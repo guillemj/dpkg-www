@@ -1,3 +1,164 @@
+dpkg-www (2.45) unstable; urgency=low
+
+  * Fixed po filename of Czech translation.
+    Closes: #293781.
+
+  * Moved menu icon in /usr/share/pixmaps/.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Sun,  6 Feb 2005 18:01:30 +0100
+
+dpkg-www (2.44) unstable; urgency=low
+
+  * Fixed translator name in fr.po file.
+
+  * Added Dutch translation. Thanks to Luk Claes.
+    Closes: #250235.
+
+  * Added Czech translation. Thanks to Jan Outrata.
+    Closes: #259182.
+
+  * Added Japanese translation. Thanks to Hideki Yamane.
+    Closes: #267676.
+
+  * Updated German translation. Thanks to Erik Schanze.
+    Closes: #284372.
+
+  * Added mime file for dpkg-www-installer.
+    Closes: #243186.
+
+  * In dpkg-www added --host option and DPKG_WWW_HOST environment variable.
+    Closes: #269273.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Fri,  4 Feb 2005 13:18:04 +0100
+
+dpkg-www (2.43) unstable; urgency=low
+
+  * Switched to gettex-based debconf templates.
+    Closes: #200120.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Mon, 29 Dec 2003 18:05:08 +0100
+
+dpkg-www (2.42) unstable; urgency=low
+
+  * In dpkg-www script use sensible-browser if installed and allow users
+    to choose a specific browser with the DPKG_WWW_BROWSER variable.
+    Updated dpkg-www mapage.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Tue, 15 Jul 2003 12:43:33 +0200
+
+dpkg-www (2.41) unstable; urgency=low
+
+  * Properly escaped the '&' in dwww man prefix.
+    Closes: Bug#197802.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Tue, 17 Jun 2003 23:12:10 +0200
+
+dpkg-www (2.40) unstable; urgency=low
+
+  * In input form added checkbox to limit search to installed packages.
+
+  * Changed dpkg-www-installer to restart self in a xterm if stdin is
+    not a tty. Needed for use with mozilla which seems unable to pass
+    the -x switch to helper application.
+
+  * Removed dpkg-www-browser helper application.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Fri, 23 May 2003 10:20:44 +0200
+
+dpkg-www (2.39) unstable; urgency=low
+
+  * In dpkg script search man2html both in /usr/lib/cgi-bin/man and
+    /usr/lib/cgi-bin for compatibility with man2html 1.5k-1 and later.
+
+  * Removed dependency on awk.
+
+  * Added missing manpages.
+
+  * Added menu icon.
+
+  * Changed Standards-Version to 3.5.8.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Wed, 12 Mar 2003 11:23:10 +0100
+
+dpkg-www (2.38) unstable; urgency=low
+
+  * In postinst script redirected message to stderr since stdout is used
+    by debconf.
+    Closes: Bug#181041.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Tue, 11 Mar 2003 23:10:11 +0100
+
+dpkg-www (2.37) unstable; urgency=low
+
+  * During postinst update httpd.conf instead of access.conf.
+    Closes: Bug#167155.
+
+  * In dpkg-www script added sensible-browser to lists of known browsers.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Tue, 26 Nov 2002 12:23:22 +0100
+
+dpkg-www (2.36) unstable; urgency=low
+
+  * Added x-www-browser to the list of X browsers.
+    Closes: Bug#162514.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Fri, 27 Sep 2002 22:28:24 +0200
+
+dpkg-www (2.35) unstable; urgency=low
+
+  * Fixed syntax error in printInputForm.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Sat,  7 Sep 2002 19:17:12 +0200
+
+dpkg-www (2.34) unstable; urgency=low
+
+  * Updated link to maintainer packages overview.
+
+  * Updated dz's home page url in the bottom line.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Wed,  4 Sep 2002 21:34:41 +0200
+
+dpkg-www (2.33) unstable; urgency=low
+
+  * In dpkg-www script added --help and --stdout options.
+    Updated man page.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Tue, 13 Aug 2002 14:26:47 +0200
+
+dpkg-www (2.32) frozen unstable; urgency=high
+
+  * In fileFilter() added /usr/share/gnome/html/ to doc dirs regexp.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Fri,  7 Jun 2002 18:35:17 +0200
+
+dpkg-www (2.31) frozen unstable; urgency=high
+
+  * In package info page added link to Igor Genibel's maintainer packages
+    overview and printed latest available version in bold.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Wed, 15 May 2002 01:00:52 +0200
+
+dpkg-www (2.30) frozen unstable; urgency=low
+
+  * Changed Build-Depends control field to Build-Depends-Indep.
+    Updated Standards-Version to 3.5.2.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Mon,  6 May 2002 17:00:24 +0200
+
+dpkg-www (2.29) unstable; urgency=low
+
+  * In packageFilter() added workaround for apt-cache missing spaces
+    in Depends field.
+
+  * Added hardcoded task descriptions in case tasksel is not installed.
+    Suggests package tasksel.
+
+  * Added support for HTML body color.
+
+  * Handle package links in Enhances field.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Tue, 16 Apr 2002 10:49:12 +0200
+
 dpkg-www (2.28) unstable; urgency=low
 
   * Added russian templates file.
@@ -344,7 +505,7 @@ dpkg-www (1.11-1) frozen unstable; urgency=low
 
   * Sponsor Upload.
 
- -- Paolo Didonè <dido@prosa.it>  Thu,  2 Mar 2000 17:34:58 +0100
+ -- Paolo DidonÃ¨ <dido@prosa.it>  Thu,  2 Mar 2000 17:34:58 +0100
 
 dpkg-www (1.11) frozen unstable; urgency=low
 
@@ -364,7 +525,7 @@ dpkg-www (1.9-1) unstable; urgency=low
 
   * Sponsor Upload.
 
- -- Paolo Didonè <dido@prosa.it>  Tue, 28 Dec 1999 13:13:13 +0100
+ -- Paolo DidonÃ¨ <dido@prosa.it>  Tue, 28 Dec 1999 13:13:13 +0100
 
 dpkg-www (1.9) unstable; urgency=low
 

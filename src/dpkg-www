@@ -18,50 +18,104 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
+usage() {
+    # Automatic help hack
+    echo "Usage: ${0##*/} [<options...>] [<query>]"
+    echo
+    echo "Options:"
+    echo
+    sed '/^	-/!d; s/\\//; s/)//; s/#/</; s/#/>/' $0
+    echo
+}
+
 urlencode() {
     perl -e '
         $s=join(" ",@ARGV);
         $s=~s/([^a-zA-Z0-9 _\.*@-])/uc sprintf("%%%02x",ord($1))/eg;
         $s=~s/ /+/g;
-        print $s . "\n";
-    ' "$*"
+        print $s . "\n";'   "$*"
 }
 
-DPKG_WWW_URL="http://localhost/cgi-bin/dpkg"
+DPKG_WWW_URL="http://${DPKG_WWW_HOST:-localhost}/cgi-bin/dpkg"
 X11_BROWSERS="\
-    netscape mozilla gzilla gnome-help-browser arena chimera chimera2 amaya"
+    sensible-browser x-www-browser
+    mozilla firefox galeon gzilla arena chimera chimera2 amaya
+    gnome-help-browser opera netscape"
 TXT_BROWSERS="\
+    sensible-browser www-browser
     lynx lynx-ssl links w3m"
 
-# Source optional local configuration file
+browser=
+browser_args=
+while [ "${1#-}" != "$1" ]; do
+    case "$1" in
+	-\?|-help|--help)
+	    usage
+	    exit
+	    ;;
+	-x|--xtrace)
+	    shift 1
+	    set -x
+	    ;;
+	-h|--host) #host#
+	    test "$2" || { usage; exit 1; }
+	    DPKG_WWW_URL="http://${2}/cgi-bin/dpkg"
+	    shift 2 || exit 1
+	    ;;
+	-s|--stdout)
+	    shift 1
+	    export DISPLAY=""
+	    noheader="&noheader=true"
+	    if [ -x /usr/bin/lynx ]; then
+		browser="lynx"
+		browser_args="-dump -nolist"
+	    elif [ -x /usr/bin/lynx-ssl ]; then
+		browser="lynx"
+		browser_args="-dump -nolist"
+	    elif  [ -x /usr/bin/links ]; then
+		browser="links"
+		browser_args=""
+	    elif  [ -x /usr/bin/w3m ]; then
+		browser="w3m"
+		browser_args=""
+	    fi
+	    ;;
+ 	--|*)
+	    break
+	    ;;
+    esac
+done
+
+# Source optional local and user configuration files
 test -e /etc/dpkg-www.conf && . /etc/dpkg-www.conf 2>/dev/null
+test -e ~/.dpkg-www && . ~/.dpkg-www 2>/dev/null
 
 if [ "$DISPLAY" ]; then
-    for f in $BROWSER $X11_BROWSERS $TXT_BROWSERS; do
+    for f in $browser $DPKG_WWW_BROWSER $X11_BROWSERS $TXT_BROWSERS; do
 	if which $f >/dev/null 2>&1; then
-	    BROWSER=$f
+	    browser=$f
 	    break
 	fi
     done
 else
-    for f in $BROWSER $TXT_BROWSERS; do
+    for f in $browser $DPKG_WWW_BROWSER $TXT_BROWSERS; do
 	echo $X11_BROWSERS | grep -qw "$f" && continue	# skip X11 $BROWSER
 	if which $f >/dev/null 2>&1; then
-	    BROWSER=$f
+	    browser=$f
 	    break
 	fi
     done
 fi
 
-if [ ! "$BROWSER" ]; then
+if [ ! "$browser" ]; then
     echo "dpkg-www: no WWW browser found" >&2
     exit 1
 fi
 
 query=$(urlencode "$*")
 if [ "$DEBUG" = 1 -o "$DEBUG" = true ]; then
-    echo "$BROWSER $DPKG_WWW_URL?query=$query"
+    echo $browser $browser_args "$DPKG_WWW_URL?query=$query$noheader"
 fi
-exec $BROWSER "$DPKG_WWW_URL?query=$query"
+exec $browser $browser_args "$DPKG_WWW_URL?query=$query$noheader"
 
 # end of file

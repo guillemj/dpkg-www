@@ -2,11 +2,6 @@
 
 set -e
 
-trap "echo ;\
-      echo 'Received signal.  Aborting configuration of dpkg-www package.' ;\
-      echo ;\
-      exit 1" 1 2 3 15
-
 case "$1" in
     configure)
 	;;
@@ -14,8 +9,7 @@ case "$1" in
 	exit 0
 	;;
     *)
-	echo "ERROR: dpkg-www postinst called with unknown argument \"$1\"."
-	echo "Aborting configuration of dpkg-www package."
+        echo "postinst called with unknown argument \`$1'" >&2
 	exit 1
 	;;
 esac
@@ -26,24 +20,25 @@ db_get dpkg-www/update-apache-config
 
 if [ "$RET" = true ]; then
     for server in apache apache-ssl; do
-	config="/etc/${server}/access.conf"
+	config="/etc/${server}/httpd.conf"
 	apachectl="/usr/sbin/${server}ctl"
-	test ! -f $config && continue
+	test -f $config || continue
 	grep -q "<Location /cgi-bin/dpkg>" $config && continue
-	echo "Updating $server configuration file: $config"
+	echo "Updating $server configuration file: $config" >&2
 	cat <<-EOF >>$config
 
 	# Disable execution of dpkg from remote hosts
 	<Location /cgi-bin/dpkg>
 	order deny,allow
 	deny from all
-	allow from localhost
+	allow from localhost 127.0.0.1
 	# allow from .your_domain.com
 	</Location>
 
 EOF
-	echo "Restarting $server..."
-	$apachectl restart || true
+	test -x $apachectl || continue
+	echo "Restarting $server..." >&2
+	$apachectl restart >&2 || true
     done
 fi
 

@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-PROG_VERSION=2.28
+PROG_VERSION=2.45
 SELF=${0##*/}
 HELP_PAGE="/usr/share/man/man8/dpkg-www.8.gz"
 COLUMNS=256; export COLUMNS
@@ -53,6 +53,39 @@ web		Web servers, browsers, proxies, download tools etc.
 x11		X servers, libraries, fonts, window managers, and applications
 "
 
+TASK_DESCRIPTIONS="
+basic-desktop	X window system
+c-dev		C and C++
+chinese-s	simplified Chinese environment
+chinese-t	traditional Chinese environment
+cyrillic	Cyrillic environment
+database-server	SQL database
+desktop		desktop environment
+dialup		dialup system
+dns-server	DNS server
+file-server	file server
+fortran-dev	fortran
+french		French environment
+games		games
+german		German environment
+japanese	Japanese environment
+junior		Debian Jr.
+korean		Korean environment
+laptop		laptop system
+mail-server	mail server
+news-server	usenet news server
+polish		Polish environment
+print-server	print server
+python-dev	Python
+russian		Russian environment
+science		scientific applications
+spanish		Spanish environment
+tcltk-dev	Tcl/Tk
+tex		TeX/LaTeX environment
+unix-server	conventional unix server
+web-server	web server
+"
+
 # Configuration defaults, can be overriden in /etc/dpkg-www.conf
 #
 SHOW_LOCAL_FILES=auto	# Show local files directly (automatic)
@@ -61,13 +94,15 @@ LIST_DOCUMENTATION=1	# List registered package documentation
 DPKG=auto		# Select the dpkg program (automatic)
 MAN=auto		# Select the man program (automatic)
 DEBIAN_CONTENTS=	# List of Contents-xxx.gz files
+INSTALLED_ONLY=0	# Only installed packages
 DPKG_STATUS=/var/lib/dpkg/status
 DPKG_AVAILABLE=/var/lib/dpkg/available
-TASKS_DESC=/usr/share/tasksel/debian-tasks.desc
+TASK_DESCRIPTIONS_FILE=/usr/share/tasksel/debian-tasks.desc
 APT_CACHE_OPTS="-o APT::Cache::AllVersions=0"
 CHECK_PACKAGE_VERSION=true
 DPKG_WWW_BROWSER_HACK=false
 GREP_DCTRL_OPTS="-i"
+BGCOLOR="#c0c0c0"
 KEEP_INPUT=0
 DEBUG=0
 
@@ -96,11 +131,25 @@ if [ ! "$DPKG" -o "$DPKG" = auto ]; then
 fi
 
 # Select the Manpage to HTML translator
-if [ ! "$MAN" -o "$MAN" = auto ]; then
-    if [ -x /usr/lib/cgi-bin/man2html ]; then
+if [ "$MAN" = dwww ]; then
+	MAN="/cgi-bin/dwww?type=man\\\\&location="
+fi
+if [ "$MAN" = man2html ]; then
+    if [ -x /usr/lib/cgi-bin/man/man2html ]; then
+	MAN="/cgi-bin/man/man2html?"
+    elif [ -x /usr/lib/cgi-bin/man2html ]; then
 	MAN="/cgi-bin/man2html?"
     else
-	MAN="/cgi-bin/dwww?type=man\\&location="
+	MAN="/cgi-bin/dwww?type=man\\\\&location="
+    fi
+fi
+if [ ! "$MAN" -o "$MAN" = auto ]; then
+    if [ -x /usr/lib/cgi-bin/man/man2html ]; then
+	MAN="/cgi-bin/man/man2html?"
+    elif [ -x /usr/lib/cgi-bin/man2html ]; then
+	MAN="/cgi-bin/man2html?"
+    else
+	MAN="/cgi-bin/dwww?type=man\\\\&location="
     fi
 fi
 
@@ -402,11 +451,15 @@ listTasks() {
     echo ""
     for t in $tasks; do
 	desc=$(
-	    cat $TASKS_DESC 2>/dev/null | awk -v t="$t" '
-		/^Task:/ { task = $2 }
-		/^Description:/ && (task == t) {
-		    sub($1"[ ]*",""); print; exit
-		}'
+	    if [ -e "$TASK_DESCRIPTIONS_FILE" ]; then
+		cat "$TASK_DESCRIPTIONS_FILE" 2>/dev/null | awk -v t="$t" '
+		    /^Task:/ { task = $2 }
+		    /^Description:/ && (task == t) {
+			sub($1"[ ]*",""); print; exit
+		    }'
+	    else
+		echo "$TASK_DESCRIPTIONS" | sed "/^$t/!d; s/^$t[ 	]*//;q"
+	    fi
 	)
 	desc=${desc:="no description available"}
 	x=$(printf "%$[16-${#t}]s" " ")
@@ -800,15 +853,25 @@ packageFilter() {
             }
 	}
 	/^Maintainer:/ {
-	    # Add link to the Debian BTS page for this package
+	    # Add link to maintainer packages overview
+	    m = $0; sub(".*: ","",m);sub(" &lt;.*","",m);gsub("[()]","\\\\&",m)
+	    e = $0; sub(".*&lt;","",e);sub("&gt;.*","",e)
+	    u = "http://qa.debian.org/developer.php/developer.php?login=" e
+	    sub(m, "<a href=\"" u "\">&</a>")
+
+	    # Add link to Debian BTS page for this package
 	    s = package; gsub("\\+", "%2B", s)
 	    d = "[Debian Bug Report]"
 	    u = "http://bugs.debian.org/cgi-bin/pkgreport.cgi"
 	    h = sprintf("<a href=\"%s?repeatmerged=no&pkg=%s\">%s</a>", u,s,d)
 	    $0 = $0 " " h
 	}
-	/^(Replace|Provide|(Pre-)?Depend|Suggest|Conflict|Require|Recommend)s/\
+	/^(Depends|Pre-Depends|Conflicts|Replaces|Provides|Suggests|\
+	  |Recommends|Enhances):/\
 	{
+	    # Workaround for apt-cache missing space:
+	    #   Depends: python-slang(>= 0.2.0), python (>= 2.1)
+	    gsub("\\(", " (")
 	    for (f=2; f<=NF; f++) {
 		if ($f == "|") {
 		    continue 
@@ -835,6 +898,12 @@ packageFilter() {
 		printf("Filename: <a href=\"%s\">%s</a>\n", h, t)
 	    }
 	}
+	/^Version:/ {
+	    if (match($0, "latest is")) {
+		# Show latest version in bold
+		sub("\\(latest is", "<B>(latest is"); sub("\\)", ")</B>")
+	    }
+	}
 	/^$/ { next}
 	/^ .$/ { $0 = " " }
 	{ print }'
@@ -847,7 +916,8 @@ listFilter() {
     awk -v SELF=$SELF \
 	-v CHECK_BUTTONS=$CHECK_BUTTONS \
 	-v DPKG_AVAILABLE=$DPKG_AVAILABLE \
-	-v LIST_UNAVAILABLE=$LIST_UNAVAILABLE '
+       -v LIST_UNAVAILABLE=$LIST_UNAVAILABLE \
+       -v INSTALLED_ONLY=$INSTALLED_ONLY '
 	BEGIN {
 	    statMax = 3
 	    nameMax = 10
@@ -897,6 +967,9 @@ listFilter() {
 	    sub("[ ]+$","",name)
 	    sub("[ ]+$","",vers)
 	    sub("[ ]+$","",desc)
+	   if (INSTALLED_ONLY && !match(stat,"^(i.|.c)")) {
+	       next
+	   }
 	    # if (vers == "<none>") { vers = "-" }
 	    nameMax = max(nameMax, length(name))
 	    versMax = max(versMax, length(vers))
@@ -935,8 +1008,10 @@ listFilter() {
 	    printf("+++%s-%s-%s-%s\n", substr("--",1,buttonW), \
 		   pad(hsep,nameMax), pad(hsep,versMax), pad(hsep,descMax))
 	    nr = NR
+	   npackages = 0
 	    for (i=6; i<=nr; i++) {
 		name = packages[i,"name"]
+	       if (!name) { continue }
 		if (CHECK_BUTTONS) {
 		    if (substr(packages[i,"stat"],2,1) == "n") {
 			stat = pad(packages[i,"stat"],statMax)
@@ -961,11 +1036,12 @@ listFilter() {
 		gsub("\\+", "%2B", href)
 		href = "<A HREF=\"" SELF "?query=" href "\">" link "</A>" npad
 		printf("%s%s %s %s %s\n", stat, button, href, vers, desc)
+	       npackages++
 	    }
-	    if (NR > 6) {
+	   if (npackages > 0) {
 		npad = statMax+2+buttonW+nameMax
 		print ""
-		printf(pad(sprintf("%d packages", NR-5), npad))
+	       printf(pad(sprintf("%d packages", npackages), npad))
 	    }
 	    if (CHECK_BUTTONS) {
 		if (install) {
@@ -1038,7 +1114,7 @@ fileFilter() {
 	    print
 	    next
 	}
-	/\/usr\/((share\/)?doc\/|share\/gnome\/help\/|share\/RFC\/)/ {
+	/\/usr\/(doc|share\/(doc|gnome\/(html|help)|RFC))\// {
 	    if (title) { t = title } else { t = $1 }
 	    if ($2) { t = t " [" $2 "]"; NF=1 }
 	    r = s = $1
@@ -1159,32 +1235,39 @@ printHtmlHeader() {
 	echo "<HEAD>"
 	echo "<TITLE>$title</TITLE>"
 	echo "</HEAD>"
-	echo "<BODY>"
+	echo "<BODY BGCOLOR=\"${BGCOLOR:-#c0c0c0}\">"
     fi
 }
 
 # Generate an input form or the <isindex> tag
 printInputForm() {
     local default
-    test "$input_form_done" && return; input_form_done=true
+    local installed
+    test "$noheader" = true && return
+    test "$input_form_done" = true  && return
     test "$KEEP_INPUT" = 1 && default="$query"
+    test "$INSTALLED_ONLY" = 1 && installed="checked"
     echo "<H1>Debian packages on $HOSTNAME</H1>"
     if [ -x /usr/bin/perl ]; then
 	echo '<P>'
-	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">"
 	if [ "${HTTP_USER_AGENT#Lynx}" != "$HTTP_USER_AGENT" ]; then
+	   echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">"
 	    echo "Search:"
 	    echo '<INPUT NAME="query" SIZE="42" VALUE="'"$default"'">'
-	    echo '<INPUT TYPE="submit" NAME="search" VALUE="Submit">'
-	    echo '(?&nbsp;for&nbsp;help)'
+	   echo '<INPUT NAME="search" TYPE="submit" VALUE="Submit">'
+	   echo '(?&nbsp;for&nbsp;help)<BR>'
+	   echo '<INPUT NAME="installed" TYPE="checkbox"' $installed '>' \
+		'only installed packages' '<br>&nbsp;<br>'
+	   echo '</FORM>'
 	else
-	    echo '<INPUT TYPE="submit" NAME="search" VALUE="  Search  ">'
+	   echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">"
+	   echo '<INPUT NAME="search" TYPE="submit" VALUE="  Search  ">'
 	    echo '<INPUT NAME="query" SIZE="50" VALUE="'"$default"'">'
-	    echo '<INPUT TYPE="submit" NAME="help" VALUE="   Help   ">'
-	fi
-	echo '</FORM>'
-	if [ "$query" != " " ]; then
-	    echo '<HR WIDTH="100%">'
+	   echo '<INPUT NAME="help" TYPE="submit" VALUE="   Help   ">'
+	   echo '<INPUT NAME="installed" TYPE="checkbox"' $installed '>' \
+		'only installed packages'
+	   echo '</FORM>'
+	   test "$query" != " " && echo '<HR WIDTH="100%">'
 	fi
 	echo '</P>'
     else
@@ -1192,17 +1275,19 @@ printInputForm() {
 	echo '<ISINDEX>'
 	echo '</P>'
     fi
+    input_form_done=true
 }
 
 # Print bottom info
 printHtmlBottom() {
+    test "$noheader" = true && return
     cat <<- EOF
 	<P>
 	<HR WIDTH="100%">
 	<ADDRESS>
 	Generated by <A HREF="$SELF?query=dpkg-www">
 	dpkg-www $PROG_VERSION</A> - Copyright (C) 1999-2001
-	<A HREF="http://www.cs.unitn.it/~dz/">Massimo Dal Zotto</A>
+	<A HREF="http://people.debian.org/~dz/">Massimo Dal Zotto</A>
 	<A HREF="mailto:dz@debian.org">&lt;dz@debian.org&gt;</A>
 	</ADDRESS>
 	<BR>
@@ -1233,7 +1318,11 @@ if [ "$*" ]; then
     help=""
     install=""
     remove=""
+    browse=""
     packages=""
+    bgcolor=""
+    noheader=""
+    installed=""
 else
     # GET method
     debug="$(getValue debug)"
@@ -1243,9 +1332,13 @@ else
     remove="$(getValue remove)"
     browse="$(getValue browse)"
     packages="$(getValue packages)"
+    bgcolor="$(getValue bgcolor)"
+    noheader="$(getValue noheader)"
+    installed="$(getValue installed)"
 fi
-test "$debug" != "" && DEBUG="$debug"
-test "$help"  != "" && query="?"
+test "$help"    != "" && query="?"
+test "$debug"   != "" && DEBUG="$debug"
+test "$bgcolor" != "" && BGCOLOR="$bgcolor"
 
 # Print debugging info
 if test_flag "$DEBUG"; then
@@ -1267,6 +1360,9 @@ if test_flag "$DEBUG"; then
 	remove="$(escape_html "$remove")"
 	browse="$(escape_html "$browse")"
 	packages="$(escape_html "$packages")"
+	bgcolor="$(escape_html "$bgcolor")"
+	noheader="$(escape_html "$noheader")"
+       installed="$(escape_html "$installed")"
 	debug="$(escape_html "$debug")"
 	</PRE>
 EOF
@@ -1298,6 +1394,13 @@ fi
 if [ "$browse" -a "$browse" != "Browse" ]; then
     printError "Error: invalid request"
     exit
+fi
+if [ "$installed" != "" ]; then
+    if test_flag "$installed"; then
+       INSTALLED_ONLY=1
+    else
+       INSTALLED_ONLY=0
+    fi
 fi
 
 title="Debian Packages${query:+: $query}"

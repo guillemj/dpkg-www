@@ -1,11 +1,11 @@
-.TH DPKG-WWW 1 "March 31, 2001"
+.TH DPKG-WWW 1 "September 1, 2004"
 
 .SH NAME
-dpkg-www \- program to remotely open a WWW Debian package browser
+dpkg-www,  dpkg-www-installer \- program to remotely open a WWW Debian package browser
 
 .SH SYNOPSIS
 .B dpkg-www
-.I [arg]
+.I [-s|--stdout] [-h|--host host] [query]
 
 .SH DESCRIPTION
 .B dpkg-www
@@ -18,7 +18,7 @@ If not running under X it will try to use a text browser instead.
 
 If Netscape is found and a Netscape instance is already running it
 will be asked to open the dpkg URL on localhost with the optional 
-.I arg
+.I query
 supplied on the command line.
 If there is no browser running, it will start automatically a new one.
 
@@ -27,13 +27,32 @@ a web browser with the
 .B \-remote openURL(http://localhost/cgi-bin/dpkg)
 argument or opening the same URL from within the browser.
 
+.B dpkg-www-installer
+is an helper application which can configured in the WWW browser for web
+installation. It should never be invoked directly by the user.
+
 .SH OPTIONS
 .TP 
-.BI \|arg \|
+\fB\-s\fR, \fB\-\-stdout\fR
+Redirect output to stdout. Requires one of the text browsers (lynx,
+lynx-ssl or links) installed.
+.TP 
+\fB\-h\fR, \fB\-\-host\fR \fBhost\fR
+Send the query to a remote host, where dpkg-www must be installed.
+.TP 
+.BI query
 Specifies an optional package name, an absolute pathname or a query
 argument which is passed to the dpkg cgi-bin. See
 .BR dpkg-www(8)
 for more information about the use of the cgi.
+
+.SH FILES
+.IP /etc/dpkg-www.conf
+.IP ~/.dpkg-www
+Configuration files for dpkg-www. It is not necessary for these files to exist,
+there are sensible defaults for everything, but you can specify your preferred
+www browser with the DPKG_WWW_BROWSER variable, for example:
+.B DPKG_WWW_BROWSER=mozilla
 
 .SH EXAMPLES
 .TP
@@ -43,15 +62,22 @@ This would open a dpkg URL on localhost listing all the installed packages.
 .B dpkg-www bash
 This would open a dpkg URL asking info on the bash package.
 .TP
+.B dpkg-www -h pisolo bash
+This would open a dpkg URL asking info on the bash package on host pisolo.
+.TP
 .B dpkg-www 'dpkg*'
 This would open a dpkg URL listing all packages matching dpkg*.
 .TP
 .B dpkg-www /bin/bash
 This would open a dpkg URL asking info on the package(s)
-owning the file /bin/bash
+owning the file /bin/bash .
 .TP
 .B dpkg-www depends=svgalib
 This would open a dpkg URL listing all packages depending on svgalib.
+.TP
+.B dpkg-www --stdout depends=awk | grep ^ii
+This would list on stdout all packages depending on awk and grep all
+lines of installed packages.
 
 .SH "SEE ALSO"
 .BR dpkg(8) ,

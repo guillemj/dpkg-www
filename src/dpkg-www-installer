@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# Dpkg install helper used by dpkg-www cgi installation.
+# Dpkg-www install helper used for dpkg-www cgi installation.
 #
-# Copyright (C) 1999-2001  Massimo Dal Zotto <dz@debian.org>
+# Copyright (C) 1999-2003  Massimo Dal Zotto <dz@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,6 +27,18 @@ press_enter() {
     echo -n "Press Enter to close this window..."; read x
 }
 
+# Restart self in an xterm window. Must be the first option. Used by netscape.
+if [ "$1" = "-x" -o "$1" = "--xterm" ]; then
+    shift 1
+    xterm -T "Package Installation" -e $0 "$@"
+    exit 0
+fi
+# Restart self in an xterm window. Used by mozilla which can't pass -x switch.
+if [ "$DPKG_WWW_INSTALLER_XTERM" != true ] && ! tty -s; then
+    DPKG_WWW_INSTALLER_XTERM=true xterm -T "Package Installation" -e $0 "$@"
+    exit 0
+fi
+
 # Source optional config file
 test -e /etc/dpkg-www.conf && . /etc/dpkg-www.conf 2>/dev/null
 
@@ -34,13 +46,6 @@ FILE=""
 ACTION=""
 HOST=""
 PACKAGES=""
-
-# Restart self in an xterm window. Must be the first option. Used by netscape.
-if [ "$1" = "-x" -o "$1" = "--xterm" ]; then
-    shift 1
-    xterm -T "Package Installation" -e $0 "$@"
-    exit 0
-fi
 
 while [ "${1#-}" != "$1" ]; do
     case "$1" in
@@ -67,7 +72,7 @@ if [ "$FILE" != "" -a ! -e "$FILE" ]; then
     exit 1
 fi
 
-request="$(cat "$FILE" | head -10)"
+request="$(cat "$FILE" | head -10)"; rm -f "$FILE"
 if echo "$request" | grep -q "^Install-packages:"; then
     ACTION=install
     HOST=$(

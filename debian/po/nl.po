@@ -1,0 +1,77 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dpkg-www 2.43\n"
+"POT-Creation-Date: 2003-07-04 10:51+0200\n"
+"PO-Revision-Date: 2004-05-21 15:34+0100\n"
+"Last-Translator: Luk Claes <luk.claes@ugent.be>\n"
+"Language-Team: Debian l10n Dutch <debian-l10n-dutch@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Description
+#: ../templates:4
+msgid "Do you want to change the apache(-ssl) configuration?"
+msgstr "Wilt u de apache(-ssl)-configuratie wijzigen?"
+
+#. Description
+#: ../templates:4
+msgid ""
+"Allowing access to /cgi-bin/dpkg from any foreign host could allow a "
+"malicious external user to know your installed packages and try possible "
+"security exploits. You should therefore disable access to dpkg-www from "
+"foreign hosts. With apache(-ssl) you should add the following lines to /etc/"
+"apache(-ssl)/httpd.conf:"
+msgstr ""
+"Het aanvaarden van toegang tot /cgi-bin/dpkg van om het even welke "
+"vreemde host, kan een boosaardige externe gebruiker laten weten welke "
+"pakketten zijn geïnstalleerd en zo hem mogelijke veiligheidslekken laten "
+"uitproberen. U moet daarom de toegang tot dpkg-www van vreemde hosts "
+"uitschakelen. Bij apache(-ssl)/httpd.conf moet u volgende regels toevoegen:"
+
+#. Description
+#: ../templates:4
+msgid ""
+"   # Disable execution of dpkg from remote hosts\n"
+"   <Location /cgi-bin/dpkg>\n"
+"   order deny,allow\n"
+"   deny from all\n"
+"   allow from localhost\n"
+"   allow from .your.domain\n"
+"   </Location>"
+msgstr ""
+"   # Dpkg uitvoeren vanuit vreemde hosts uitschakelen\n"
+"   <Location /cgi-bin/dpkg>\n"
+"   order deny,allow\n"
+"   deny from all\n"
+"   allow from localhost\n"
+"   allow from .your.domain\n"
+"   </Location>"
+
+#. Description
+#: ../templates:4
+msgid ""
+"If you accept here and the apache configuration files are found the dpkg-www "
+"installation script will make these changes automatically for you. If apache "
+"is not installed, if you are using a different httpd server or if you refuse "
+"here, you should make the appropriate changes yourself."
+msgstr ""
+"Als u hier aanvaardt en de apache-configuratiebestanden worden gevonden, "
+"dan zal het dpkg-www-installatiescript de wijzigingen automatisch voor u "
+"toepassen. Als apache niet is geïnstalleerd, als u een andere httpd-server "
+"gebruikt of als u hier moet weigeren, dan moet u zelf de gepaste "
+"wijzigingen aanbrengen."
+

@@ -1,4 +1,4 @@
-.TH DPKG-WWW 8 "Oct 27, 2001"
+.TH DPKG-WWW 8 "Apr 10, 2002"
 
 .SH NAME
 dpkg-www \- WWW Debian package browser
@@ -154,6 +154,8 @@ files mapping each file available in the Debian GNU/Linux system to
 the package from which it originates. If available these files are used
 to find the owner packages of non installed files. This can be useful for
 quickly finding the package to install when a needed command is missing.
+.IP BGCOLOR
+background color of the HTML body.
 .IP DEBUG
 internal option used only for debugging. Disabled by default since it is
 useless for normal users.
@@ -220,6 +222,12 @@ DEBIAN_CONTENTS="
 # Manpage conversion command (dwww|man2html|auto). Automatically detected.
 .br
 # MAN=auto
+.br
+
+.br
+# HTML background color.
+.br
+# BGCOLOR="#c0c0c0"
 .br
 
 .br
