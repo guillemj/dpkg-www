@@ -75,8 +75,8 @@ binary-indep: build install
 	# dh_installcron
 	dh_installman
 	for f in dpkg-www-installer; do \
-	    ln -s dpkg-www.1.gz \
-		  $(CURDIR)/debian/dpkg-www/usr/share/man/man1/$$f.1.gz; \
+	    ln -s dpkg-www.8.gz \
+		  $(CURDIR)/debian/dpkg-www/usr/share/man/man8/$$f.8.gz; \
 	done
 	# dh_installinfo
 	# dh_undocumented

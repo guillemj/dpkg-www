@@ -1,8 +1,11 @@
 # Makefile
 
 VERSION	= $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/-.*//')
+PKGFILE = $(shell cd ..; find . -name dpkg-www_$(VERSION)_*.deb | sed 's|./||')
+CHANGES = $(shell cd ..; find . -name dpkg-www_$(VERSION)_*.changes)
 
 all:
+	# Update program version from changelog
 	if ! grep -q "^PROG_VERSION=$(VERSION)$$" src/dpkg; then \
 	    sed '/^PROG_VERSION=/s/^.*$$/PROG_VERSION=$(VERSION)/' \
 		< src/dpkg > src/dpkg.new; \
@@ -26,3 +29,20 @@ clean:
 	rm -f `find . -name \*~`
 
 distclean:	clean
+
+diff:
+	@diff -u src/dpkg $(DESTDIR)/usr/lib/cgi-bin/dpkg
+
+deb:
+	dpkg-buildpackage -rfakeroot -us -uc
+
+package:
+	dpkg-buildpackage -rfakeroot
+
+lintian:
+	lintian -i ../$(PKGFILE)
+
+upload:
+	cd .. && dupload $(CHANGES)
+
+# end of file

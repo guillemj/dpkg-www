@@ -1,3 +1,14 @@
+dpkg-www (2.46) unstable; urgency=low
+
+  * Fixed regexp for plus(+) in fileFilter when using gawk.
+    Closes: #302294.
+
+  * Added dependency on awk to have the installed flavors in reportbug.
+
+  * Moved dpkg-www-installer manpage in section 8.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Thu, 31 Mar 2005 12:11:21 +0200
+
 dpkg-www (2.45) unstable; urgency=low
 
   * Fixed po filename of Czech translation.
