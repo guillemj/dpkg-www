@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+# Command-line interface to dpkg-www.
+#
+# Copyright (C) 1999-2001  Massimo Dal Zotto <dz@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+
+urlencode() {
+    perl -e '
+        $s=join(" ",@ARGV);
+        $s=~s/([^a-zA-Z0-9 _\.*@-])/uc sprintf("%%%02x",ord($1))/eg;
+        $s=~s/ /+/g;
+        print $s . "\n";
+    ' "$*"
+}
+
+DPKG_WWW_URL="http://localhost/cgi-bin/dpkg"
+X11_BROWSERS="\
+    netscape mozilla gzilla gnome-help-browser arena chimera chimera2 amaya"
+TXT_BROWSERS="\
+    lynx lynx-ssl links w3m"
+
+# Source optional local configuration file
+test -e /etc/dpkg-www.conf && . /etc/dpkg-www.conf 2>/dev/null
+
+if [ "$DISPLAY" ]; then
+    for f in $BROWSER $X11_BROWSERS $TXT_BROWSERS; do
+	if which $f >/dev/null 2>&1; then
+	    BROWSER=$f
+	    break
+	fi
+    done
+else
+    for f in $BROWSER $TXT_BROWSERS; do
+	echo $X11_BROWSERS | grep -qw "$f" && continue	# skip X11 $BROWSER
+	if which $f >/dev/null 2>&1; then
+	    BROWSER=$f
+	    break
+	fi
+    done
+fi
+
+if [ ! "$BROWSER" ]; then
+    echo "dpkg-www: no WWW browser found" >&2
+    exit 1
+fi
+
+query=$(urlencode "$*")
+if [ "$DEBUG" = 1 -o "$DEBUG" = true ]; then
+    echo "$BROWSER $DPKG_WWW_URL?query=$query"
+fi
+exec $BROWSER "$DPKG_WWW_URL?query=$query"
+
+# end of file

@@ -1,0 +1,113 @@
+#!/bin/sh
+#
+# Dpkg browser helper used by dpkg-www.
+#
+# Copyright (C) 1999-2001  Massimo Dal Zotto <dz@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+
+usage() {
+    echo "${0##*/} [-x|--xterm] [-f|--file] <file>"
+}
+
+press_enter() {
+    echo ""
+    echo -n "Press Enter to close this window..."; read x
+}
+
+packageURI() {
+    local package="$1"
+    local pkgcache=$(tempfile)
+    local srcpkgcache=$(tempfile)
+    trap "rm -f $pkgcache $srcpkgcache" 0
+    apt-get -o "Debug::NoLocking=1" \
+	    -o "Dir::Cache=/tmp" \
+	    -o "Dir::Cache::pkgcache=$pkgcache" \
+	    -o "Dir::Cache::srcpkgcache=$srcpkgcache" \
+	    -o "Dir::Cache::archives=/var/cache/apt/archives" \
+	    install --reinstall --print-uris -y "$package" \
+    | grep -F "/${package}_" \
+    | sed "/^'/!d; s/^'//; s/'.*//"
+    rm -f $pkgcache $srcpkgcache 2>/dev/null
+}
+
+# Source optional config file
+test -e /etc/dpkg-www.conf && . /etc/dpkg-www.conf 2>/dev/null
+
+FILE=""
+ACTION=""
+HOST=""
+PACKAGES=""
+
+# Restart self in an xterm window. Must be the first option. Used by netscape.
+if [ "$DISPLAY" -a "$1" = "-x" -o "$1" = "--xterm" ]; then
+    shift 1
+    xterm -T "Package Browser" -e $0 "$@"
+    exit 0
+fi
+
+while [ "${1#-}" != "$1" ]; do
+    case "$1" in
+	-\?|-help|--help)
+	    usage
+	    exit
+	    ;;
+	-f|--file)
+	    FILE="$2"
+	    shift 2
+	    ;;
+	-*)
+	    echo "Invalid option: $1" >&2
+	    press_enter
+	    exit 1
+	    ;;
+    esac
+done
+FILE="${FILE:-$1}"
+
+if [ "$FILE" != "" -a ! -e "$FILE" ]; then
+    echo "File not found: $FILE" >&2
+    press_enter
+    exit 1
+fi
+
+request="$(cat "$FILE" | head -10)"
+if echo "$request" | grep -q "^Browse-package:"; then
+    PACKAGE=$(
+	echo "$request" | grep ^Browse-package: \
+	| head -1 | sed 's/.*: *//'
+    )
+else
+    echo "Invalid request" >&2
+    press_enter
+    exit 1
+fi
+
+uri="$(packageURI "$PACKAGE")"
+file="${uri#file:}"
+if [ ! "$file" -o "$file" = "$uri" -o ! -e "$file" ]; then
+    echo "Package not found: $file" >&2
+    press_enter
+    exit 1
+fi
+
+if [ "$DISPLAY" ]; then
+    sensible-editor "$file" &
+    sleep 1
+else
+    exec sensible-editor "$file"
+fi
+
+# end of file

@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Cgi interface to dpkg. Show information about debian packages.
 #
-# Copyright (C) 1999,2000  Massimo Dal Zotto <dz@cs.unitn.it>
+# Copyright (C) 1999-2001  Massimo Dal Zotto <dz@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,21 +18,110 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-PROG_VERSION=1.10
+PROG_VERSION=2.28
+SELF=${0##*/}
+HELP_PAGE="/usr/share/man/man8/dpkg-www.8.gz"
+COLUMNS=256; export COLUMNS
+SECTION_DESCRIPTIONS="
+admin		Utilities to administer the system
+base		Basic needed utilities of every Debian system
+comm		Software to use your modem in the old fashioned style
+devel		Development utilities, compilers, environments, libraries, etc.
+doc		FAQs, HOWTOs, documents and software to browse documentation 
+editors		Software to edit files and programming environments
+electronics	Electronics utilities
+games		Programs to spend a nice time with after setting up Debian
+graphics	Editors, viewers, converters... Everything to become an artist
+hamradio	Software for ham radio
+interpreters	Interpreters for interpreted languages and macro processors
+libs		Libraries to make other programs work
+mail		Programs to route, read, and compose E-mail messages
+math		Math software
+misc		Miscellaneous utilities that didn't fit well anywhere else
+net		Daemons and clients to connect your system to the world
+news		Software to access Usenet, to set up news servers, etc.
+non-us		Software restricted in the US by export regulations or patents
+oldlibs		Old versions of libraries, kept for backward compatibility
+otherosfs	Software to use programs and filesystems for other O.S.
+science		Basic tools for scientific work
+shells		Command shells and friendly user interfaces for beginners.
+sound		Utilities to deal with sound: mixers, players, recorders, etc. 
+tex		The famous typesetting software and related programs
+text		Utilities to format and print text documents
+utils		Utilities for file/disk manipulation, backup, monitoring, etc. 
+web		Web servers, browsers, proxies, download tools etc.
+x11		X servers, libraries, fonts, window managers, and applications
+"
+
+# Configuration defaults, can be overriden in /etc/dpkg-www.conf
+#
+SHOW_LOCAL_FILES=auto	# Show local files directly (automatic)
+LIST_UNAVAILABLE=0	# List also unavailable packages
+LIST_DOCUMENTATION=1	# List registered package documentation
+DPKG=auto		# Select the dpkg program (automatic)
+MAN=auto		# Select the man program (automatic)
+DEBIAN_CONTENTS=	# List of Contents-xxx.gz files
 DPKG_STATUS=/var/lib/dpkg/status
 DPKG_AVAILABLE=/var/lib/dpkg/available
-DPKG_NAME_MAX=15
-#DEBUG=true
+TASKS_DESC=/usr/share/tasksel/debian-tasks.desc
+APT_CACHE_OPTS="-o APT::Cache::AllVersions=0"
+CHECK_PACKAGE_VERSION=true
+DPKG_WWW_BROWSER_HACK=false
+GREP_DCTRL_OPTS="-i"
+KEEP_INPUT=0
+DEBUG=0
 
+# Install buttons support. This require that users define the following
+# mime action in their netscape mailcap file:
+#
+# application/dpkg-www-installer;/usr/sbin/dpkg-www-installer -f '%s'
+#
+CHECK_BUTTONS=0		# Enable install check-buttons in package list
+INSTALL_BUTTON=0	# Enable install button in package info
+
+# Source optional local configuration file
+test -e /etc/dpkg-www.conf && . /etc/dpkg-www.conf 2>/dev/null
+set -o noglob
+
+HOSTNAME_FULL="$(hostname -f)"
+HOSTNAME="${HOSTNAME_FULL%%.*}"
+
+# Use dlocate, if installed, to speedup certain queries
+if [ ! "$DPKG" -o "$DPKG" = auto ]; then
+    if [ -x /usr/bin/dlocate ]; then
+	DPKG=dlocate
+    else
+	DPKG=dpkg
+    fi
+fi
+
+# Select the Manpage to HTML translator
+if [ ! "$MAN" -o "$MAN" = auto ]; then
+    if [ -x /usr/lib/cgi-bin/man2html ]; then
+	MAN="/cgi-bin/man2html?"
+    else
+	MAN="/cgi-bin/dwww?type=man\\&location="
+    fi
+fi
+
+# If remote host is localhost generate local URL's for local files
 case "$REMOTE_HOST" in
-    localhost|`hostname`|`hostname -f`)
-	SHOW_LOCAL_FILE=true
+    localhost|$HOSTNAME|$HOSTNAME_FULL)
+	if [ ! "$SHOW_LOCAL_FILES" -o "$SHOW_LOCAL_FILES" = auto ]; then
+	    SHOW_LOCAL_FILES=true
+	fi
+	if [ "$HTTP_USER_AGENT" != "${HTTP_USER_AGENT#*Mozilla/[56]}" ]; then
+	    # It seems that Mozilla/5.0 refuses to access local files from
+	    # a web page for security reasons.
+	    SHOW_LOCAL_FILES=false
+	fi
 	;;
     *)
-	SHOW_LOCAL_FILE=false
+	SHOW_LOCAL_FILES=false
 	;;
 esac
 
+# Print a short help for the cgi-program
 usage() {
     cat <<- EOF
 	<P>
@@ -40,156 +129,687 @@ usage() {
 	The search argument can be:
 	<P>
 	<TABLE WIDTH="80%">
-	  <TR><TD><TD> *                 <TD> - list all available packages
-	  <TR><TD><TD> &lt;empty&gt;     <TD> - list all installed packages
-	  <TR><TD><TD> wilcard search    <TD> - list packages concisely
-	  <TR><TD><TD> list of packages  <TD> - list packages concisely
-	  <TR><TD><TD> package           <TD> - list package and owned files
-	  <TR><TD><TD> absolute pathname <TD> - list packages owners of a file
+	  <TR><TD>
+	    <TD> <TT>?</TT>
+	    <TD> show this help page
+	  <TR><TD>
+	    <TD> <TT>*</TT>
+	    <TD> list all packages available on your system
+	  <TR><TD>
+	    <TD> <I>&lt;empty&gt;</I>
+	    <TD> list all packages installed on your system
+	  <TR><TD>
+	    <TD> <I>&lt;space&gt;</I>
+	    <TD> print only the input form, for use from wm menus
+	  <TR><TD>
+	    <TD> <I>package</I>
+	    <TD> list the required package and its owned files
+	  <TR><TD>
+	    <TD> <I>list of packages</I>
+	    <TD> list required packages concisely
+	  <TR><TD>
+	    <TD> <I>wilcard expression</I>
+	    <TD> list matching packages concisely
+	  <TR><TD>
+	    <TD> <I>absolute pathname</I>
+	    <TD> list packages owning pathname
+	  <TR><TD>
+	    <TD> <I>field=value</I>
+	    <TD> list packages with control field matching value
+	  <TR><TD>
+	    <TD> <I>=value</I>
+	    <TD> list packages with any field matching value
+	  <TR><TD>
+	    <TD> <I>section=?</I>
+	    <TD> list available package sections
+	  <TR><TD>
+	    <TD> <I>task=?</I>
+	    <TD> list available tasks
+	  <TR><TD>
+	    <TD> <I>recent=[&lt;N&gt;]</I>
+	    <TD> list packages installed in last N days (default 1)
 	</TABLE>
+	<P>
+	<H3>Examples:</H3>
+	<P>
+	<FORM METHOD="GET" ACTION="$SELF">
+	<TABLE WIDTH="80%">
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=*"><TT>*</TT></A>
+	    <TD> list all packages available on your system
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query="><I>&lt;empty&gt;</I></A>
+	    <TD> list all packages installed on your system
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=binutils"><TT>binutils<TT></A>
+	    <TD> list verbosely the package binutils
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=dpkg+apt"><TT>dpkg apt</TT></A>
+	    <TD> list the dpkg and apt packages
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=jpeg*"><TT>jpeg*</TT></A>
+	    <TD> list packages with name beginning with "jpeg"
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=*jpeg*"><TT>*jpeg*</TT></A>
+	    <TD> list packages with name containing "jpeg"
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=/usr/bin/tail"><TT>/usr/bin/tail</TT></A>
+	    <TD> list packages owning the file /usr/bin/tail
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=/.*/postfix"><TT>/.*/postfix</TT></A>
+	    <TD> list packages owning any file named "postfix" (1)
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=/.*pbm.*"><TT>/.*pbm.*</TT></A>
+	    <TD> list packages owning any file matching *pbm* (1)
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=maintainer%3DJoey+Hess"
+	         ><TT>maintainer=Joey Hess</TT></A>
+	    <TD> list packages with maintainer Joey Hess (2)
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=section%3Dnet"><TT>section=net</TT></A>
+	    <TD> list packages with section net (2)
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=%3Dfirewall"><TT>=firewall</TT></A>
+	    <TD> list packages with any field matching "firewall" (2)
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=section%3D?"><TT>section=?</TT></A>
+	    <TD> list available package sections
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=task%3D?"><TT>task=?</TT></A>
+	    <TD> list available tasks
+	  <TR><TD>
+	    <TD> <A HREF="$SELF?query=recent%3D2"><TT>recent=2</TT></A>
+	    <TD> list packages installed in last 2 days
+	  <TR><TD>
+	    <TD> <TT>
+	         <INPUT TYPE="hidden" NAME="packages" VALUE="hello">
+		 <INPUT TYPE="submit" NAME="install" VALUE="Install">
+		 package <A HREF="$SELF?query=hello">hello</A><TT>
+	    <TD> install the package hello (3)
+	  <TR><TD>
+	    <TD> <TT>
+		 <!-- INPUT TYPE="hidden" NAME="packages" VALUE="hello" -->
+		 <INPUT TYPE="submit" NAME="remove" VALUE="Remove ">
+		 package <A HREF="$SELF?query=hello">hello</A><TT>
+	    <TD> remove the package hello (3)
+	</TABLE>
+	</FORM>
+	<P>
+	(1) The regexp form can be used to query also packages owning files
+	not installed on your system. However this works only if you have
+	properly configured the variable <TT>DEBIAN_CONTENTS</TT> in the
+	configuration file<EM>&nbsp/etc/dpkg-www.conf</EM>.
+	This query can be used to find which package you should install
+	in order to get some missing command or file.
+	Note that the leading '<TT>/</TT>' is required to distinguish filename
+	queries from package queries.
+	<P>
+	(2) This works only if the
+	<A HREF="$SELF?query=grep-dctrl">grep-dctrl</A> package is installed.
+	</P>
+	(3) This works only if <TT>INSTALL_BUTTON=1</TT> has been set in the
+	configuration file<EM>&nbsp/etc/dpkg-www.conf</EM>, your browser has
+	been configured to handle WEB installation requests and, of course,
+	you know the root password.
+	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
+	man page for more information.
 	</P>
 EOF
 }
 
-# List one or more packages
+debug() {
+    test_flag "$DEBUG" && echo "<TT>$(escape_html "$*")</TT><BR>"
+}
+
+test_flag() {
+    case "$1" in
+	0|false|n|no|"") return 1 ;;
+	*)		 return 0 ;;
+    esac
+}
+
+# Sanity check on input values
+checkInput() {
+    if echo "$*" | grep -q '[(){}<>$%#&!|\\;`]'; then
+	printError "Error: invalid input"
+	exit
+    fi
+}
+
+# Execute the query
+doQuery() {
+    debug "doQuery $1"
+    local query="$1"
+    case "${query%/}" in
+	\?|-\?|-h|-help|--help)
+	    usage
+	    ;;
+	" ")
+	    return
+	    ;;
+	-*)
+	    printError "Invalid keyword: $query"
+	    exit
+	    ;;
+	/*)
+	    queryOwners "$query"
+	    ;;
+	*=*)
+	    queryPackagesByField "$query"
+	    ;;
+	*)
+	    checkInput "$query"
+	    queryPackages "$query"
+	    ;;
+    esac
+}
+
+# Query one or more packages
+queryPackages() {
+    debug "queryPackages $*"
+    local packages="$*"
+    local package="${packages%% *}"
+    if [ ! "$packages" ]; then
+	# No argument, show the package list
+	debug "no arguments"
+	listPackages
+    elif [ "$package" != "$packages" -o "$packages" != "${packages#*[\[*?]}" ];then
+	# Package list or wildcard, list packages concisely
+	debug "package list"
+	listPackages $packages
+    else
+	# One package, show package information
+	debug "one package"
+	listPackage $package
+    fi
+}
+
+# Query one or more packages by control field value
+queryPackagesByField() {
+    field="${*%%=*}"; arg="${*#$field}"; arg="${arg#=}"
+    field="${field## }"; field="${field%% }"
+    arg="${arg## }"; arg="${arg%% }"
+    if [ "$field" = section -a "$arg" = "?" ]; then
+	listSections
+	return
+    fi
+    if [ "$field" = task -a "$arg" = "?" ]; then
+	listTasks
+	return
+    fi
+    if [ "$field" = recent -o "$field" = new ]; then
+	listRecentPackages $arg
+	return
+    fi
+    if [ "$field" != "" -a ! -x /usr/bin/grep-dctrl ]; then
+	echo "<PRE>"
+	echo -n "Error: the <A HREF=\"$SELF?query=/usr/bin/grep-dctrl\">"
+	echo -n "grep-dctrl</A>"
+	echo " command is not installed on your system"
+	echo "</PRE>"
+	return
+    fi
+    echo "<PRE>"
+    echo "Packages with $(escape_html "${field:-any field matching} $arg")"
+    echo ""
+    {
+	if [ -x /usr/bin/grep-dctrl ]; then
+	    grep-dctrl $GREP_DCTRL_OPTS -s Package -F "$field" "$arg" \
+		$DPKG_STATUS $DPKG_AVAILABLE
+	else
+	    apt-cache search "$arg" | sed 's/ .*//;s/^/Package: /'
+	fi
+	dpkg -l "*" 2>&1
+    } \
+    | awk '
+	/^Package:/ { p[$2]=1; NR=0; next }
+	(NR <= 5) { print }
+	(p[$2] != 1) { next }
+	{ print }' \
+    | listFilter
+    echo "</PRE>"
+}
+
+# List available sections
+listSections() {
+    sections=$(
+	grep -h "^Section:" $DPKG_STATUS $DPKG_AVAILABLE \
+	   | sed 's|.*:[ ]*||; s|.*/||' | sort | uniq | grep -v "^non-"
+    )
+    echo "<pre>"
+    echo "Available sections:"
+    echo ""
+    for s in $sections; do
+	desc=$(
+	    echo "$SECTION_DESCRIPTIONS" | sed "/^$s/!d; s/^$s[	 ]*//;q"
+	)
+	desc=${desc:="no description available"}
+	x=$(printf "%$[16-${#s}]s" " ")
+	echo "  <a href=\"${SELF}?query=section%3D${s}\">${s}</a>${x} ${desc}"
+    done
+    echo "</pre>"
+}
+
+# List available tasks
+listTasks() {
+    tasks=$(
+	grep -h "^Task:" $DPKG_STATUS $DPKG_AVAILABLE \
+	   | sed 's|.*:[ ]*||; s|,[ ]*|\
+|g' | sort | uniq
+    )
+    echo "<pre>"
+    echo "Available tasks:"
+    echo ""
+    for t in $tasks; do
+	desc=$(
+	    cat $TASKS_DESC 2>/dev/null | awk -v t="$t" '
+		/^Task:/ { task = $2 }
+		/^Description:/ && (task == t) {
+		    sub($1"[ ]*",""); print; exit
+		}'
+	)
+	desc=${desc:="no description available"}
+	x=$(printf "%$[16-${#t}]s" " ")
+	echo "  <a href=\"${SELF}?query=task%3D${t}\">${t}</a>${x} ${desc}"
+    done
+    echo "</pre>"
+}
+
+# List recent packages
+listRecentPackages() {
+    n=${1:-1}
+    packages=$(
+	find /var/lib/dpkg/info/ -daystart \( -name \*.list -a -mtime -$n \) \
+	   | sed 's|.list$||;s|.*/||' \
+	   | sort
+    )
+    if [ "$packages" ]; then
+	echo "<PRE>"
+	echo "Recent packages in last $n days:"
+	echo ""
+	dpkg -l $packages 2>&1 | listFilter
+	echo "</PRE>"
+    else
+	echo "<PRE>"
+	echo "No recent packages in last $n days"
+	echo "</PRE>"
+    fi
+}
+
+# List one or more packages concisely
 listPackages() {
     debug "listPackages $*"
-    packages="$*"
-    package="${packages%% *}"
-    if [ ! "$package" ]; then
-	# No argument, show the package list
-	debug "package"
-	echo "<PRE>"
-	dpkg -l | pkgFilter
-	echo "</PRE>"
-	return
-    elif [ "$package" != "$packages" ] || echo "$packages" |grep -q '[*?]';then
-	# Package list or wildcard, show packages concisely
-	debug "package list"
-	echo "<PRE>"
-	set -f; set - $packages
-	dpkg -l "$@" 2>&1 | pkgFilter
-	echo "</PRE>"
-	return
-    elif dpkg -l $package 2>&1 | grep -q "No packages found";then
-	# Package name not known to dpkg
-	debug "package not found"
-	if [ ${#package} = $DPKG_NAME_MAX ]; then
-	    # Maybe name truncated by dpkg, try all corresponding long names
-	    packages=$(grep "Package: $package" $DPKG_STATUS | cut -f2 -d' ')
-	    if [ "$packages" ]; then
-		debug "truncated name"
-		for pkg in $packages; do
-		    test "$hr" && echo '<HR WIDTH="100%">'
-		    listPackage $pkg || listAvailPackage $pkg
-		    hr=true
-		done
-		return
+    echo "<PRE>"
+    dpkg -l "$@" 2>&1 | listFilter
+    echo "</PRE>"
+}
+
+# List a single package
+#
+listPackage() {
+    debug "listPackage $*"
+    local package="$1"
+    local installed
+    local status
+    local version
+    local latest
+    local priority
+    local essential
+
+    pkg_info="$(dpkg -s $package)"
+    if [ ! "$pkg_info" ]; then
+	# Unknown package or virtual package
+	listVirtualPackage $package || listUnknownPackage $package
+	return 1
+    fi
+
+    status="$(echo "$pkg_info" | awk '/^Status:/ {print $4}')"
+    #   installed		The package is unpacked and configured OK.
+    #   half-installed		The installation has started but not completed.
+    #   not-installed		The package is not installed on your system.
+    #   unpacked		The package is unpacked, but not configured.
+    #   half-configured		The package configuration has not completed.
+    #   config-files		Only the config files exist on the system.
+    # Handle unknown package
+    if [ ! "$status" ]; then
+	listUnknownPackage $package
+	return 1
+    fi
+
+    if [ "$status" = not-installed -o "$status" = config-files ]; then
+	if [ -x /usr/bin/apt-cache ]; then
+	    pkg_info="$(
+		echo "$pkg_info" \
+		   | grep "^\(Package\|Status\|Priority\|Section\):"
+		apt-cache $APT_CACHE_OPTS show $package 2>/dev/null \
+		   | sed 's/^installed-size:/Installed-Size:/' \
+		   | grep -v -e "^\(Package\|Status\|Priority\|Section\):" \
+			     -e "^\(Filename\|MD5sum\|Size\):"
+	    )"
+	else
+	    pkg_info="$(
+		echo "$pkg_info" \
+		   | grep "^\(Package\|Status\|Priority\|Section\):"
+		dpkg --print-avail $package 2>/dev/null \
+		   | grep -v -e "^\(Package\|Status\|Priority\|Section\):" \
+			     -e "^\(Filename\|MD5sum\|Size\):"
+	    )"
+	fi
+    fi
+
+    # Check for newer version of installed package
+    if [ "$status" = installed ]; then
+	version="$(echo "$pkg_info" | awk '/^Version:/ {print $2}')"
+	priority="$(echo "$pkg_info"  | grep ^Priority:  | awk '{print $2}')"
+	essential="$(echo "$pkg_info" | grep ^Essential: | awk '{print $2}')"
+	if test_flag "$CHECK_PACKAGE_VERSION"; then
+	    latest=$(
+		apt-cache $APT_CACHE_OPTS show $package \
+		  | grep ^Version: | awk '{print $2}'
+	    ); latest=${latest:-$version}
+	    if dpkg --compare-versions "$latest" gt "$version"; then
+		pkg_info="$(
+		    echo "$pkg_info" \
+		       | sed "/^Version:/s/\$/ (latest is $latest)/"
+		)"
+	    fi
+	else
+	    latest="$version"
+	fi
+    fi
+
+    echo "<PRE>"
+
+    # Print package info
+    echo "$pkg_info" | packageFilter $package
+
+    if [ "$INSTALL_BUTTON" = "top" ]; then
+	addButtons
+    fi
+
+    # Print documentation and file list
+    if [ "$status" != not-installed ]; then
+	listPackageDocumentation $package
+	listPackageFiles $package
+    fi
+
+    if [ "$INSTALL_BUTTON" != "top" ]; then
+	addButtons
+    fi
+
+    echo "</PRE>"
+}
+
+# Add "Install", "Update" and "Remove" buttons if enabled.
+addButtons() {
+    if [ "$status" = installed ]; then
+	if [ "$priority" = required -o "$essential" = yes ]; then
+	    if [ "$version" != "$latest" ]; then
+		addUpgradeButton $package $latest
+	    fi
+	else
+	    if [ "$version" != "$latest" ]; then
+		addRemoveUpgradeButtons $package $latest
+	    else
+		addRemoveButton $package
 	    fi
 	fi
     else
-	# Package is known to dpkg (but maybe not installed)
-	debug "package found"
-	listPackage $package && return
+	addInstallButton $package
     fi
-
-    # Package is not installed, try with available packages
-    listAvailPackage $package && return
-
-    # No info available for this package, maybe a virtual package?
-    listVirtualPackage $package && return
-
-    # Unknown package
-    debug "unknown package"
-    echo "<PRE>"
-    echo "Package $package is not installed and no info is available."
-    echo "</PRE>"
 }
 
-# List a package known to dpkg, possibly not installed
-listPackage() {
-    package="$1"
-    installed=
-    grep -q "Package: $package$" $DPKG_STATUS || return 1
-    echo "<PRE>"
-    dpkg -s $package | statusFilter && installed=true
-    if [ "$installed" ]; then
-	echo
-	echo "Files owned by package $package:"
-	echo
-	dpkg -L $package | fileFilter
+# Print a "Package not installed" message and add the "Install" button
+# if enabled in the configuration file.
+#
+addInstallButton() {
+    debug "addInstallButton $*"
+    local package="$1"
+    local pkgname="$package"
+    if test_flag "$INSTALL_BUTTON"; then
+	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">" \
+	     "<INPUT TYPE=\"hidden\" NAME=\"packages\" VALUE=\"$pkgname\">"
+	echo -n \
+	     "Package $(escape_html "$package") is not installed." \
+	     "<INPUT TYPE=\"submit\" NAME=\"install\" VALUE=\"Install\">" \
+	     "</FORM>"
     else
-	if grep -q "Package: $package$" $DPKG_AVAILABLE; then
-	    dpkg --print-avail $package 2>/dev/null \
-	       | grep -v '^\(Package\|Status\|Priority\|Section\):' \
-	       | grep -v '^\(Filename\|MD5sum\):' \
-	       | statusFilter
-	    echo
-	    echo "Package $package is not installed."
-	else
-	    echo
-	    echo "Package $package is not installed and no info is available."
-	fi
+	echo ""
+	echo "Package $(escape_html "$package") is not installed."
     fi
-    echo "</PRE>"
 }
 
-# List a package not known by dpkg
-listAvailPackage() {
-    package="$1"
-    grep -q "Package: $package$" $DPKG_AVAILABLE || return 1
-    echo "<PRE>"
-    dpkg --print-avail $package | statusFilter
-    echo
-    echo "Package $package is not installed."
-    echo "</PRE>"
+# Add the "Remove" button if enabled in the configuration file.
+#
+addRemoveButton() {
+    debug "addRemoveButton $*"
+    local package="$1"
+    local pkgname="$package"
+    if test_flag "$INSTALL_BUTTON"; then
+	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">" \
+	     "<INPUT TYPE=\"hidden\" NAME=\"packages\" VALUE=\"$pkgname\">"
+	echo -n \
+	     "<INPUT TYPE=\"submit\" NAME=\"remove\" VALUE=\"Remove\">" \
+	     "package $package" \
+	     "</FORM>"
+    fi
 }
 
-# List all packages providing a virtual package
+# Add the "Upgrade" button if enabled in the configuration file.
+#
+addUpgradeButton() {
+    debug "addUpgradeButton $*"
+    local package="$1"
+    local latest="$2"
+    local pkgname="$package"
+    if test_flag "$INSTALL_BUTTON"; then
+	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">" \
+	     "<INPUT TYPE=\"hidden\" NAME=\"packages\" VALUE=\"$pkgname\">"
+	echo -n \
+	     "<INPUT TYPE=\"submit\" NAME=\"install\" VALUE=\"Upgrade\">" \
+	     "package $package to version $latest" \
+	     "</FORM>"
+    fi
+}
+
+# Add the "Remove" and "Upgrade" buttons if enabled in the configuration file.
+#
+addRemoveUpgradeButtons() {
+    debug "addRemoveUpgradeButtons $*"
+    local package="$1"
+    local latest="$2"
+    local pkgname="$package"
+    if test_flag "$INSTALL_BUTTON"; then
+	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">" \
+	     "<INPUT TYPE=\"hidden\" NAME=\"packages\" VALUE=\"$pkgname\">"
+	echo -n \
+	     "<INPUT TYPE=\"submit\" NAME=\"remove\" VALUE=\"Remove\">" \
+	     "package $package. " \
+	     "<INPUT TYPE=\"submit\" NAME=\"install\" VALUE=\"Upgrade\">" \
+	     "to version $latest" \
+	     "</FORM>"
+    fi
+}
+
+# List all packages providing a virtual package.
+#
 listVirtualPackage() {
-    package="$1"
-    packages=$(
-	cat $DPKG_STATUS $DPKG_AVAILABLE | awk -v package=$package '
+    debug "listVirtualPackage $*"
+    local package="$1"
+    local packages=$(
+	cat $DPKG_STATUS $DPKG_AVAILABLE \
+	  | awk -v package=$package '
 	    /^Package:/ { owner = $2 }
 	    /^Provides:/ {
 		gsub(",","")
 		for (i=2; i<=NF; i++) { if ($i == package) { print owner } }
 	    }' \
-	| sort | uniq
+	  | sort | uniq
     )
     test "$packages" || return 1
+    debug "is virtual package"
     echo "<PRE>"
-    echo "Virtual package $package is provided by:"
+    echo "Virtual package $(escape_html "$package") is provided by:"
     echo "</PRE>"
-    listPackages "$(echo $packages)"
-    return 0
+    listPackages $(echo $packages)
 }
 
-# Find all packages owners of a file
-findOwner() {
-    file="${1%/}"
-    owners=$(dpkg --search $file | cut -f1 -d: | grep -v diversion | tr -d ',')
+listUnknownPackage() {
+    debug "listUnknownPackage $*"
+    local package="$(escape_html "$1")"
+    echo "<PRE>"
+    echo "Package $package is not installed and no info is available."
+    echo "</PRE>"
+}
+
+listPackageFiles() {
+    debug "listPackageFiles $*"
+    local package="$1"
+    echo
+    echo "Files owned by package $(escape_html "$package"):"
+    echo
+    $DPKG -L $package | sort | fileFilter
+}
+
+# This is really ugly but I don't know a better way since install-docs
+# doesn't record package ownership of documents.
+#
+listPackageDocumentation() {
+    debug "listPackageDocumentation $*"
+    local package="$1"
+    local installdocs_files
+    local document_id
+    local f
+    test_flag "$LIST_DOCUMENTATION" || return
+    test -x /usr/sbin/install-docs || return
+    test -e /var/lib/dpkg/info/$package.postinst || return
+    installdocs_files=$(
+	cat /var/lib/dpkg/info/$package.postinst \
+	  | grep 'install-docs[ 	]*-i' \
+	  | sed 's/.*install-docs[ 	]*-i[ 	]*//;s/[ 	].*//'
+    )
+    debug "installdocs_files=$installdocs_files"
+    test "$installdocs_files" || return
+    echo
+    echo "Documentation:"
+    echo
+    for f in $installdocs_files; do
+	# Hack for postinsts with `$package' in filenames
+	test ! -e $f && f="$(echo "$f" | sed "s/\$package/$package/i")"
+	# Get document_id (this can be different than file basename)
+	if [ -e $f ]; then
+	    document_id="$(grep "^Document:" "$f" | sed 's/.*: //' | head -1)"
+	else
+	    document_id="${f##*/}"
+	fi
+	debug "document_id=$document_id"
+	title="$(
+	    /usr/sbin/install-docs -s "$document_id" 2>/dev/null \
+	      | awk '/^Title: / { sub("^Title: *",""); print $0 }'
+	)"
+	/usr/sbin/install-docs -s "$document_id" 2>/dev/null \
+	| awk '
+	    /^Format:/ { format = $2 }
+	    /^Index: / { print $2 "\t" format }
+	    /^Files: / { if (!match($2,"\\*")) { print $2 "\t" format } }' \
+	| sort | uniq | fileFilter "$title" | sed 's/^/ /'
+    done
+}
+
+# Find all packages owning a file. Must be able to handle things like:
+#
+#   /usr/lib/games/maelstrom/Maelstrom Fonts
+#   /usr/share/ucblogo/logolib/#
+#   /usr/share/ucblogo/logolib/`
+#   /etc/diskless-image/config.sh
+#   /bin/bash
+#   /.*/postfix
+#   /.*pbm.*
+#
+queryOwners() {
+    debug "queryOwners $*"
+    local file="${1%/}"
+    local owners=$(
+	# Must grep the exact filename when using dlocate
+	$DPKG -S "$file" 2>/dev/null | grep ": $file$" | cut -f1 -d: \
+	    | grep -v diversion | tr -d ','
+    )
     if [ "$owners" ]; then
 	echo "<PRE>"
-	echo "Packages owning $file:"
+	echo "Packages owning $(escape_html "$file"):"
 	echo "</PRE>"
 	listPackages $owners
-    else
-	echo "<PRE>"
-	echo "No package is owner of $file"
-	echo "</PRE>"
+	return
     fi
+
+    if [ "$DEBIAN_CONTENTS" ]; then
+	owners=$(
+	    zcat $DEBIAN_CONTENTS 2>/dev/null \
+	       | grep "^${file#/}[	 ][ 	]*[^ ]*\$" \
+	       | sed "s^${file#/}[	 ][ 	]*; s/,/\\
+/"	       | sed 's|.*/||' \
+	       | sort | uniq
+	)
+    fi
+    if [ "$owners" ]; then
+	echo "<PRE>"
+	echo "Packages owning $(escape_html "$file"):"
+	echo "</PRE>"
+	listPackages $owners
+	return
+    fi
+
+    echo "<PRE>"
+    echo "No package is owning $(escape_html "$file")"
+    echo "</PRE>"
 }
 
-# Convert package status to html adding hrefs to other packages
-statusFilter() {
-    awk '
+# Convert package info to html by adding hrefs to other packages.
+#
+packageFilter() {
+    local package="$1"
+    local uri=""
+    if [ "$DPKG_WWW_BROWSER_HACK" = true -a "$SHOW_LOCAL_FILES" ]; then
+	uri="$(packageURI "$package")"
+	test "$uri" = "${uri#file:/}" && uri=""
+    fi
+    awk -v SELF=$SELF -v package="$package" -v uri="$uri" '
 	{ gsub("<","\\&lt;"); gsub(">","\\&gt;") }
-	/^Status:/ { if ($NF == "not-installed") { rc=1 } else { rc=0 } }
-	/^(Replace|Provide|Depend|Pre-Depend|Suggest|Conflict|Require|Recommend)s:/ {
-	    # print "-->" $0
+	/^Package:/ {
+	    # Add link to the Debian package page for this package
+	    p = s = package; gsub("\\+", "%2B", s)
+	    u = "http://packages.debian.org"
+	    $2 = sprintf("<a href=\"%s/%s\">%s</a>", u,s,p)
+	}
+	/^Section:/ {
+	    # Add link to package section list
+	    s = t = r = $2
+	    gsub("\\+", "\\+", r)
+	    gsub("\\+", "%2B", s)
+	    sub(r, "<a href=\"" SELF "?query=section%3D" s "\">" t "</a>", $2)
+	}
+	/^Task:/ {
+	    # Add links to package tasks list
 	    for (f=2; f<=NF; f++) {
-		# print " ->" f,$f
+		r = $f;
+		gsub(",", "", r)
+		s = t = r
+		gsub("\\+", "\\+", r)
+		gsub("\\+", "%2B", s)
+		sub(r, "<a href=\"" SELF "?query=task%3D" s "\">" t "</a>", $f)
+            }
+	}
+	/^Maintainer:/ {
+	    # Add link to the Debian BTS page for this package
+	    s = package; gsub("\\+", "%2B", s)
+	    d = "[Debian Bug Report]"
+	    u = "http://bugs.debian.org/cgi-bin/pkgreport.cgi"
+	    h = sprintf("<a href=\"%s?repeatmerged=no&pkg=%s\">%s</a>", u,s,d)
+	    $0 = $0 " " h
+	}
+	/^(Replace|Provide|(Pre-)?Depend|Suggest|Conflict|Require|Recommend)s/\
+	{
+	    for (f=2; f<=NF; f++) {
 		if ($f == "|") {
 		    continue 
 		}
@@ -202,62 +822,234 @@ statusFilter() {
 		s = t = r
 		gsub("\\+", "\\+", r)
 		gsub("\\+", "%2B", s)
-		# print " +>" f,r,s
-		sub(r, "<a href=\"dpkg?query=" s "\">" t "</a>", $f)
-		# print " =>" f,$f
+		sub(r, "<a href=\"" SELF "?query=" s "\">" t "</a>", $f)
             }
-	    # print "==>" $0
         }
+	/^Description:/ {
+	    if (uri != "") {
+		s = package
+		t = uri
+		gsub("\\+", "%2B", s)
+		gsub("^file:", "", t)
+		h =  SELF "?browse=Browse&packages=" s
+		printf("Filename: <a href=\"%s\">%s</a>\n", h, t)
+	    }
+	}
 	/^$/ { next}
 	/^ .$/ { $0 = " " }
-	{ print }
-	END { exit rc }'
+	{ print }'
 }
 
-# Convert a dpkg packages list to html adding hrefs to package names
-pkgFilter() {
-    awk '
-	(f==0) { print }
-	(f==1) {
-	    gsub("<","\\&lt;"); gsub(">","\\&gt;")
-	    r = s = $2;
-	    gsub("\\+", "\\\\+", r);
-	    gsub("\\+", "%2B", s);
-	    sub(r, "<A HREF=\"dpkg?query=" s "\">" $2 "</A>");
-	    print
+# Convert a dpkg package list to html adding hrefs to package names.
+# This is used for both file list and documentation list.
+#
+listFilter() {
+    awk -v SELF=$SELF \
+	-v CHECK_BUTTONS=$CHECK_BUTTONS \
+	-v DPKG_AVAILABLE=$DPKG_AVAILABLE \
+	-v LIST_UNAVAILABLE=$LIST_UNAVAILABLE '
+	BEGIN {
+	    statMax = 3
+	    nameMax = 10
+	    versMax = 10
+	    descMax = 10
+	    if (CHECK_BUTTONS) {
+		pkg_button = \
+		    "<INPUT TYPE=\"checkbox\" NAME=\"packages\" VALUE=\"%s\">"
+		install_button = \
+		    "<INPUT TYPE=\"submit\" NAME=\"install\" " \
+			"VALUE=\"Install selected packages\">"
+		reset_button = \
+		    "<INPUT TYPE=\"reset\">"
+		buttonW = 2
+	    }
 	}
-	/^\+/  { f=1 }'
+	/^No packages found matching/ {
+	    print $0
+	    missing++
+	    NR--
+	    next
+	}
+	(NR <= 3) {
+	    header[NR] = $0
+	    next
+	}
+	(NR == 4) {
+	    hstat = $1
+	    hname = $2
+	    hvers = $3
+	    hdesc = $4
+	    next
+	}
+	(NR == 5) {
+	    split($0,A,"-")
+	    statLen = length(A[1])
+	    nameLen = length(A[2])
+	    versLen = length(A[3])
+	    hsep = A[4] A[4] A[4]
+	    next
+	}
+	(NR >= 6) {
+	    stat = substr($0,1,statLen)
+	    name = substr($0,5,nameLen)
+	    vers = substr($0,6+nameLen,versLen)
+	    desc = substr($0,7+nameLen+versLen)
+	    sub("[ ]+$","",name)
+	    sub("[ ]+$","",vers)
+	    sub("[ ]+$","",desc)
+	    # if (vers == "<none>") { vers = "-" }
+	    nameMax = max(nameMax, length(name))
+	    versMax = max(versMax, length(vers))
+	    descMax = max(descMax, length(desc))
+	    packages[NR,"stat"] = stat
+	    packages[NR,"name"] = name
+	    packages[NR,"vers"] = vers
+	    packages[NR,"desc"] = desc
+	    if (desc == "(no description available)") {
+		needs_desc = missing_desc[name] = NR
+	    }
+	}
+	END {
+	    if (needs_desc) {
+		update_descs()
+	    }
+	    if (NR < 6) { 
+		if (!missing) {
+		    print "no packages found"
+		}
+		exit
+	    }
+	    if (missing) {
+		print ""
+	    }
+	    if (CHECK_BUTTONS) {
+		printf "<FORM METHOD=\"GET\" ACTION=\"" SELF "\">"
+	    }
+	    for (i=1; i<=3; i++) {
+		print header[i]
+	    }
+	    descMax = max(descMax,80-statMax-nameMax-versMax-3)
+	    printf("%s %s %s %s\n", \
+		   pad(hstat,statMax+buttonW), pad(hname,nameMax), \
+		   pad(hvers,versMax), hdesc)
+	    printf("+++%s-%s-%s-%s\n", substr("--",1,buttonW), \
+		   pad(hsep,nameMax), pad(hsep,versMax), pad(hsep,descMax))
+	    nr = NR
+	    for (i=6; i<=nr; i++) {
+		name = packages[i,"name"]
+		if (CHECK_BUTTONS) {
+		    if (substr(packages[i,"stat"],2,1) == "n") {
+			stat = pad(packages[i,"stat"],statMax)
+			button = sprintf(pkg_button, name",")
+			install = 1
+		    } else {
+			stat = pad(packages[i,"stat"],statMax)
+			button = "  "
+		    }
+		} else {
+		    stat = pad(packages[i,"stat"],statMax)
+		}
+		npad = pad("", nameMax-length(name))
+		vers = escape(pad(packages[i,"vers"],versMax))
+		desc = escape(packages[i,"desc"])
+		if ((LIST_UNAVAILABLE == 0) &&
+		    (desc == "(no description available)")) {
+		    NR--
+		    continue
+		}
+		href = link = name
+		gsub("\\+", "%2B", href)
+		href = "<A HREF=\"" SELF "?query=" href "\">" link "</A>" npad
+		printf("%s%s %s %s %s\n", stat, button, href, vers, desc)
+	    }
+	    if (NR > 6) {
+		npad = statMax+2+buttonW+nameMax
+		print ""
+		printf(pad(sprintf("%d packages", NR-5), npad))
+	    }
+	    if (CHECK_BUTTONS) {
+		if (install) {
+		    printf reset_button "  " install_button "\n"
+		}
+		printf "</FORM>"
+	    }
+	}
+	function escape(s) {
+	    gsub("&","\\&amp;",s)
+	    gsub("<","\\&lt;",s)
+	    gsub(">","\\&gt;",s)
+	    return s
+	}
+	function pad(s,l) {
+	    while (length(s) < l) {
+		s = s "          "
+	    }
+	    return substr(s,1,l)
+	}
+	function max(x,y) {
+	    return ((x > y) ? x : y)
+	}
+	function update_descs() {
+	    while (getline < DPKG_AVAILABLE) {
+		if ($1 == "Package:") {
+		    if ((nr=missing_desc[$2])) {
+			package = $2
+		    } else {
+			package = ""
+		    }
+		}
+		if (package && ($1 == "Version:")) {
+		    sub("Version: ",""); vers = $0
+		    packages[nr,"vers"] = vers
+		    versMax = max(versMax, length(vers))
+		}
+		if (package && ($1 == "Description:")) {
+		    sub("Description: ",""); desc = $0
+		    packages[nr,"desc"] = desc
+		    descMax = max(descMax, length(desc))
+		}
+	    }
+	}'
 }
 
-# Convert a file list to html adding hrefs to files in /usr/{doc,info,man}
+# Convert a file list to html adding hrefs to files in /usr/{doc,info,man}.
+#
 fileFilter() {
-    awk -v show_local_file="$SHOW_LOCAL_FILE" '
-	/\/usr\/([a-zA-Z0-9_-]+\/)?man\/.*\..*/ {
-	    r = s = $1;
+    awk -v title="$*" -v show_local_files="$SHOW_LOCAL_FILES" -v man="$MAN" '
+	/\/usr\/(share\/)?([a-zA-Z0-9_+-]+\/)?man\/.*\..*/ {
+	    if (title) { t = title } else { t = $1 }
+	    if ($2) { t = t " [" $2 "]"; NF=1 }
+	    r = s = $1
 	    gsub("\\+", "\\\\+", r);
 	    gsub("\\+", "%2B", s);
-	    sub(r, "<A HREF=\"/cgi-bin/dwww?type=man\&amp;location=" s "\">" \
-		   $1 "</A>")
+	    gsub("\\$","\\$",r)
+	    sub(r, "<A HREF=\"" man s "\">" t "</A>")
 	    print
 	    next
 	}
-	/\/usr\/info\/.*\.gz/ {
-	    r = s = $1;
+	/\/usr\/(share\/)?info\/.*\.gz/ {
+	    if (title) { t = title } else { t = $1 }
+	    if ($2) { t = t " [" $2 "]"; NF=1 }
+	    r = s = $1
 	    gsub("\\+", "\\\\+", r);
 	    gsub("\\+", "%2B", s);
-	    sub(r, "<A HREF=\"/cgi-bin/info2www?" s "\">" $1 "</A>")
+	    gsub("\\$","\\$",r)
+	    sub(r, "<A HREF=\"/cgi-bin/info2www?" s "\">" t "</A>")
 	    print
 	    next
 	}
-	/\/usr\/(share\/)?doc\// {
-	    r = s = $1;
+	/\/usr\/((share\/)?doc\/|share\/gnome\/help\/|share\/RFC\/)/ {
+	    if (title) { t = title } else { t = $1 }
+	    if ($2) { t = t " [" $2 "]"; NF=1 }
+	    r = s = $1
 	    gsub("\\+", "\\\\+", r);
 	    gsub("\\+", "%2B", s);
-	    if (show_local_file == "true") {
-		sub(r, "<A HREF=\"file:" s "\">" $1 "</A>")
+	    gsub("\\$","\\$",r)
+	    if (show_local_files == "true") {
+		sub(r, "<A HREF=\"file:" s "\">" t "</A>")
 	    } else {
-		sub(r, "<A HREF=\"/cgi-bin/dwww?type=file\&location=" s "\">" \
-		       $1 "</A>")
+		sub(r, "<A HREF=\"/cgi-bin/dwww?type=file\\&location=" s "\">"\
+		       t "</A>")
 	    }
 	    print
 	    next
@@ -268,103 +1060,265 @@ fileFilter() {
 	{ print }'
 }
 
-debug() {
-    test "$DEBUG" && echo "<TT>$*</TT><BR>"
+packageURI() {
+    local package="$1"
+    local pkgcache=$(tempfile)
+    local srcpkgcache=$(tempfile)
+    trap "rm -f $pkgcache $srcpkgcache" 0
+    apt-get -o "Debug::NoLocking=1" \
+	    -o "Dir::Cache=/tmp" \
+	    -o "Dir::Cache::pkgcache=$pkgcache" \
+	    -o "Dir::Cache::srcpkgcache=$srcpkgcache" \
+	    -o "Dir::Cache::archives=/var/cache/apt/archives" \
+	    install --reinstall --print-uris -y "$package" \
+      | grep -F "/${package}_" \
+      | sed "/^'/!d; s/^'//; s/'.*//"
+    rm -f $pkgcache $srcpkgcache 2>/dev/null
 }
 
-# Unescape the query string
-html_unescape() {
+printInstallRequest() {
+    local packages="$1"
+    local host="$HOSTNAME_FULL"
+    cat <<-EOF
+	<!--
+	Install-host: $host
+	Install-packages: $packages
+	-->
+	<H1>dpkg-www WEB Installation</H1>
+	<P>
+	If you are reading this document on your browser or you have
+	been asked to save it to disk instead of running the installation
+	of the required packages this means that your browser has not
+	been set up correctly for dpkg-www WEB installation.
+	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
+	man page for more information.
+	</P>
+EOF
+}
+
+printRemoveRequest() {
+    local packages="$1"
+    local host="$HOSTNAME_FULL"
+    cat <<-EOF
+	<!--
+	Remove-host: $host
+	Remove-packages: $packages
+	-->
+	<H1>dpkg-www WEB Deinstallation</H1>
+	<P>
+	If you are reading this document on your browser or you have
+	been asked to save it to disk instead of running the installation
+	of the required packages this means that your browser has not
+	been set up correctly for dpkg-www WEB installation.
+	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
+	man page for more information.
+	</P>
+EOF
+}
+
+printBrowseRequest() {
+    local package="$1"
+    local host="$HOSTNAME_FULL"
+    cat <<-EOF
+	<!--
+	Browse-package: $package
+	-->
+	<H1>dpkg-www Browse Request</H1>
+	<P>
+	If you are reading this document on your browser or you have
+	been asked to save it to disk instead of running a browser
+	on the required packages this means that your browser has not
+	been set up correctly for dpkg-www WEB installation.
+	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
+	man page for more information.
+	</P>
+EOF
+}
+
+# Get the value of a query argument
+getValue() {
+    local key="$1"
     test -x /usr/bin/perl || return
-    perl -e "use CGI; my \$q = new CGI(\$_); print \$q->param('query')" "$1"
+    perl -e "use CGI; my \$q = new CGI(\$_); print \$q->param('$key')" "$1"
 }
 
-#------------------------------------------------------------------------------
+escape_html() {
+    echo "$*" | sed 's/&/\&amp;/g; s/\"/\&quot;/g; s/</\&lt;/g; s/>/\&gt;/g'
+}
 
-# Get query argument
-if [ "$*" ]; then
-    # ISINDEX
-    query="$*"
-else
-    # GET
-    query="$(html_unescape "$*")"
-fi
-
-# Html header
-cat <<- EOF
-	Content-type: text/html
-
-	<HTML>
-	<HEAD>
-	<TITLE>Debian Packages${query:+: }${query}</TITLE>
-	</HEAD>
-	<BODY>
-EOF
-
-# Debugging info
-test "$DEBUG" && cat <<- EOF
-	<PRE>
-	$(env | sort)
-	PROG=$0
-	ARGC=$#
-	ARGV='$*'
-	QUERY="$(html_unescape "$*")"
-	</PRE>
-EOF
-
-echo "<H1>Debian packages on $(hostname)</H1>"
+printHtmlHeader() {
+    local title="${1:-Debian Packages}"
+    local content_type="${2:-text/html}"
+    test "$html_header_done" && return
+    html_header_done=true
+    echo "Content-type: $content_type"
+    echo "Connection: close"
+    echo ""
+    if [ "$content_type" ]; then
+	echo "<HTML>"
+	echo "<HEAD>"
+	echo "<TITLE>$title</TITLE>"
+	echo "</HEAD>"
+	echo "<BODY>"
+    fi
+}
 
 # Generate an input form or the <isindex> tag
-if [ -x /usr/bin/perl ]; then
-    echo '<P>'
-    echo '<FORM METHOD="GET" ACTION="dpkg">'
-    if [ "${HTTP_USER_AGENT#Lynx}" != "$HTTP_USER_AGENT" ]; then
-	echo "Search:"
-	echo '<INPUT NAME="query" SIZE="42">'
-	echo '<INPUT TYPE="submit" NAME="search" VALUE="Submit">'
+printInputForm() {
+    local default
+    test "$input_form_done" && return; input_form_done=true
+    test "$KEEP_INPUT" = 1 && default="$query"
+    echo "<H1>Debian packages on $HOSTNAME</H1>"
+    if [ -x /usr/bin/perl ]; then
+	echo '<P>'
+	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">"
+	if [ "${HTTP_USER_AGENT#Lynx}" != "$HTTP_USER_AGENT" ]; then
+	    echo "Search:"
+	    echo '<INPUT NAME="query" SIZE="42" VALUE="'"$default"'">'
+	    echo '<INPUT TYPE="submit" NAME="search" VALUE="Submit">'
+	    echo '(?&nbsp;for&nbsp;help)'
+	else
+	    echo '<INPUT TYPE="submit" NAME="search" VALUE="  Search  ">'
+	    echo '<INPUT NAME="query" SIZE="50" VALUE="'"$default"'">'
+	    echo '<INPUT TYPE="submit" NAME="help" VALUE="   Help   ">'
+	fi
+	echo '</FORM>'
+	if [ "$query" != " " ]; then
+	    echo '<HR WIDTH="100%">'
+	fi
+	echo '</P>'
     else
-	echo '<INPUT TYPE="submit" NAME="search" VALUE="  Search  ">'
-	echo '<INPUT NAME="query" SIZE="50">'
+	echo '<P>'
+	echo '<ISINDEX>'
+	echo '</P>'
     fi
-    echo '(?&nbsp;for&nbsp;help)'
-    echo '</FORM>'
-    echo '<HR WIDTH="100%">'
-    echo '</P>'
-else
-    echo '<P>'
-    echo '<ISINDEX>'
-    echo '</P>'
-fi
+}
 
-# Execute the query
-case "${query%/}" in
-    \?|-\?|-h|-help|--help)
-	usage
-	;;
-    -*)
-	echo "Error: invalid keyword: $query"
-	usage
-	;;
-    /*)
-	findOwner "$query"
-	;;
-    *)
-	listPackages "$query"
-	;;
-esac
-
-cat <<- EOF
+# Print bottom info
+printHtmlBottom() {
+    cat <<- EOF
 	<P>
 	<HR WIDTH="100%">
 	<ADDRESS>
-	Generated by <A HREF="dpkg?query=dpkg-www">
-	dpkg-www $PROG_VERSION</A> - Copyright (C) 1999,2000
+	Generated by <A HREF="$SELF?query=dpkg-www">
+	dpkg-www $PROG_VERSION</A> - Copyright (C) 1999-2001
 	<A HREF="http://www.cs.unitn.it/~dz/">Massimo Dal Zotto</A>
-	<A HREF="mailto:dz@cs.unitn.it">&lt;dz@cs.unitn.it&gt;</A>
+	<A HREF="mailto:dz@debian.org">&lt;dz@debian.org&gt;</A>
 	</ADDRESS>
 	<BR>
 	</P>
 	</BODY>
 	</HTML>
 EOF
+}
+
+printError() {
+    local message="$*"
+    printHtmlHeader "$title" text/html
+    printInputForm
+    echo "<P>"
+    echo "$(escape_html "$message")"
+    echo "<P>"
+    usage
+    printHtmlBottom
+}
+
+#------------------------------------------------------------------------------
+
+# Get the query arguments
+if [ "$*" ]; then
+    # ISINDEX or interactive invocation
+    debug=""
+    query="$*"
+    help=""
+    install=""
+    remove=""
+    packages=""
+else
+    # GET method
+    debug="$(getValue debug)"
+    query="$(getValue query)"
+    help="$(getValue help)"
+    install="$(getValue install)"
+    remove="$(getValue remove)"
+    browse="$(getValue browse)"
+    packages="$(getValue packages)"
+fi
+test "$debug" != "" && DEBUG="$debug"
+test "$help"  != "" && query="?"
+
+# Print debugging info
+if test_flag "$DEBUG"; then
+    printHtmlHeader "$title" text/html
+    cat <<- EOF
+	<PRE>
+	$(env | sort)
+	SELF=$SELF
+	DPKG=$DPKG
+	SHOW_LOCAL_FILES=$SHOW_LOCAL_FILES
+	LIST_DOCUMENTATION=$LIST_DOCUMENTATION
+	CHECK_BUTTONS=$CHECK_BUTTONS
+	INSTALL_BUTTON=$INSTALL_BUTTON
+	PROG=$0
+	ARGC=$#
+	ARGV="$(escape_html "$*")"
+	query="$(escape_html "$query")"
+	install="$(escape_html "$install")"
+	remove="$(escape_html "$remove")"
+	browse="$(escape_html "$browse")"
+	packages="$(escape_html "$packages")"
+	debug="$(escape_html "$debug")"
+	</PRE>
+EOF
+fi
+
+# Sanity check on input values. $query is checked in doQuery.
+checkInput "$install$remove$packages$debug"
+
+if [ "$install" -a "$remove" ]; then
+    printError "Error: invalid request"
+    exit
+fi
+if [ "$install$remove$browse" -a "$packages" = "" ]; then
+    printError "Error: invalid request"
+    exit
+fi
+if [ "$install$remove$browse" -a "$query" != "" ]; then
+    printError "Error: invalid request"
+    exit
+fi
+if [ "$install" -a "$install" != "Install" -a "$install" != "Upgrade" ]; then
+    printError "Error: invalid request"
+    exit
+fi
+if [ "$remove" -a "$remove" != "Remove" ]; then
+    printError "Error: invalid request"
+    exit
+fi
+if [ "$browse" -a "$browse" != "Browse" ]; then
+    printError "Error: invalid request"
+    exit
+fi
+
+title="Debian Packages${query:+: $query}"
+
+if [ "$install" ]; then
+    printHtmlHeader "Package Installation" application/dpkg-www-installer
+    printInstallRequest "$packages"
+    printHtmlBottom
+elif [ "$remove" ]; then
+    printHtmlHeader "Package Deinstallation" application/dpkg-www-installer
+    printRemoveRequest "$packages"
+    printHtmlBottom
+elif [ "$browse" ]; then
+    printHtmlHeader "Package Browser" application/dpkg-www-browser
+    printBrowseRequest "$packages"
+    printHtmlBottom 
+else
+    printHtmlHeader "$title" text/html
+    printInputForm
+    doQuery "$query"
+    printHtmlBottom
+fi
 
 # end of file

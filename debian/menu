@@ -1,0 +1,13 @@
+?package(dpkg-www):\
+  needs="x11"\
+  section="Help"\
+  title="Debian Package Browser"\
+  longtitle="Debian Package Browser"\
+  command="/usr/bin/dpkg-www ' '"
+
+?package(dpkg-www):\
+  needs="text"\
+  section="Help"\
+  title="Debian Package Browser"\
+  longtitle="Debian Package Browser"\
+  command="/usr/bin/dpkg-www ' '"

@@ -1,10 +1,10 @@
-This software was written by Massimo Dal Zotto dz@cs.unitn.it on
+This package was written by Massimo Dal Zotto <dz@debian.org> on
 Mon,  2 Aug 1999 17:37:25 +0200.
 
 This software is released under the terms of the GNU General Public
 Licence.
 
-   Copyright (C) 1999,2000 Massimo Dal Zotto <dz@cs.unitn.it>
+   Copyright (C) 1999-2001 Massimo Dal Zotto <dz@debian.org>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

@@ -1,16 +1,24 @@
 Source: dpkg-www
 Section: doc
 Priority: optional
-Maintainer: Paolo Didonè <dido@prosa.it>
-Standards-Version: 3.0.1
+Maintainer: Massimo Dal Zotto <dz@debian.org>
+Standards-Version: 3.1.0
+Build-Depends: debhelper (>= 1.1.17)
 
 Package: dpkg-www
 Architecture: all
-Depends: dwww, bash, textutils, awk
-Description: WWW interface to dpkg package info.
- The dpkg cgi-bin program lets you browse Debian packages via a local
- WWW server. You can list packages, show package info and installed files,
+Depends: apt, dwww, info2www, gawk | mawk | awk, perl | perl5, httpd, debconf
+Suggests: dlocate, grep-dctrl, www-browser, man2html
+Description: WWW Debian package browser
+ With the dpkg cgi-bin you can browse Debian packages on a local or
+ remote host using a normal WEB browser.
+ .
+ You can list packages, show package information and installed files,
  browse documentation and navigate through the packages dependencies.
- You can also find all the packages owner of a file or directory or
+ You can also find all the packages owners of a file or directory or
  those providing a virtual package.
-
+ .
+ If you are the system administrator you can also install or remove
+ packages by clicking on the buttons found in the package info page, 
+ provided that this feature has been enabled and you have properly
+ configured your WEB browser.

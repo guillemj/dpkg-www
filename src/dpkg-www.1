@@ -1,0 +1,66 @@
+.TH DPKG-WWW 1 "March 31, 2001"
+
+.SH NAME
+dpkg-www \- program to remotely open a WWW Debian package browser
+
+.SH SYNOPSIS
+.B dpkg-www
+.I [arg]
+
+.SH DESCRIPTION
+.B dpkg-www
+is used to remotely control a WEB browser and open a dpkg
+URL on the local host from an interactive shell or script.
+
+If the command is invoked while running under X-window the script
+will try to find an installed X browser to open the specified URL.
+If not running under X it will try to use a text browser instead.
+
+If Netscape is found and a Netscape instance is already running it
+will be asked to open the dpkg URL on localhost with the optional 
+.I arg
+supplied on the command line.
+If there is no browser running, it will start automatically a new one.
+
+The functionality provided by this program is identical to running
+a web browser with the
+.B \-remote openURL(http://localhost/cgi-bin/dpkg)
+argument or opening the same URL from within the browser.
+
+.SH OPTIONS
+.TP 
+.BI \|arg \|
+Specifies an optional package name, an absolute pathname or a query
+argument which is passed to the dpkg cgi-bin. See
+.BR dpkg-www(8)
+for more information about the use of the cgi.
+
+.SH EXAMPLES
+.TP
+.B dpkg-www
+This would open a dpkg URL on localhost listing all the installed packages.
+.TP
+.B dpkg-www bash
+This would open a dpkg URL asking info on the bash package.
+.TP
+.B dpkg-www 'dpkg*'
+This would open a dpkg URL listing all packages matching dpkg*.
+.TP
+.B dpkg-www /bin/bash
+This would open a dpkg URL asking info on the package(s)
+owning the file /bin/bash
+.TP
+.B dpkg-www depends=svgalib
+This would open a dpkg URL listing all packages depending on svgalib.
+
+.SH "SEE ALSO"
+.BR dpkg(8) ,
+.BR dpkg-www(8)
+
+.SH AUTHOR
+Massimo Dal Zotto <dz@debian.org>.
+.br
+Bugs should be reported via the normal Debian bug reporting system.
+
+.SH LICENCE
+dpkg-www is licensed under the GNU General Public License version 2.

@@ -1,0 +1,171 @@
+#!/bin/sh
+#
+# Dpkg install helper used by dpkg-www cgi installation.
+#
+# Copyright (C) 1999-2001  Massimo Dal Zotto <dz@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+
+usage() {
+    echo "${0##*/} [-x|--xterm] [-f|--file] <file>"
+}
+
+press_enter() {
+    echo ""
+    echo -n "Press Enter to close this window..."; read x
+}
+
+# Source optional config file
+test -e /etc/dpkg-www.conf && . /etc/dpkg-www.conf 2>/dev/null
+
+FILE=""
+ACTION=""
+HOST=""
+PACKAGES=""
+
+# Restart self in an xterm window. Must be the first option. Used by netscape.
+if [ "$1" = "-x" -o "$1" = "--xterm" ]; then
+    shift 1
+    xterm -T "Package Installation" -e $0 "$@"
+    exit 0
+fi
+
+while [ "${1#-}" != "$1" ]; do
+    case "$1" in
+	-\?|-help|--help)
+	    usage
+	    exit
+	    ;;
+	-f|--file)
+	    FILE="$2"
+	    shift 2
+	    ;;
+	-*)
+	    echo "Invalid option: $1" >&2
+	    press_enter
+	    exit 1
+	    ;;
+    esac
+done
+FILE="${FILE:-$1}"
+
+if [ "$FILE" != "" -a ! -e "$FILE" ]; then
+    echo "File not found: $FILE" >&2
+    press_enter
+    exit 1
+fi
+
+request="$(cat "$FILE" | head -10)"
+if echo "$request" | grep -q "^Install-packages:"; then
+    ACTION=install
+    HOST=$(
+	echo "$request" | grep ^Install-host: \
+	| head -1 | sed 's/.*: *//; s/,/ /g'
+    )
+    PACKAGES=$(
+	echo "$request" | grep ^Install-packages: \
+	| head -1 | sed 's/.*: *//; s/,/ /g'
+    )
+else
+    ACTION=remove
+    HOST=$(
+	echo "$request" | grep ^Remove-host: \
+	| head -1 | sed 's/.*: *//; s/,/ /g'
+    )
+    PACKAGES=$(
+	echo "$request" | grep ^Remove-packages: \
+	| head -1 | sed 's/.*: *//; s/,/ /g'
+    )
+fi
+
+if [ ! "$HOST" ]; then
+    echo "Missing hostname" >&2
+    press_enter
+    exit 1
+fi
+
+if [ "$(echo "$HOST" | sed 's/[ a-zA-Z0-9_.+-]//g')" ]; then
+    echo "Invalid characters in hostname: $HOST" >&2
+    press_enter
+    exit 1
+fi
+
+if [ ! "$PACKAGES" ]; then
+    echo "Missing package names" >&2
+    press_enter
+    exit 1
+fi
+
+# From Debian Packaging Manual, 4.2.1:
+#
+# The name of the binary package. Package names consist of the alphanumerics
+# and + - . (plus, minus and full stop). In current versions of dpkg they are
+# sort of case-sensitive.
+#
+if [ "$(echo "$PACKAGES" | sed 's/[ a-zA-Z0-9.+-]//g')" ]; then
+    echo "Invalid characters in package names: $PACKAGES" >&2
+    press_enter
+    exit 1
+fi
+
+if [ $(echo "$PACKAGES" | wc -w) -gt 1 ]; then
+    if [ "$ACTION" = install ]; then
+	echo "Installing the following packages on $HOST:"
+    else
+	echo "Removing the following packages on $HOST:"
+    fi
+    echo ""
+    echo "$PACKAGES" \
+       | if [ -x /usr/bin/fold ]; then fold -s -w 76; else cat; fi \
+       | sed 's/^/  /'
+    echo ""
+else
+    if [ "$ACTION" = install ]; then
+	echo "Installing package $PACKAGES on $HOST."
+    else
+	echo "Removing package $PACKAGES from $HOST."
+    fi
+    echo ""
+fi
+
+case "$HOST" in
+    localhost|$(hostname)|$(hostname -f))
+	if [ "$EUID" = 0 ]; then
+		echo "You should NOT run this script as root!"
+		echo ""
+		echo -n "Press Enter to continue..."; read x
+		echo ""
+		apt-get -s $REINSTALL $ACTION $PACKAGES; echo
+		apt-get    $REINSTALL $ACTION $PACKAGES
+	else
+	    echo -n "Root "; su root -c "\
+		apt-get -s $REINSTALL $ACTION $PACKAGES; echo
+		apt-get    $REINSTALL $ACTION $PACKAGES"
+	    
+	fi
+	;;
+    *)
+	# Ignore any active ssh-agent to force ssh passwd prompt
+	test "$FORCE_SSH_PASSWD" = true && unset SSH_AGENT_PID SSH_AUTH_SOCK
+	/usr/bin/ssh -l root "$HOST" PATH=/usr/sbin:/sbin:/usr/bin:/bin \
+		apt-get -s $REINSTALL $ACTION $PACKAGES \; echo \; \
+		apt-get    $REINSTALL $ACTION $PACKAGES
+        ;;
+esac
+
+press_enter
+exit 0
+
+# end of file

@@ -41,19 +41,19 @@ binary-indep: build install
 	# dh_testversion
 	dh_testdir
 	dh_testroot
-	# dh_installdebconf	
+	dh_installdebconf	
 	dh_installdocs
 	# dh_installexamples
-	# dh_installmenu
+	dh_installmenu
 	# dh_installemacsen
 	# dh_installpam
 	# dh_installinit
 	# dh_installcron
-	# dh_installmanpages
+	dh_installmanpages
 	# dh_installinfo
-	# dh_undocumented
+	dh_undocumented dpkg-www-installer.8 dpkg-www-browser.8
 	dh_installchangelogs 
-	dh_link
+	# dh_link
 	# dh_strip
 	dh_compress
 	dh_fixperms
