@@ -1,0 +1,16 @@
+Source: dpkg-www
+Section: doc
+Priority: optional
+Maintainer: Paolo Didonè <dido@prosa.it>
+Standards-Version: 3.0.1
+
+Package: dpkg-www
+Architecture: all
+Depends: dwww, bash, textutils, awk
+Description: WWW interface to dpkg package info.
+ The dpkg cgi-bin program lets you browse Debian packages via a local
+ WWW server. You can list packages, show package info and installed files,
+ browse documentation and navigate through the packages dependencies.
+ You can also find all the packages owner of a file or directory or
+ those providing a virtual package.
+

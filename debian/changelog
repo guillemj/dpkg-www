@@ -1,0 +1,89 @@
+dpkg-www (1.10) unstable; urgency=low
+
+  * Changed gawk to awk in statusFilter(), closes: bug #53746.
+
+  * Restored package architecture to all (Massimo Dal Zotto <dz@cs.unitn.it>).
+
+ -- Paolo Didonè <dido@prosa.it>  Fri, 31 Dec 1999 14:23:43 +0100
+
+dpkg-www (1.9-1) unstable; urgency=low
+
+  * Sponsor Upload.
+
+ -- Paolo Didonè <dido@prosa.it>  Tue, 28 Dec 1999 13:13:13 +0100
+
+dpkg-www (1.9) unstable; urgency=low
+
+  * Allow browsing local doc files from remote hosts.
+
+ -- Massimo Dal Zotto <dz@cs.unitn.it>  Tue,  7 Dec 1999 10:03:52 +0100
+
+dpkg-www (1.8) unstable; urgency=low
+
+  * Fixed a typo in the html help message.
+
+ -- Massimo Dal Zotto <dz@cs.unitn.it>  Mon, 22 Nov 1999 10:21:45 +0100
+
+dpkg-www (1.7) unstable; urgency=low
+
+  * Removed diversions of dwww-convert and dwww-find which are not
+    really needed by this package and don't belong to it.
+
+ -- Massimo Dal Zotto <dz@cs.unitn.it>  Wed, 10 Nov 1999 13:09:51 +0100
+
+dpkg-www (1.6) unstable; urgency=low
+
+  * Added support for wildcard queries. This can also be used to list
+    all available packages.
+
+  * Use dpkg --print-avail to show packages not installed.
+
+  * In fileFilter, handle also files in /usr/share/doc/.
+
+ -- Massimo Dal Zotto <dz@cs.unitn.it>  Tue,  9 Nov 1999 14:49:48 +0100
+
+dpkg-www (1.5) unstable; urgency=low
+
+  * Fixed html bug when dpkg -l lists version <none>.
+
+  * Added support for virtual packages.
+
+  * Added some output hacks for lynx.
+
+ -- Massimo Dal Zotto <dz@cs.unitn.it>  Sun,  7 Nov 1999 17:15:15 +0100
+
+dpkg-www (1.4) unstable; urgency=low
+
+  * Replaced the <ISINDEX> tag with an input form if perl is available.
+
+  * Added help command.
+
+  * Rewritten the listPackage code for package not found.
+
+  * Show package status also for non installed packages.
+
+ -- Massimo Dal Zotto <dz@cs.unitn.it>  Fri,  5 Nov 1999 15:22:37 +0100
+
+dpkg-www (1.3) unstable; urgency=low
+
+  * Fixed bug in the search of owners of a diverted files.
+
+ -- Massimo Dal Zotto <dz@cs.unitn.it>  Wed,  3 Nov 1999 16:17:08 +0100
+
+dpkg-www (1.2) unstable; urgency=low
+
+  * Added email and copyright info to html output.
+
+ -- Massimo Dal Zotto <dz@cs.unitn.it>  Sat,  2 Oct 1999 11:37:25 +0200
+
+dpkg-www (1.1) unstable; urgency=low
+
+  * Initial Release.
+
+  * Changed dwww-convert and dwww-find to handle dpkg output.
+
+ -- Massimo Dal Zotto <dz@cs.unitn.it>  Mon,  2 Aug 1999 17:37:25 +0200
+
+Local variables:
+mode: debian-changelog
+End:

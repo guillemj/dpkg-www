@@ -1,0 +1,370 @@
+#!/bin/sh
+#
+# Cgi interface to dpkg. Show information about debian packages.
+#
+# Copyright (C) 1999,2000  Massimo Dal Zotto <dz@cs.unitn.it>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+
+PROG_VERSION=1.10
+DPKG_STATUS=/var/lib/dpkg/status
+DPKG_AVAILABLE=/var/lib/dpkg/available
+DPKG_NAME_MAX=15
+#DEBUG=true
+
+case "$REMOTE_HOST" in
+    localhost|`hostname`|`hostname -f`)
+	SHOW_LOCAL_FILE=true
+	;;
+    *)
+	SHOW_LOCAL_FILE=false
+	;;
+esac
+
+usage() {
+    cat <<- EOF
+	<P>
+	You can query information about Debian packages and installed files.
+	The search argument can be:
+	<P>
+	<TABLE WIDTH="80%">
+	  <TR><TD><TD> *                 <TD> - list all available packages
+	  <TR><TD><TD> &lt;empty&gt;     <TD> - list all installed packages
+	  <TR><TD><TD> wilcard search    <TD> - list packages concisely
+	  <TR><TD><TD> list of packages  <TD> - list packages concisely
+	  <TR><TD><TD> package           <TD> - list package and owned files
+	  <TR><TD><TD> absolute pathname <TD> - list packages owners of a file
+	</TABLE>
+	</P>
+EOF
+}
+
+# List one or more packages
+listPackages() {
+    debug "listPackages $*"
+    packages="$*"
+    package="${packages%% *}"
+    if [ ! "$package" ]; then
+	# No argument, show the package list
+	debug "package"
+	echo "<PRE>"
+	dpkg -l | pkgFilter
+	echo "</PRE>"
+	return
+    elif [ "$package" != "$packages" ] || echo "$packages" |grep -q '[*?]';then
+	# Package list or wildcard, show packages concisely
+	debug "package list"
+	echo "<PRE>"
+	set -f; set - $packages
+	dpkg -l "$@" 2>&1 | pkgFilter
+	echo "</PRE>"
+	return
+    elif dpkg -l $package 2>&1 | grep -q "No packages found";then
+	# Package name not known to dpkg
+	debug "package not found"
+	if [ ${#package} = $DPKG_NAME_MAX ]; then
+	    # Maybe name truncated by dpkg, try all corresponding long names
+	    packages=$(grep "Package: $package" $DPKG_STATUS | cut -f2 -d' ')
+	    if [ "$packages" ]; then
+		debug "truncated name"
+		for pkg in $packages; do
+		    test "$hr" && echo '<HR WIDTH="100%">'
+		    listPackage $pkg || listAvailPackage $pkg
+		    hr=true
+		done
+		return
+	    fi
+	fi
+    else
+	# Package is known to dpkg (but maybe not installed)
+	debug "package found"
+	listPackage $package && return
+    fi
+
+    # Package is not installed, try with available packages
+    listAvailPackage $package && return
+
+    # No info available for this package, maybe a virtual package?
+    listVirtualPackage $package && return
+
+    # Unknown package
+    debug "unknown package"
+    echo "<PRE>"
+    echo "Package $package is not installed and no info is available."
+    echo "</PRE>"
+}
+
+# List a package known to dpkg, possibly not installed
+listPackage() {
+    package="$1"
+    installed=
+    grep -q "Package: $package$" $DPKG_STATUS || return 1
+    echo "<PRE>"
+    dpkg -s $package | statusFilter && installed=true
+    if [ "$installed" ]; then
+	echo
+	echo "Files owned by package $package:"
+	echo
+	dpkg -L $package | fileFilter
+    else
+	if grep -q "Package: $package$" $DPKG_AVAILABLE; then
+	    dpkg --print-avail $package 2>/dev/null \
+	       | grep -v '^\(Package\|Status\|Priority\|Section\):' \
+	       | grep -v '^\(Filename\|MD5sum\):' \
+	       | statusFilter
+	    echo
+	    echo "Package $package is not installed."
+	else
+	    echo
+	    echo "Package $package is not installed and no info is available."
+	fi
+    fi
+    echo "</PRE>"
+}
+
+# List a package not known by dpkg
+listAvailPackage() {
+    package="$1"
+    grep -q "Package: $package$" $DPKG_AVAILABLE || return 1
+    echo "<PRE>"
+    dpkg --print-avail $package | statusFilter
+    echo
+    echo "Package $package is not installed."
+    echo "</PRE>"
+}
+
+# List all packages providing a virtual package
+listVirtualPackage() {
+    package="$1"
+    packages=$(
+	cat $DPKG_STATUS $DPKG_AVAILABLE | awk -v package=$package '
+	    /^Package:/ { owner = $2 }
+	    /^Provides:/ {
+		gsub(",","")
+		for (i=2; i<=NF; i++) { if ($i == package) { print owner } }
+	    }' \
+	| sort | uniq
+    )
+    test "$packages" || return 1
+    echo "<PRE>"
+    echo "Virtual package $package is provided by:"
+    echo "</PRE>"
+    listPackages "$(echo $packages)"
+    return 0
+}
+
+# Find all packages owners of a file
+findOwner() {
+    file="${1%/}"
+    owners=$(dpkg --search $file | cut -f1 -d: | grep -v diversion | tr -d ',')
+    if [ "$owners" ]; then
+	echo "<PRE>"
+	echo "Packages owning $file:"
+	echo "</PRE>"
+	listPackages $owners
+    else
+	echo "<PRE>"
+	echo "No package is owner of $file"
+	echo "</PRE>"
+    fi
+}
+
+# Convert package status to html adding hrefs to other packages
+statusFilter() {
+    awk '
+	{ gsub("<","\\&lt;"); gsub(">","\\&gt;") }
+	/^Status:/ { if ($NF == "not-installed") { rc=1 } else { rc=0 } }
+	/^(Replace|Provide|Depend|Pre-Depend|Suggest|Conflict|Require|Recommend)s:/ {
+	    # print "-->" $0
+	    for (f=2; f<=NF; f++) {
+		# print " ->" f,$f
+		if ($f == "|") {
+		    continue 
+		}
+		if (match($f,"^\\(")) {
+		    f++;
+		    continue 
+		}
+		r = $f;
+		gsub(",", "", r)
+		s = t = r
+		gsub("\\+", "\\+", r)
+		gsub("\\+", "%2B", s)
+		# print " +>" f,r,s
+		sub(r, "<a href=\"dpkg?query=" s "\">" t "</a>", $f)
+		# print " =>" f,$f
+            }
+	    # print "==>" $0
+        }
+	/^$/ { next}
+	/^ .$/ { $0 = " " }
+	{ print }
+	END { exit rc }'
+}
+
+# Convert a dpkg packages list to html adding hrefs to package names
+pkgFilter() {
+    awk '
+	(f==0) { print }
+	(f==1) {
+	    gsub("<","\\&lt;"); gsub(">","\\&gt;")
+	    r = s = $2;
+	    gsub("\\+", "\\\\+", r);
+	    gsub("\\+", "%2B", s);
+	    sub(r, "<A HREF=\"dpkg?query=" s "\">" $2 "</A>");
+	    print
+	}
+	/^\+/  { f=1 }'
+}
+
+# Convert a file list to html adding hrefs to files in /usr/{doc,info,man}
+fileFilter() {
+    awk -v show_local_file="$SHOW_LOCAL_FILE" '
+	/\/usr\/([a-zA-Z0-9_-]+\/)?man\/.*\..*/ {
+	    r = s = $1;
+	    gsub("\\+", "\\\\+", r);
+	    gsub("\\+", "%2B", s);
+	    sub(r, "<A HREF=\"/cgi-bin/dwww?type=man\&amp;location=" s "\">" \
+		   $1 "</A>")
+	    print
+	    next
+	}
+	/\/usr\/info\/.*\.gz/ {
+	    r = s = $1;
+	    gsub("\\+", "\\\\+", r);
+	    gsub("\\+", "%2B", s);
+	    sub(r, "<A HREF=\"/cgi-bin/info2www?" s "\">" $1 "</A>")
+	    print
+	    next
+	}
+	/\/usr\/(share\/)?doc\// {
+	    r = s = $1;
+	    gsub("\\+", "\\\\+", r);
+	    gsub("\\+", "%2B", s);
+	    if (show_local_file == "true") {
+		sub(r, "<A HREF=\"file:" s "\">" $1 "</A>")
+	    } else {
+		sub(r, "<A HREF=\"/cgi-bin/dwww?type=file\&location=" s "\">" \
+		       $1 "</A>")
+	    }
+	    print
+	    next
+	}
+	/^\/.$/ { next }
+	/^$/ { next }
+	/^[^\/]/ { sub("^","  ") }
+	{ print }'
+}
+
+debug() {
+    test "$DEBUG" && echo "<TT>$*</TT><BR>"
+}
+
+# Unescape the query string
+html_unescape() {
+    test -x /usr/bin/perl || return
+    perl -e "use CGI; my \$q = new CGI(\$_); print \$q->param('query')" "$1"
+}
+
+#------------------------------------------------------------------------------
+
+# Get query argument
+if [ "$*" ]; then
+    # ISINDEX
+    query="$*"
+else
+    # GET
+    query="$(html_unescape "$*")"
+fi
+
+# Html header
+cat <<- EOF
+	Content-type: text/html
+
+	<HTML>
+	<HEAD>
+	<TITLE>Debian Packages${query:+: }${query}</TITLE>
+	</HEAD>
+	<BODY>
+EOF
+
+# Debugging info
+test "$DEBUG" && cat <<- EOF
+	<PRE>
+	$(env | sort)
+	PROG=$0
+	ARGC=$#
+	ARGV='$*'
+	QUERY="$(html_unescape "$*")"
+	</PRE>
+EOF
+
+echo "<H1>Debian packages on $(hostname)</H1>"
+
+# Generate an input form or the <isindex> tag
+if [ -x /usr/bin/perl ]; then
+    echo '<P>'
+    echo '<FORM METHOD="GET" ACTION="dpkg">'
+    if [ "${HTTP_USER_AGENT#Lynx}" != "$HTTP_USER_AGENT" ]; then
+	echo "Search:"
+	echo '<INPUT NAME="query" SIZE="42">'
+	echo '<INPUT TYPE="submit" NAME="search" VALUE="Submit">'
+    else
+	echo '<INPUT TYPE="submit" NAME="search" VALUE="  Search  ">'
+	echo '<INPUT NAME="query" SIZE="50">'
+    fi
+    echo '(?&nbsp;for&nbsp;help)'
+    echo '</FORM>'
+    echo '<HR WIDTH="100%">'
+    echo '</P>'
+else
+    echo '<P>'
+    echo '<ISINDEX>'
+    echo '</P>'
+fi
+
+# Execute the query
+case "${query%/}" in
+    \?|-\?|-h|-help|--help)
+	usage
+	;;
+    -*)
+	echo "Error: invalid keyword: $query"
+	usage
+	;;
+    /*)
+	findOwner "$query"
+	;;
+    *)
+	listPackages "$query"
+	;;
+esac
+
+cat <<- EOF
+	<P>
+	<HR WIDTH="100%">
+	<ADDRESS>
+	Generated by <A HREF="dpkg?query=dpkg-www">
+	dpkg-www $PROG_VERSION</A> - Copyright (C) 1999,2000
+	<A HREF="http://www.cs.unitn.it/~dz/">Massimo Dal Zotto</A>
+	<A HREF="mailto:dz@cs.unitn.it">&lt;dz@cs.unitn.it&gt;</A>
+	</ADDRESS>
+	<BR>
+	</P>
+	</BODY>
+	</HTML>
+EOF
+
+# end of file

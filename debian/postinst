@@ -1,0 +1,46 @@
+#!/bin/sh
+
+set -e
+
+trap "echo ;\
+      echo 'Received signal.  Aborting configuration of dpkg-www package.' ;\
+      echo ;\
+      exit 1" 1 2 3 15
+
+case "$1" in
+    configure)
+	;;
+    abort-upgrade|abort-remove|abort-deconfigure)
+	exit 0
+	;;
+    *)
+	echo "ERROR: dpkg-www postinst called with unknown argument \"$1\"."
+	echo "Aborting configuration of dpkg-www package."
+	exit 1
+	;;
+esac
+
+for f in /etc/apache/access.conf /etc/apache-ssl/access.conf; do
+    test ! -f $f && continue
+    grep -q "^<Location /cgi-bin/dpkg>" $f && continue
+    restart_httpd=true
+    cat <<-EOF >>$f
+
+	# Disable execution of dpkg from remote hosts
+	<Location /cgi-bin/dpkg>
+	order deny,allow
+	deny from all
+	allow from localhost
+	# allow from .your_domain.com
+	</Location>
+
+EOF
+done
+
+if [ "$restart_httpd" ]; then
+    test -x /etc/init.d/apache && /etc/init.d/apache restart || true
+    test -x /etc/init.d/apache-ssl && /etc/init.d/apache-ssl restart || true
+fi
+
+#DEBHELPER#
+exit 0
