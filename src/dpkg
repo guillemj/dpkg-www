@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-PROG_VERSION=2.46
+PROG_VERSION=2.47
 SELF=${0##*/}
 HELP_PAGE="/usr/share/man/man8/dpkg-www.8.gz"
 COLUMNS=256; export COLUMNS
@@ -1096,7 +1096,7 @@ fileFilter() {
 	    if (title) { t = title } else { t = $1 }
 	    if ($2) { t = t " [" $2 "]"; NF=1 }
 	    r = s = $1
-	    gsub("\\+", "\\\\+", r);
+	    gsub("\\+", "\\+", r);
 	    gsub("\\+", "%2B", s);
 	    gsub("\\$","\\$",r)
 	    sub(r, "<A HREF=\"" man s "\">" t "</A>")
@@ -1107,7 +1107,7 @@ fileFilter() {
 	    if (title) { t = title } else { t = $1 }
 	    if ($2) { t = t " [" $2 "]"; NF=1 }
 	    r = s = $1
-	    gsub("\\+", "\\\\+", r);
+	    gsub("\\+", "\\+", r);
 	    gsub("\\+", "%2B", s);
 	    gsub("\\$","\\$",r)
 	    sub(r, "<A HREF=\"/cgi-bin/info2www?" s "\">" t "</A>")
@@ -1118,7 +1118,7 @@ fileFilter() {
 	    if (title) { t = title } else { t = $1 }
 	    if ($2) { t = t " [" $2 "]"; NF=1 }
 	    r = s = $1
-	    gsub("\\+", "\\\\+", r);
+	    gsub("\\+", "\\+", r);
 	    gsub("\\+", "%2B", s);
 	    gsub("\\$","\\$",r)
 	    if (show_local_files == "true") {

@@ -1,3 +1,10 @@
+dpkg-www (2.47) unstable; urgency=low
+
+  * Applied forgotten patch of dpkg-www-2.46.
+    Closes: #302294.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Mon,  4 Apr 2005 10:05:00 +0200
+
 dpkg-www (2.46) unstable; urgency=low
 
   * Fixed regexp for plus(+) in fileFilter when using gawk.

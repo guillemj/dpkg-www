@@ -31,7 +31,7 @@ clean:
 distclean:	clean
 
 diff:
-	@diff -u src/dpkg $(DESTDIR)/usr/lib/cgi-bin/dpkg
+	@diff -u src/dpkg /usr/lib/cgi-bin/dpkg
 
 deb:
 	dpkg-buildpackage -rfakeroot -us -uc
