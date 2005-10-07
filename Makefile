@@ -1,8 +1,9 @@
 # Makefile
 
+PKGNAME = $(shell head -1 debian/changelog | sed 's/ .*//')
 VERSION	= $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/-.*//')
-PKGFILE = $(shell cd ..; find . -name dpkg-www_$(VERSION)_*.deb | sed 's|./||')
-CHANGES = $(shell cd ..; find . -name dpkg-www_$(VERSION)_*.changes)
+PKGFILE	= $(PKGNAME)_$(VERSION)_all.deb
+CHANGES	= $(PKGNAME)_$(VERSION)_$(shell dpkg --print-architecture).changes
 
 all:
 	# Update program version from changelog
@@ -17,6 +18,7 @@ install:
 	@ mkdir -p $(DESTDIR)/usr/lib/cgi-bin
 	@ mkdir -p $(DESTDIR)/usr/bin
 	@ mkdir -p $(DESTDIR)/usr/share/man/man1
+	@ mkdir -p $(DESTDIR)/etc/{apache,apache2}/conf.d
 	cp -p src/dpkg $(DESTDIR)/usr/lib/cgi-bin/
 	cp -p src/dpkg-www $(DESTDIR)/usr/bin/
 	cp -p src/dpkg-www-installer $(DESTDIR)/usr/sbin/
@@ -24,6 +26,8 @@ install:
 	cp -p src/dpkg-www.1 $(DESTDIR)/usr/share/man/man1/
 	cp -p src/dpkg-www.8 $(DESTDIR)/usr/share/man/man8/
 	cp -p src/dpkg-www.conf $(DESTDIR)/etc/
+	cp -p src/apache.conf $(DESTDIR)/etc/apache/conf.d/dpkg-www
+	cp -p src/apache.conf $(DESTDIR)/etc/apache2/conf.d/dpkg-www
 
 clean:
 	rm -f `find . -name \*~`
@@ -33,14 +37,20 @@ distclean:	clean
 diff:
 	@diff -u src/dpkg /usr/lib/cgi-bin/dpkg
 
-deb:
-	dpkg-buildpackage -rfakeroot -us -uc
-
 package:
 	dpkg-buildpackage -rfakeroot
 
+deb:
+	dpkg-buildpackage -rfakeroot -us -uc
+
+debclean:
+	fakeroot ./debian/rules clean
+
+debinst:
+	cd .. && sudo dpkg -i $(PKGFILE)
+
 lintian:
-	lintian -i ../$(PKGFILE)
+	cd .. && lintian -i $(PKGFILE)
 
 upload:
 	cd .. && dupload $(CHANGES)

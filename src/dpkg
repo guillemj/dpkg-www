@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-PROG_VERSION=2.47
+PROG_VERSION=2.48
 SELF=${0##*/}
 HELP_PAGE="/usr/share/man/man8/dpkg-www.8.gz"
 COLUMNS=256; export COLUMNS
@@ -105,6 +105,8 @@ GREP_DCTRL_OPTS="-i"
 BGCOLOR="#c0c0c0"
 KEEP_INPUT=0
 DEBUG=0
+DWWW_PATH="/cgi-bin/dwww"
+INFO2WWW_PATH="/cgi-bin/info2www"
 
 # Install buttons support. This require that users define the following
 # mime action in their netscape mailcap file:
@@ -132,7 +134,7 @@ fi
 
 # Select the Manpage to HTML translator
 if [ "$MAN" = dwww ]; then
-	MAN="/cgi-bin/dwww?type=man\\\\&location="
+	MAN="${DWWW_PATH}?type=man\\\\&location="
 fi
 if [ "$MAN" = man2html ]; then
     if [ -x /usr/lib/cgi-bin/man/man2html ]; then
@@ -140,7 +142,7 @@ if [ "$MAN" = man2html ]; then
     elif [ -x /usr/lib/cgi-bin/man2html ]; then
 	MAN="/cgi-bin/man2html?"
     else
-	MAN="/cgi-bin/dwww?type=man\\\\&location="
+	MAN="${DWWW_PATH}?type=man\\\\&location="
     fi
 fi
 if [ ! "$MAN" -o "$MAN" = auto ]; then
@@ -149,7 +151,7 @@ if [ ! "$MAN" -o "$MAN" = auto ]; then
     elif [ -x /usr/lib/cgi-bin/man2html ]; then
 	MAN="/cgi-bin/man2html?"
     else
-	MAN="/cgi-bin/dwww?type=man\\\\&location="
+	MAN="${DWWW_PATH}?type=man\\\\&location="
     fi
 fi
 
@@ -739,7 +741,8 @@ listPackageDocumentation() {
     installdocs_files=$(
 	cat /var/lib/dpkg/info/$package.postinst \
 	  | grep 'install-docs[ 	]*-i' \
-	  | sed 's/.*install-docs[ 	]*-i[ 	]*//;s/[ 	].*//'
+	  | sed 's/.*install-docs[ 	]*-i[ 	]*//;s/[ 	].*//' \
+	  | sort | uniq
     )
     debug "installdocs_files=$installdocs_files"
     test "$installdocs_files" || return
@@ -1091,7 +1094,8 @@ listFilter() {
 # Convert a file list to html adding hrefs to files in /usr/{doc,info,man}.
 #
 fileFilter() {
-    awk -v title="$*" -v show_local_files="$SHOW_LOCAL_FILES" -v man="$MAN" '
+    awk -v title="$*" -v show_local_files="$SHOW_LOCAL_FILES" \
+	-v man="$MAN" -v info2www="$INFO2WWW_PATH" -v dwww="$DWWW_PATH" '
 	/\/usr\/(share\/)?([a-zA-Z0-9_+-]+\/)?man\/.*\..*/ {
 	    if (title) { t = title } else { t = $1 }
 	    if ($2) { t = t " [" $2 "]"; NF=1 }
@@ -1110,11 +1114,11 @@ fileFilter() {
 	    gsub("\\+", "\\+", r);
 	    gsub("\\+", "%2B", s);
 	    gsub("\\$","\\$",r)
-	    sub(r, "<A HREF=\"/cgi-bin/info2www?" s "\">" t "</A>")
+	    sub(r, "<A HREF=\"" info2www "?" s "\">" t "</A>")
 	    print
 	    next
 	}
-	/\/usr\/(doc|share\/(doc|gnome\/(html|help)|RFC))\// {
+	/\/usr\/(doc|share\/(doc|gtk-doc|gnome\/(html|help)|RFC))\// {
 	    if (title) { t = title } else { t = $1 }
 	    if ($2) { t = t " [" $2 "]"; NF=1 }
 	    r = s = $1
@@ -1124,7 +1128,7 @@ fileFilter() {
 	    if (show_local_files == "true") {
 		sub(r, "<A HREF=\"file:" s "\">" t "</A>")
 	    } else {
-		sub(r, "<A HREF=\"/cgi-bin/dwww?type=file\\&location=" s "\">"\
+		sub(r, "<A HREF=\"" dwww "?type=file\\&location=" s "\">"\
 		       t "</A>")
 	    }
 	    print

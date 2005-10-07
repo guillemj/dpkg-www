@@ -1,3 +1,26 @@
+dpkg-www (2.48) unstable; urgency=low
+
+  * Fixed duplicate lines for doc-base documentation files.
+
+  * Use apache's conf.d instead modifying httpd.conf.
+    Also changed debconf templates to simply output a note.
+    Closes: #281833, #329622.
+
+  * Added Vietnamese translation. Thanks to Clytie Siddall.
+    Closes: #311594.
+
+  * Allow alternate location of info2www and dwww.
+    Closes: #315541.
+
+  * Added alternate dependency on debconf-2.0.
+    Closes: #331805.
+
+  * Added support for /usr/share/gtk-doc/html directory.
+
+  * Removed again dependency on awk.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Fri,  7 Oct 2005 13:10:38 +0200
+
 dpkg-www (2.47) unstable; urgency=low
 
   * Applied forgotten patch of dpkg-www-2.46.

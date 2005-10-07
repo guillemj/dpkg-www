@@ -1,23 +1,21 @@
 Template: dpkg-www/update-apache-config
-Type: boolean
-Default: true
-_Description: Do you want to change the apache(-ssl) configuration?
+Type: note
+_Description: Disabling access to dpkg-www from foreign hosts.
  Allowing access to /cgi-bin/dpkg from any foreign host could allow a
  malicious external user to know your installed packages and try possible
  security exploits. You should therefore disable access to dpkg-www from
- foreign hosts. With apache(-ssl) you should add the following lines to
- /etc/apache(-ssl)/httpd.conf:
+ foreign hosts. With apache you should add a file with the following
+ instructions into apache conf.d directory:
  .
     # Disable execution of dpkg from remote hosts
     <Location /cgi-bin/dpkg>
-    order deny,allow
-    deny from all
-    allow from localhost
-    allow from .your.domain
+        order deny,allow
+        deny from all
+        allow from localhost
+        allow from .your.domain
     </Location>
  .
- If you accept here and the apache configuration files are
- found the dpkg-www installation script will make these changes
- automatically for you. If apache is not installed, if you are using a
- different httpd server or if you refuse here, you should make
- the appropriate changes yourself.
+ The dpkg-www installation script will automatically install a default
+ configuration file in /etc/{apache,apache2}/conf.d. If you are using a
+ different httpd server you should make the appropriate changes in the
+ proper httpd config file.

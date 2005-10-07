@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dpkg-www\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-07-04 10:51+0200\n"
+"POT-Creation-Date: 2005-10-07 13:56+0200\n"
 "PO-Revision-Date: 2004-07-11 22:22+0200\n"
 "Last-Translator: Jan Outrata <outrataj@upcase.inf.upol.cz>\n"
 "Language-Team: Czech <provoz@debian.cz>\n"
@@ -23,35 +23,40 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#. Type: note
 #. Description
-#: ../templates:4
-msgid "Do you want to change the apache(-ssl) configuration?"
-msgstr "Chcete zmìnit nastavení apache(-ssl)?"
+#: ../templates:3
+msgid "Disabling access to dpkg-www from foreign hosts."
+msgstr ""
 
+#. Type: note
 #. Description
-#: ../templates:4
+#: ../templates:3
+#, fuzzy
 msgid ""
 "Allowing access to /cgi-bin/dpkg from any foreign host could allow a "
 "malicious external user to know your installed packages and try possible "
 "security exploits. You should therefore disable access to dpkg-www from "
-"foreign hosts. With apache(-ssl) you should add the following lines to /etc/"
-"apache(-ssl)/httpd.conf:"
+"foreign hosts. With apache you should add a file with the following "
+"instructions into apache conf.d directory:"
 msgstr ""
-"Povolení pøístupu do /cgi-bin/dpkg z jakéhokoliv cizího poèítaèe by "
-"mohlo umo¾nit zlomyslnému u¾ivateli zvenku zjistit va¹e instalované "
-"balíèky a zkou¹et mo¾né zneu¾itelné bezpeènostní chyby. Mìli byste "
-"tedy zakázat pøístup k dpkg-www z cizích poèítaèù. Pro apache(-ssl) "
-"byste mìli pøidat následující øádky do /etc/apache(-ssl)/httpd.conf:"
+"Povolení pøístupu do /cgi-bin/dpkg z jakéhokoliv cizího poèítaèe by mohlo "
+"umo¾nit zlomyslnému u¾ivateli zvenku zjistit va¹e instalované balíèky a "
+"zkou¹et mo¾né zneu¾itelné bezpeènostní chyby. Mìli byste tedy zakázat "
+"pøístup k dpkg-www z cizích poèítaèù. Pro apache(-ssl) byste mìli pøidat "
+"následující øádky do /etc/apache(-ssl)/httpd.conf:"
 
+#. Type: note
 #. Description
-#: ../templates:4
+#: ../templates:3
+#, fuzzy
 msgid ""
 "   # Disable execution of dpkg from remote hosts\n"
 "   <Location /cgi-bin/dpkg>\n"
-"   order deny,allow\n"
-"   deny from all\n"
-"   allow from localhost\n"
-"   allow from .your.domain\n"
+"       order deny,allow\n"
+"       deny from all\n"
+"       allow from localhost\n"
+"       allow from .your.domain\n"
 "   </Location>"
 msgstr ""
 "   # Disable execution of dpkg from remote hosts\n"
@@ -62,15 +67,26 @@ msgstr ""
 "   allow from .your.domain\n"
 "   </Location>"
 
+#. Type: note
 #. Description
-#: ../templates:4
+#: ../templates:3
 msgid ""
-"If you accept here and the apache configuration files are found the dpkg-www "
-"installation script will make these changes automatically for you. If apache "
-"is not installed, if you are using a different httpd server or if you refuse "
-"here, you should make the appropriate changes yourself."
+"The dpkg-www installation script will automatically install a default "
+"configuration file in /etc/{apache,apache2}/conf.d. If you are using a "
+"different httpd server you should make the appropriate changes in the proper "
+"httpd config file."
 msgstr ""
-"Pokud zde budete souhlasit a konfiguraèní soubory apache budou "
-"nalezeny, instalaèní skript dpkg-www provede tyto zmìny automaticky za "
-"vás. Pokud není apache nainstalován, pokud pou¾íváte jiný httpd server "
-"nebo pokud zde odmítnete, mìli byste provést vhodné zmìny sami."
+
+#~ msgid "Do you want to change the apache(-ssl) configuration?"
+#~ msgstr "Chcete zmìnit nastavení apache(-ssl)?"
+
+#~ msgid ""
+#~ "If you accept here and the apache configuration files are found the dpkg-"
+#~ "www installation script will make these changes automatically for you. If "
+#~ "apache is not installed, if you are using a different httpd server or if "
+#~ "you refuse here, you should make the appropriate changes yourself."
+#~ msgstr ""
+#~ "Pokud zde budete souhlasit a konfiguraèní soubory apache budou nalezeny, "
+#~ "instalaèní skript dpkg-www provede tyto zmìny automaticky za vás. Pokud "
+#~ "není apache nainstalován, pokud pou¾íváte jiný httpd server nebo pokud "
+#~ "zde odmítnete, mìli byste provést vhodné zmìny sami."

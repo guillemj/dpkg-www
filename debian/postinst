@@ -18,29 +18,14 @@ esac
 db_version 2.0
 db_get dpkg-www/update-apache-config
 
-if [ "$RET" = true ]; then
-    for server in apache apache-ssl; do
-	config="/etc/${server}/httpd.conf"
-	apachectl="/usr/sbin/${server}ctl"
-	test -f $config || continue
-	grep -q "<Location /cgi-bin/dpkg>" $config && continue
-	echo "Updating $server configuration file: $config" >&2
-	cat <<-EOF >>$config
-
-	# Disable execution of dpkg from remote hosts
-	<Location /cgi-bin/dpkg>
-	order deny,allow
-	deny from all
-	allow from localhost 127.0.0.1
-	# allow from .your_domain.com
-	</Location>
-
-EOF
-	test -x $apachectl || continue
+for server in apache2 apache apache-ssl; do
+    apachectl="/usr/sbin/${server}ctl"
+    apachepid="/var/run/${server}.pid"
+    if [ -x $apachectl -a -f $apachepid ]; then
 	echo "Restarting $server..." >&2
-	$apachectl restart >&2 || true
-    done
-fi
+	$apachectl restart >&2 </dev/null || true
+    fi
+done
 
 #DEBHELPER#
 exit 0
