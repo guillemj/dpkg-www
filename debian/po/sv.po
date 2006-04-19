@@ -1,0 +1,74 @@
+# Translators, if you are not familiar with the PO format, gettext
+# documentation is worth reading, especially sections dedicated to
+# this format, e.g. by running:
+# info -n '(gettext)PO Files'
+# info -n '(gettext)Header Entry'
+# Some information specific to po-debconf are available at
+# /usr/share/doc/po-debconf/README-trans
+# or http://www.debian.org/intl/l10n/po-debconf/README-trans
+# Developers do not need to manually edit POT or PO files.
+# , fuzzy
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: dpkg-www 2.47\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-07-04 10:51+0200\n"
+"PO-Revision-Date: 2005-10-11 21:07+0200\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <sv@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit"
+
+#. Description
+#: ../templates:4
+msgid "Do you want to change the apache(-ssl) configuration?"
+msgstr "Vill du ändra apache(-ssl) konfigurationen?"
+
+#. Description
+#: ../templates:4
+msgid ""
+"Allowing access to /cgi-bin/dpkg from any foreign host could allow a "
+"malicious external user to know your installed packages and try possible "
+"security exploits. You should therefore disable access to dpkg-www from "
+"foreign hosts. With apache(-ssl) you should add the following lines to /etc/"
+"apache(-ssl)/httpd.conf:"
+msgstr ""
+"Tillåta access till /cgi-bin/dpkg från en främmande värd kan innebära att "
+"ondsinta externa användare får reda på vilka installerade paket du har och försöka "
+"med attackera tänkbara säkerhetshål. Du bör därför stänga av tillgång till dpkg-www från "
+"fjärrvärdar. Med apache(-ssl) bör du lägga till följande rader i /etc/apache(-ssl)/httpd.conf."
+
+#. Description
+#: ../templates:4
+msgid ""
+"   # Disable execution of dpkg from remote hosts\n"
+"   <Location /cgi-bin/dpkg>\n"
+"   order deny,allow\n"
+"   deny from all\n"
+"   allow from localhost\n"
+"   allow from .your.domain\n"
+"   </Location>"
+msgstr ""
+"   # Stäng av exekvering av dpkg från fjärrsystem\n"
+"   <Location /cgi-bin/dpkg>\n"
+"   order deny,allow\n"
+"   deny from all\n"
+"   allow from localhost\n"
+"   allow from .your.domain\n"
+"   </Location>"
+
+#. Description
+#: ../templates:4
+msgid ""
+"If you accept here and the apache configuration files are found the dpkg-www "
+"installation script will make these changes automatically for you. If apache "
+"is not installed, if you are using a different httpd server or if you refuse "
+"here, you should make the appropriate changes yourself."
+msgstr ""
+"Om du accepterar här och apache konfigurationsfilerna hittades kommer dpkg-www's installationsskript "
+"att göra dessa ändringar automatiskt åt dig. Om apache inte är installerad, om du använder en "
+"annan webserver eller om du vägrar här bör du göra de passande ändringarna själv."
+

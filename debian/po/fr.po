@@ -13,10 +13,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dpkg-www 2.41\n"
+"Project-Id-Version: dpkg-www 2.48\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-10-07 13:56+0200\n"
-"PO-Revision-Date: 2003-07-04 10:56+0100\n"
+"PO-Revision-Date: 2005-10-12 17:19+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,12 +27,11 @@ msgstr ""
 #. Description
 #: ../templates:3
 msgid "Disabling access to dpkg-www from foreign hosts."
-msgstr ""
+msgstr "Empêcher l'exécution de dpkg-www par les hôtes distants"
 
 #. Type: note
 #. Description
 #: ../templates:3
-#, fuzzy
 msgid ""
 "Allowing access to /cgi-bin/dpkg from any foreign host could allow a "
 "malicious external user to know your installed packages and try possible "
@@ -40,16 +39,15 @@ msgid ""
 "foreign hosts. With apache you should add a file with the following "
 "instructions into apache conf.d directory:"
 msgstr ""
-"Si n'importe quelle machine extérieure peut accéder à /cgi-bin/dpkg, un "
-"utilisateur malveillant peut savoir quels paquets sont installés et par là "
-"tenter d'exploiter un faille de sécurité. Il est conseillé d'interdire "
-"l'accès à dpkg-www aux machines extérieures. Vous devriez ajouter les lignes "
-"suivantes à /etc/apache(-ssl)/httpd.conf :"
+"Si une machine extérieure peut accéder à /cgi-bin/dpkg, un utilisateur "
+"malveillant peut savoir quels sont les paquets installés et par là tenter "
+"d'exploiter une faille de sécurité. Il est conseillé d'interdire l'accès à "
+"dpkg-www aux machines extérieures. Vous devriez ajouter un fichier dans le "
+"répertoire conf.d d'apache, contenant les lignes suivantes :"
 
 #. Type: note
 #. Description
 #: ../templates:3
-#, fuzzy
 msgid ""
 "   # Disable execution of dpkg from remote hosts\n"
 "   <Location /cgi-bin/dpkg>\n"
@@ -61,10 +59,10 @@ msgid ""
 msgstr ""
 "   # Empêcher l'exécution de dpkg par les hôtes distants\n"
 "   <Location /cgi-bin/dpkg>\n"
-"   order deny,allow\n"
-"   deny from all\n"
-"   allow from localhost\n"
-"   allow from .your.domain\n"
+"       order deny,allow\n"
+"       deny from all\n"
+"       allow from localhost\n"
+"       allow from .votre.domaine\n"
 "   </Location>"
 
 #. Type: note
@@ -76,6 +74,10 @@ msgid ""
 "different httpd server you should make the appropriate changes in the proper "
 "httpd config file."
 msgstr ""
+"Le script d'installation de dpkg-www installera automatiquement un fichier "
+"de configuration dans /etc/{apache,apache2}/conf.d. Si vous utilisez un "
+"autre serveur httpd, vous devrez modifier vous-même le fichier de "
+"configuration du serveur."
 
 #~ msgid "Do you want to change the apache(-ssl) configuration?"
 #~ msgstr "Voulez-vous modifier la configuration d'apache(-ssl) ?"

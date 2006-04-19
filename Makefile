@@ -40,6 +40,9 @@ diff:
 package:
 	dpkg-buildpackage -rfakeroot
 
+dist:
+	dpkg-buildpackage -rfakeroot
+
 deb:
 	dpkg-buildpackage -rfakeroot -us -uc
 

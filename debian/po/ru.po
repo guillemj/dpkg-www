@@ -1,39 +1,38 @@
+# translation of dpkg-www_2.48_ru.po to Russian
 #
 #    Translators, if you are not familiar with the PO format, gettext
 #    documentation is worth reading, especially sections dedicated to
 #    this format, e.g. by running:
 #         info -n '(gettext)PO Files'
 #         info -n '(gettext)Header Entry'
-#
 #    Some information specific to po-debconf are available at
 #            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-#
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans#
 #    Developers do not need to manually edit POT or PO files.
+# Yuri Kozlov <kozlov.y@gmail.com>, 2006.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: dpkg-www_2.48\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-10-07 13:56+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2006-04-09 14:51+0300\n"
+"Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
+"Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=KOI8-R\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #. Type: note
 #. Description
 #: ../templates:3
 msgid "Disabling access to dpkg-www from foreign hosts."
-msgstr ""
+msgstr "п▒п╩п╬п╨п╦я─п╬п╡п╟п╫п╦п╣ п╢п╬я│я┌я┐п©п╟ п╨ dpkg-www я│ п©п╬я│я┌п╬я─п╬п╫п╫п╦я┘ я┘п╬я│я┌п╬п╡."
 
 #. Type: note
 #. Description
 #: ../templates:3
-#, fuzzy
 msgid ""
 "Allowing access to /cgi-bin/dpkg from any foreign host could allow a "
 "malicious external user to know your installed packages and try possible "
@@ -41,17 +40,15 @@ msgid ""
 "foreign hosts. With apache you should add a file with the following "
 "instructions into apache conf.d directory:"
 msgstr ""
-"Доступ  к  каталогу  /cgi-bin/dpkg  с любого  постороннего хоста может "
-"привести к тому, что посторонний пользователь может узнать какие у вас "
-"установлены  пакеты  и  попытается взломать систему. В избежание этого "
-"рекомендуется  запретить  доступ  к dpkg-www с посторонних хостов. Для apache"
-"(-ssl)  вам  надо  добавить  следующие строки в настроечный файл /etc/apache"
-"(-ssl)/httpd.conf:"
+"п■п╬я│я┌я┐п© п╨ п╨п╟я┌п╟п╩п╬пЁя┐ /cgi-bin/dpkg я│ п╩я▌п╠п╬пЁп╬ п©п╬я│я┌п╬я─п╬п╫п╫п╣пЁп╬ я┘п╬я│я┌п╟ п╪п╬п╤п╣я┌ "
+"п©я─п╦п╡п╣я│я┌п╦ п╨ я┌п╬п╪я┐, я┤я┌п╬ п©п╬я│я┌п╬я─п╬п╫п╫п╦п╧ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▄ п╪п╬п╤п╣я┌ я┐п╥п╫п╟я┌я▄ п╨п╟п╨п╦п╣ я┐ п╡п╟я│ "
+"я┐я│я┌п╟п╫п╬п╡п╩п╣п╫я▀ п©п╟п╨п╣я┌я▀ п╦ п©п╬п©я▀я┌п╟п╣я┌я│я▐ п╡п╥п╩п╬п╪п╟я┌я▄ я│п╦я│я┌п╣п╪я┐. п▓ п╦п╥п╠п╣п╤п╟п╫п╦п╣ я█я┌п╬пЁп╬ "
+"я─п╣п╨п╬п╪п╣п╫п╢я┐п╣я┌я│я▐ п╥п╟п©я─п╣я┌п╦я┌я▄ п╢п╬я│я┌я┐п© п╨ dpkg-www я│ п©п╬я│я┌п╬я─п╬п╫п╫п╦я┘ я┘п╬я│я┌п╬п╡. "
+"п■п╩я▐ apache п╡п╟п╪ п╫п╟п╢п╬ п╢п╬п╠п╟п╡п╦я┌я▄ я└п╟п╧п╩ я│п╬ я│п╩п╣п╢я┐я▌я┴п╦п╪п╦ я│я┌я─п╬п╨п╟п╪п╦ п╡ п╨п╟я┌п╟п╩п╬пЁ conf.d:"
 
 #. Type: note
 #. Description
 #: ../templates:3
-#, fuzzy
 msgid ""
 "   # Disable execution of dpkg from remote hosts\n"
 "   <Location /cgi-bin/dpkg>\n"
@@ -61,13 +58,13 @@ msgid ""
 "       allow from .your.domain\n"
 "   </Location>"
 msgstr ""
-"    # Запретить выполнение dpkg с удаленных хостов\n"
-"    <Location /cgi-bin/dpkg>\n"
-"        order deny,allow\n"
-"        deny from all\n"
-"        allow from localhost\n"
-"        allow from .your.domain\n"
-"    </Location>"
+"   # п≈п╟п©я─п╣я┌п╦я┌я▄ п╡я▀п©п╬п╩п╫п╣п╫п╦п╣ dpkg я│ я┐п╢п╟п╩я▒п╫п╫я▀я┘ я┘п╬я│я┌п╬п╡\n"
+"   <Location /cgi-bin/dpkg>\n"
+"       order deny,allow\n"
+"       deny from all\n"
+"       allow from localhost\n"
+"       allow from .your.domain\n"
+"   </Location>"
 
 #. Type: note
 #. Description
@@ -78,19 +75,8 @@ msgid ""
 "different httpd server you should make the appropriate changes in the proper "
 "httpd config file."
 msgstr ""
+"п║я├п╣п╫п╟я─п╦п╧ я┐я│я┌п╟п╫п╬п╡п╨п╦ dpkg-www п╟п╡я┌п╬п╪п╟я┌п╦я┤п╣я│п╨п╦ я┐я│я┌п╟п╫п╟п╡п╩п╦п╡п╟п╣я┌ я└п╟п╧п╩ п╫п╟я│я┌я─п╬п╧п╨п╦ "
+"п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌ п╡ п╨п╟я┌п╟п╩п╬пЁ /etc/{apache,apache2}/conf.d. п∙я│п╩п╦ п╦я│п©п╬п╩я▄п╥я┐п╣я┌я│я▐ "
+"п╢я─я┐пЁп╬п╧ я│п╣я─п╡п╣я─ httpd, я┌п╬ п╡я▀ п╢п╬п╩п╤п╫я▀ я│п╢п╣п╩п╟я┌я▄ я│п╬п╬я┌п╡п╣я┌я│я┌п╡я┐я▌я┴п╦п╣ п╦п╥п╪п╣п╫п╣п╫п╦я▐ п╡ "
+"п╫я┐п╤п╫п╬п╪ я└п╟п╧п╩п╣ п╫п╟я│я┌я─п╬п╧п╨п╦ httpd."
 
-#~ msgid "Do you want to change the apache(-ssl) configuration?"
-#~ msgstr "Хотите изменить настройки apache(-ssl)?"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you accept here and the apache configuration files are found the dpkg-"
-#~ "www installation script will make these changes automatically for you. If "
-#~ "apache is not installed, if you are using a different httpd server or if "
-#~ "you refuse here, you should make the appropriate changes yourself."
-#~ msgstr ""
-#~ "Если вы отвечаете ДА на этот вопрос и найдены настроечные файлы apache "
-#~ "то  сценарий  установки  dpkg-www  сделает в них необходимые изменения "
-#~ "автоматически. Если apache не установлен, вы используете другой сервер "
-#~ "WWW или если вы отчаете НЕТ на этот вопрос, то вам придется сделать "
-#~ "соответствующие изменения самостоятельно."
