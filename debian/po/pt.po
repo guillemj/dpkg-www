@@ -1,0 +1,73 @@
+# Portuguese translation for dpkg-www's debconf messages.
+# 2006, Rui Branco <ruipb@debianpt.org>
+# 2006-06-09 - Initial translation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dpkg-www 2.49\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-10-07 13:56+0200\n"
+"PO-Revision-Date: 2006-06-09 00:51+0100\n"
+"Last-Translator: Rui Branco <ruipb@debianpt.org>\n"
+"Language-Team: Portuguese <traduz@debianpt.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit"
+
+#. Type: note
+#. Description
+#: ../templates:3
+msgid "Disabling access to dpkg-www from foreign hosts."
+msgstr "A desabilitar o acesso ao dpkg-www de máquinas externas."
+
+#. Type: note
+#. Description
+#: ../templates:3
+msgid ""
+"Allowing access to /cgi-bin/dpkg from any foreign host could allow a "
+"malicious external user to know your installed packages and try possible "
+"security exploits. You should therefore disable access to dpkg-www from "
+"foreign hosts. With apache you should add a file with the following "
+"instructions into apache conf.d directory:"
+msgstr ""
+"Permitir o acesso a /cgi-bin/dpkg a partir de qualquer máquina exterior "
+"pode possibilitar a utilizadores externos a informação sobre os seus "
+"pacotes instalados e consequentemente a exploração de vulnerabilidades. "
+"Deverá desta forma desactivar o acesso ao dpkg-www a partir de máquinas "
+"externas. Com o apache deverá adicionar um ficheiro com as seguintes "
+"instruções à pasta do apache conf.d:"
+
+#. Type: note
+#. Description
+#: ../templates:3
+msgid ""
+"   # Disable execution of dpkg from remote hosts\n"
+"   <Location /cgi-bin/dpkg>\n"
+"       order deny,allow\n"
+"       deny from all\n"
+"       allow from localhost\n"
+"       allow from .your.domain\n"
+"   </Location>"
+msgstr ""
+"   # Disable execution of dpkg from remote hosts\n"
+"   <Location /cgi-bin/dpkg>\n"
+"       order deny,allow\n"
+"       deny from all\n"
+"       allow from localhost\n"
+"       allow from .your.domain\n"
+"   </Location>"
+
+#. Type: note
+#. Description
+#: ../templates:3
+msgid ""
+"The dpkg-www installation script will automatically install a default "
+"configuration file in /etc/{apache,apache2}/conf.d. If you are using a "
+"different httpd server you should make the appropriate changes in the proper "
+"httpd config file."
+msgstr ""
+"O script de instalação do dpkg-www instalará automaticamente um ficheiro "
+"de configuração por omissão em /etc/{apache,apache2}/conf.d.·Se estiver a "
+"usar um servidor httpd diferente deverá efectuar as alterações apropriadas "
+"no respectivo ficheiro de configuração do httpd."
+

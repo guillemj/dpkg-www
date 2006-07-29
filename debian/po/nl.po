@@ -1,23 +1,30 @@
-# 
+# translation of dpkg-www 2.49_templates.po to Dutch
+# This file is distributed under the same license as the dpkg-www package.
+# Please see debian/copyright.
+#
 #    Translators, if you are not familiar with the PO format, gettext
 #    documentation is worth reading, especially sections dedicated to
 #    this format, e.g. by running:
 #         info -n '(gettext)PO Files'
 #         info -n '(gettext)Header Entry'
-# 
+#
 #    Some information specific to po-debconf are available at
 #            /usr/share/doc/po-debconf/README-trans
 #         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-# 
+#
 #    Developers do not need to manually edit POT or PO files.
-# 
+#
+# Luk Claes <luk.claes(AT)ugent(DOT)be>, 2004
+# Kurt De Bree <kdebree(AT)telenet(DOT)be>, 2006
+# This is an unofficial translation
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: dpkg-www 2.43\n"
+"Project-Id-Version: dpkg-www 2.49\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-10-07 13:56+0200\n"
-"PO-Revision-Date: 2004-05-21 15:34+0100\n"
-"Last-Translator: Luk Claes <luk.claes@ugent.be>\n"
+"PO-Revision-Date: 2006-06-20 19:10+0100\n"
+"Last-Translator: Kurt De Bree <kdebree(AT)telenet(DOT)be>\n"
 "Language-Team: Debian l10n Dutch <debian-l10n-dutch@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -27,12 +34,11 @@ msgstr ""
 #. Description
 #: ../templates:3
 msgid "Disabling access to dpkg-www from foreign hosts."
-msgstr ""
+msgstr "Uitschakelen van de toegang tot dpkg-www vanuit vreemde hosts."
 
 #. Type: note
 #. Description
 #: ../templates:3
-#, fuzzy
 msgid ""
 "Allowing access to /cgi-bin/dpkg from any foreign host could allow a "
 "malicious external user to know your installed packages and try possible "
@@ -40,16 +46,16 @@ msgid ""
 "foreign hosts. With apache you should add a file with the following "
 "instructions into apache conf.d directory:"
 msgstr ""
-"Het aanvaarden van toegang tot /cgi-bin/dpkg van om het even welke vreemde "
+"Het aanvaarden van toegang tot /cgi-bin/dpkg vanuit om het even welke vreemde "
 "host, kan een boosaardige externe gebruiker laten weten welke pakketten zijn "
-"geïnstalleerd en zo hem mogelijke veiligheidslekken laten uitproberen. U "
-"moet daarom de toegang tot dpkg-www van vreemde hosts uitschakelen. Bij "
-"apache(-ssl)/httpd.conf moet u volgende regels toevoegen:"
+"geïnstalleerd en hem zo mogelijke veiligheidslekken laten uitproberen. U "
+"dient daarom de toegang tot dpkg-www vanuit vreemde hosts uit te schakelen. "
+"Bij apache dient u een bestand met de volgende instructies toe te voegen aan de "
+"apache 'conf.d'-map:"
 
 #. Type: note
 #. Description
 #: ../templates:3
-#, fuzzy
 msgid ""
 "   # Disable execution of dpkg from remote hosts\n"
 "   <Location /cgi-bin/dpkg>\n"
@@ -76,18 +82,6 @@ msgid ""
 "different httpd server you should make the appropriate changes in the proper "
 "httpd config file."
 msgstr ""
-
-#~ msgid "Do you want to change the apache(-ssl) configuration?"
-#~ msgstr "Wilt u de apache(-ssl)-configuratie wijzigen?"
-
-#~ msgid ""
-#~ "If you accept here and the apache configuration files are found the dpkg-"
-#~ "www installation script will make these changes automatically for you. If "
-#~ "apache is not installed, if you are using a different httpd server or if "
-#~ "you refuse here, you should make the appropriate changes yourself."
-#~ msgstr ""
-#~ "Als u hier aanvaardt en de apache-configuratiebestanden worden gevonden, "
-#~ "dan zal het dpkg-www-installatiescript de wijzigingen automatisch voor u "
-#~ "toepassen. Als apache niet is geïnstalleerd, als u een andere httpd-"
-#~ "server gebruikt of als u hier moet weigeren, dan moet u zelf de gepaste "
-#~ "wijzigingen aanbrengen."
+"Het dpkg-www installatiescript zal automatisch een standaard configuratiebestand "
+"in /etc/{apache,apache2}/conf.d installeren. Als u een andere httpd-server gebruikt "
+"dient u de gepaste wijzigingen in het juiste 'httpd'-configuratiebestand uit te voeren."

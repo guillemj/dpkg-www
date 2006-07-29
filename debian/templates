@@ -1,6 +1,6 @@
 Template: dpkg-www/update-apache-config
 Type: note
-_Description: Disabling access to dpkg-www from foreign hosts.
+_Description: Disabling access to dpkg-www from foreign hosts
  Allowing access to /cgi-bin/dpkg from any foreign host could allow a
  malicious external user to know your installed packages and try possible
  security exploits. You should therefore disable access to dpkg-www from
