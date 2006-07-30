@@ -1,3 +1,10 @@
+dpkg-www (2.51) unstable; urgency=low
+
+  * Updated Dutch translation.
+    Closes: #380493.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Sun, 30 Jul 2006 18:28:55 +0200
+
 dpkg-www (2.50) unstable; urgency=low
 
   * Updated Swedish translation.

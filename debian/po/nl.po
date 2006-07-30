@@ -1,4 +1,4 @@
-# translation of dpkg-www 2.49_templates.po to Dutch
+# translation of dpkg-www 2.50_templates.po to Dutch
 # This file is distributed under the same license as the dpkg-www package.
 # Please see debian/copyright.
 #
@@ -20,10 +20,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dpkg-www 2.49\n"
+"Project-Id-Version: dpkg-www 2.50\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-07 13:56+0200\n"
-"PO-Revision-Date: 2006-06-20 19:10+0100\n"
+"POT-Creation-Date: 2006-07-30 05:01-0600\n"
+"PO-Revision-Date: 2006-07-30 17:10+0100\n"
 "Last-Translator: Kurt De Bree <kdebree(AT)telenet(DOT)be>\n"
 "Language-Team: Debian l10n Dutch <debian-l10n-dutch@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -32,13 +32,13 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../templates:3
-msgid "Disabling access to dpkg-www from foreign hosts."
-msgstr "Uitschakelen van de toegang tot dpkg-www vanuit vreemde hosts."
+#: ../templates:1001
+msgid "Disabling access to dpkg-www from foreign hosts"
+msgstr "Uitschakelen van de toegang tot dpkg-www vanuit vreemde hosts"
 
 #. Type: note
 #. Description
-#: ../templates:3
+#: ../templates:1001
 msgid ""
 "Allowing access to /cgi-bin/dpkg from any foreign host could allow a "
 "malicious external user to know your installed packages and try possible "
@@ -46,16 +46,16 @@ msgid ""
 "foreign hosts. With apache you should add a file with the following "
 "instructions into apache conf.d directory:"
 msgstr ""
-"Het aanvaarden van toegang tot /cgi-bin/dpkg vanuit om het even welke vreemde "
-"host, kan een boosaardige externe gebruiker laten weten welke pakketten zijn "
-"geïnstalleerd en hem zo mogelijke veiligheidslekken laten uitproberen. U "
-"dient daarom de toegang tot dpkg-www vanuit vreemde hosts uit te schakelen. "
-"Bij apache dient u een bestand met de volgende instructies toe te voegen aan de "
-"apache 'conf.d'-map:"
+"Het aanvaarden van toegang tot /cgi-bin/dpkg vanuit om het even welke "
+"vreemde host, kan een boosaardige externe gebruiker laten weten welke "
+"pakketten zijn geïnstalleerd en hem zo mogelijke veiligheidslekken laten "
+"uitproberen. U dient daarom de toegang tot dpkg-www vanuit vreemde hosts uit "
+"te schakelen. Bij apache dient u een bestand met de volgende instructies toe "
+"te voegen aan de apache 'conf.d'-map:"
 
 #. Type: note
 #. Description
-#: ../templates:3
+#: ../templates:1001
 msgid ""
 "   # Disable execution of dpkg from remote hosts\n"
 "   <Location /cgi-bin/dpkg>\n"
@@ -75,13 +75,14 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../templates:3
+#: ../templates:1001
 msgid ""
 "The dpkg-www installation script will automatically install a default "
 "configuration file in /etc/{apache,apache2}/conf.d. If you are using a "
 "different httpd server you should make the appropriate changes in the proper "
 "httpd config file."
 msgstr ""
-"Het dpkg-www installatiescript zal automatisch een standaard configuratiebestand "
-"in /etc/{apache,apache2}/conf.d installeren. Als u een andere httpd-server gebruikt "
-"dient u de gepaste wijzigingen in het juiste 'httpd'-configuratiebestand uit te voeren."
+"Het dpkg-www installatiescript zal automatisch een standaard "
+"configuratiebestand in /etc/{apache,apache2}/conf.d installeren. Als u een "
+"andere httpd-server gebruikt dient u de gepaste wijzigingen in het juiste "
+"'httpd'-configuratiebestand uit te voeren."

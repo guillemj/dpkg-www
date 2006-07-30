@@ -56,6 +56,6 @@ lintian:
 	cd .. && lintian -i $(PKGFILE)
 
 upload:
-	cd .. && dupload $(CHANGES)
+	cd .. && grep -q 'PGP SIGNED MESSAGE' $(CHANGES) && dupload $(CHANGES)
 
 # end of file
