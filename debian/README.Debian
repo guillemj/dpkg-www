@@ -13,11 +13,12 @@ own a non-installed file or have a certain value in a control field.
 You can even install or remove packages from your browser if this feature is
 enabled in the site configuration file.
 
-WARNING! Allowing access to /cgi-bin/dpkg from any foreign host could allow
-a malicious external user to know your installed packages and try possible
-security exploits. You should check your local http server configuration
-and disable access to dpkg-www from external hosts. With apache you should
-add a file with the following lines in apache's conf.d:
+WARNING! 
+Allowing access to /cgi-bin/dpkg from any foreign host could allow a
+malicious external user to know your installed packages and try possible
+security exploits. You should therefore disable access to dpkg-www from
+foreign hosts. With apache you should add a file with the following
+instructions into apache conf.d directory:
 
     # Disable execution of dpkg from remote hosts
     <Location /cgi-bin/dpkg>
@@ -27,8 +28,13 @@ add a file with the following lines in apache's conf.d:
         allow from .your.domain
     </Location>
 
-WARNING! Enabling the WEB installation feature could potentially introduce
+The dpkg-www installation script will automatically install a default
+configuration file in /etc/{apache,apache2}/conf.d. If you are using a
+different httpd server you should make the appropriate changes in the
+proper httpd config file.
+
+Enabling the WEB installation feature could potentially introduce
 security holes in your system and your network. Use at yout own risk!
 
 -- 
-Massimo Dal Zotto <dz@debian.org>  Fri Oct  7 13:14:20 CEST 2005
+Massimo Dal Zotto <dz@debian.org>  Tue Sep 26 14:11:49 CEST 2006
