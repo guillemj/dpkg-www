@@ -18,7 +18,8 @@ install:
 	@ mkdir -p $(DESTDIR)/usr/lib/cgi-bin
 	@ mkdir -p $(DESTDIR)/usr/bin
 	@ mkdir -p $(DESTDIR)/usr/share/man/man1
-	@ mkdir -p $(DESTDIR)/etc/{apache,apache2}/conf.d
+	@ mkdir -p $(DESTDIR)/etc/apache/conf.d
+	@ mkdir -p $(DESTDIR)/etc/apache2/conf.d
 	cp -p src/dpkg $(DESTDIR)/usr/lib/cgi-bin/
 	cp -p src/dpkg-www $(DESTDIR)/usr/bin/
 	cp -p src/dpkg-www-installer $(DESTDIR)/usr/sbin/

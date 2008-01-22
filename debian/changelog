@@ -1,3 +1,13 @@
+dpkg-www (2.53) unstable; urgency=low
+
+  * Rewritten parsing of dpkg -l headers in listFilter.
+    Closes: #455483.
+
+  * Fixed package building with dash as /bin/sh.
+    Closes: #459047.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Tue, 22 Jan 2008 15:05:09 +0100
+
 dpkg-www (2.52) unstable; urgency=low
 
   * Removed debconf stuff and moved notes to README.Debian.

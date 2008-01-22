@@ -18,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-PROG_VERSION=2.52
-SELF=${0##*/}
+PROG_VERSION=2.53
+SELF=${0##*/}; export SELF
 HELP_PAGE="/usr/share/man/man8/dpkg-www.8.gz"
 COLUMNS=256; export COLUMNS
 SECTION_DESCRIPTIONS="
@@ -364,7 +364,8 @@ queryPackages() {
 	# No argument, show the package list
 	debug "no arguments"
 	listPackages
-    elif [ "$package" != "$packages" -o "$packages" != "${packages#*[\[*?]}" ];then
+    elif [ "$package" != "$packages" -o "$packages" != "${packages#*[\[*?]}" ]
+    then
 	# Package list or wildcard, list packages concisely
 	debug "package list"
 	listPackages $packages
@@ -764,11 +765,11 @@ listPackageDocumentation() {
 	      | awk '/^Title: / { sub("^Title: *",""); print $0 }'
 	)"
 	/usr/sbin/install-docs -s "$document_id" 2>/dev/null \
-	| awk '
+	  | awk '
 	    /^Format:/ { format = $2 }
 	    /^Index: / { print $2 "\t" format }
 	    /^Files: / { if (!match($2,"\\*")) { print $2 "\t" format } }' \
-	| sort | uniq | fileFilter "$title" | sed 's/^/ /'
+	  | sort | uniq | fileFilter "$title" | sed 's/^/ /'
     done
 }
 
@@ -919,9 +920,10 @@ listFilter() {
     awk -v SELF=$SELF \
 	-v CHECK_BUTTONS=$CHECK_BUTTONS \
 	-v DPKG_AVAILABLE=$DPKG_AVAILABLE \
-       -v LIST_UNAVAILABLE=$LIST_UNAVAILABLE \
-       -v INSTALLED_ONLY=$INSTALLED_ONLY '
+	-v LIST_UNAVAILABLE=$LIST_UNAVAILABLE \
+	-v INSTALLED_ONLY=$INSTALLED_ONLY '
 	BEGIN {
+	    is_hdr  = 1
 	    statMax = 3
 	    nameMax = 10
 	    versMax = 10
@@ -943,26 +945,31 @@ listFilter() {
 	    NR--
 	    next
 	}
-	(NR <= 3) {
+	(is_hdr) {
 	    header[NR] = $0
 	    next
 	}
-	(NR == 4) {
-	    hstat = $1
-	    hname = $2
-	    hvers = $3
-	    hdesc = $4
+	(is_hdr == 1) && ($1 == "||/") {
+	    # ||/ Name           Version        Description
+	    hstat  = $1
+	    hname  = $2
+	    hvers  = $3
+	    hdesc  = $4
+	    is_hdr = 2
 	    next
 	}
-	(NR == 5) {
+	(is_hdr == 2) {
+	    # +++-==============-==============-===============================
 	    split($0,A,"-")
 	    statLen = length(A[1])
 	    nameLen = length(A[2])
 	    versLen = length(A[3])
-	    hsep = A[4] A[4] A[4]
+	    hsep    = A[4] A[4] A[4]
+	    is_hdr  = 0
 	    next
 	}
-	(NR >= 6) {
+	(!is_hdr) {
+	    # ii  dpkg-www       2.52           package description ...
 	    stat = substr($0,1,statLen)
 	    name = substr($0,5,nameLen)
 	    vers = substr($0,6+nameLen,versLen)
@@ -970,9 +977,9 @@ listFilter() {
 	    sub("[ ]+$","",name)
 	    sub("[ ]+$","",vers)
 	    sub("[ ]+$","",desc)
-	   if (INSTALLED_ONLY && !match(stat,"^(i.|.c)")) {
-	       next
-	   }
+	    if (INSTALLED_ONLY && !match(stat,"^(i.|.c)")) {
+	        next
+	    }
 	    # if (vers == "<none>") { vers = "-" }
 	    nameMax = max(nameMax, length(name))
 	    versMax = max(versMax, length(vers))
@@ -1011,10 +1018,10 @@ listFilter() {
 	    printf("+++%s-%s-%s-%s\n", substr("--",1,buttonW), \
 		   pad(hsep,nameMax), pad(hsep,versMax), pad(hsep,descMax))
 	    nr = NR
-	   npackages = 0
+	    npackages = 0
 	    for (i=6; i<=nr; i++) {
 		name = packages[i,"name"]
-	       if (!name) { continue }
+		if (!name) { continue }
 		if (CHECK_BUTTONS) {
 		    if (substr(packages[i,"stat"],2,1) == "n") {
 			stat = pad(packages[i,"stat"],statMax)
@@ -1039,12 +1046,12 @@ listFilter() {
 		gsub("\\+", "%2B", href)
 		href = "<A HREF=\"" SELF "?query=" href "\">" link "</A>" npad
 		printf("%s%s %s %s %s\n", stat, button, href, vers, desc)
-	       npackages++
+		npackages++
 	    }
-	   if (npackages > 0) {
+	    if (npackages > 0) {
 		npad = statMax+2+buttonW+nameMax
 		print ""
-	       printf(pad(sprintf("%d packages", npackages), npad))
+		printf(pad(sprintf("%d packages", npackages), npad))
 	    }
 	    if (CHECK_BUTTONS) {
 		if (install) {
@@ -1296,6 +1303,7 @@ printHtmlBottom() {
 	</ADDRESS>
 	<BR>
 	</P>
+        $(test "${tempfile}" && echo "<PRE>" && cat $tempfile | sed 's/</\&lt;/g' && echo "</PRE>")
 	</BODY>
 	</HTML>
 EOF
@@ -1366,10 +1374,13 @@ if test_flag "$DEBUG"; then
 	packages="$(escape_html "$packages")"
 	bgcolor="$(escape_html "$bgcolor")"
 	noheader="$(escape_html "$noheader")"
-       installed="$(escape_html "$installed")"
+	installed="$(escape_html "$installed")"
 	debug="$(escape_html "$debug")"
 	</PRE>
 EOF
+    tempfile=$(tempfile); trap "rm -f $tempfile" 0
+    exec 2>$tempfile
+    set -x
 fi
 
 # Sanity check on input values. $query is checked in doQuery.

@@ -9,9 +9,9 @@ Package: dpkg-www
 Architecture: all
 Depends: apt, dwww, info2www, perl | perl5, apache2 | httpd
 Suggests: dlocate, grep-dctrl, mozilla-firefox | www-browser, man2html, tasksel
-Description: powerful WEB based Debian package browser
+Description: Web based Debian package browser
  With the dpkg cgi-bin you can browse Debian packages on a local or
- remote host using a normal WEB browser.
+ remote host using a normal web browser.
  .
  You can list packages, show package information and installed files,
  browse documentation and navigate through the packages dependencies.
@@ -21,4 +21,4 @@ Description: powerful WEB based Debian package browser
  If you are the system administrator you can also install or remove
  packages by clicking on the buttons found in the package info page, 
  provided that this feature has been enabled and you have properly
- configured your WEB browser.
+ configured your web browser.
