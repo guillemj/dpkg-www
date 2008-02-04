@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-PROG_VERSION=2.53
+PROG_VERSION=2.54
 SELF=${0##*/}; export SELF
 HELP_PAGE="/usr/share/man/man8/dpkg-www.8.gz"
 COLUMNS=256; export COLUMNS
@@ -947,7 +947,6 @@ listFilter() {
 	}
 	(is_hdr) {
 	    header[NR] = $0
-	    next
 	}
 	(is_hdr == 1) && ($1 == "||/") {
 	    # ||/ Name           Version        Description

@@ -1,3 +1,10 @@
+dpkg-www (2.54) unstable; urgency=low
+
+  * Fixed parsing of dpkg -l headers in listFilter.
+    Closes: #463871.
+
+ -- Massimo Dal Zotto <dz@debian.org>  Mon, 04 Feb 2008 23:31:43 +0100
+
 dpkg-www (2.53) unstable; urgency=low
 
   * Rewritten parsing of dpkg -l headers in listFilter.
