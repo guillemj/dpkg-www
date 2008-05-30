@@ -1,3 +1,16 @@
+dpkg-www (2.54+nmu1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Lintian-based changes:
+    - Build-Depend on debhelper, clean-should-be-satisfied-by-build-depends
+    - debian/compat:4, comment DH_COMPAT in rules, debian-rules-sets-DH_COMPAT
+    - s/-$(MAKE)/$(MAKE)/ debian/rules as Makefile is always present
+      + debian-rules-ignores-make-clean-error
+  * Fixed bashisms in dpkg-www-installer (Closes: #468679).
+    - Additionally changed the shebang of dpkg-www to sh, as it's bashisms-free
+
+ -- Raphael Geissert <atomo64@gmail.com>  Fri, 30 May 2008 15:46:11 -0500
+
 dpkg-www (2.54) unstable; urgency=low
 
   * Fixed parsing of dpkg -l headers in listFilter.

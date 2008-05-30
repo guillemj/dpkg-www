@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Command-line interface to dpkg-www.
 #

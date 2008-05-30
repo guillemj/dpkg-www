@@ -147,7 +147,7 @@ fi
 
 case "$HOST" in
     localhost|$(hostname)|$(hostname -f))
-	if [ "$EUID" = 0 ]; then
+	if [ "$(id -u)" = "0" ]; then
 		echo "You should NOT run this script as root!"
 		echo ""
 		echo -n "Press Enter to continue..."; read x
