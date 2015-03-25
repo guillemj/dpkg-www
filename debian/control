@@ -1,13 +1,14 @@
 Source: dpkg-www
 Section: doc
 Priority: optional
-Maintainer: Massimo Dal Zotto <dz@debian.org>
-Build-Depends: debhelper (>= 4.1.16)
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Build-Depends: debhelper (>= 4.1.16), dh-apache2
 Standards-Version: 3.5.8
 
 Package: dpkg-www
 Architecture: all
-Depends: apt, dwww, info2www, perl | perl5, apache2 | httpd
+Depends: apt, dwww, info2www, perl | perl5
+Recommends: ${misc:Recommends}
 Suggests: dlocate, grep-dctrl, mozilla-firefox | www-browser, man2html, tasksel
 Description: Web based Debian package browser
  With the dpkg cgi-bin you can browse Debian packages on a local or

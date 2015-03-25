@@ -1,0 +1,2 @@
+rm_conffile /etc/apache/conf.d/dpkg-www 2.55~
+mv_conffile /etc/apache2/conf.d/dpkg-www /etc/apache2/conf-available/dpkg-www.conf 2.55~

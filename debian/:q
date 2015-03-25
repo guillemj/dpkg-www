@@ -2,7 +2,7 @@ dpkg-www (2.55) unstable; urgency=medium
 
   * QA upload:
     - d/control: Set maintainer address to QA.
-  * Apache2.4 transition (Closes: #669735, #578237):
+  * Apache2.4 transition (Closes: #669735):
     - d/control: Build-depends on dh-apache2, change hard Depends on apache2
       to use of misc:Recommends.
     - d/rules: Add dh_apache2.
