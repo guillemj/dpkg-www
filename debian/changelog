@@ -2,6 +2,7 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
 
   * QA upload.
   * Bumped compat level to 9.
+  * Bumped Standards-Version to 3.9.6: No change required.
   * Minimize d/rules to use dh $@, create links using d/links.
   * Other d/control changed:
     - Added Vcs-* fields.
