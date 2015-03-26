@@ -1234,7 +1234,7 @@ escape_html() {
 
 printHtmlHeader() {
     local title="${1:-Debian Packages}"
-    local content_type="${2:-text/html}"
+    local content_type="${2:-text/html; charset=UTF-8}"
     test "$html_header_done" && return
     html_header_done=true
     echo "Content-type: $content_type"
@@ -1310,7 +1310,7 @@ EOF
 
 printError() {
     local message="$*"
-    printHtmlHeader "$title" text/html
+    printHtmlHeader "$title"
     printInputForm
     echo "<P>"
     echo "$(escape_html "$message")"
@@ -1353,7 +1353,7 @@ test "$bgcolor" != "" && BGCOLOR="$bgcolor"
 
 # Print debugging info
 if test_flag "$DEBUG"; then
-    printHtmlHeader "$title" text/html
+    printHtmlHeader "$title"
     cat <<- EOF
 	<PRE>
 	$(env | sort)
@@ -1432,7 +1432,7 @@ elif [ "$browse" ]; then
     printBrowseRequest "$packages"
     printHtmlBottom 
 else
-    printHtmlHeader "$title" text/html
+    printHtmlHeader "$title"
     printInputForm
     doQuery "$query"
     printHtmlBottom

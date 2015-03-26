@@ -24,6 +24,7 @@ dpkg-www (2.56) UNRELEASED; urgency=medium
     - New lintian override for Build-Depending on dh-apache2.
   * d/copyright: Switch to DEP5 format, fix link to GPL-2 license.
   * New .desktop file since menu is deprectated.
+  * Set utf-8 charset in html responses. (Closes: #712018)
 
  -- Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Thu, 26 Mar 2015 10:14:10 +0100
 
