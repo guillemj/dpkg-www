@@ -19,6 +19,7 @@ dpkg-www (2.56) UNRELEASED; urgency=medium
   * Polish apache2.4 upgrade:
     - New require apache2.4 syntax in d/dpkg-www.conf.
     - Update README.Debian.
+    - New lintian override for Build-Depending on dh-apache2.
   * d/copyright: Fix link to GPL-2 license.
 
  -- Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Thu, 26 Mar 2015 10:14:10 +0100

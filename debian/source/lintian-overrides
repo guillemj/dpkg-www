@@ -1,0 +1,3 @@
+# dh_apache2 build usage requires dependency on dh-apache2, which is temporarily provided by apache2-dev
+# See https://bugs.debian.org/778820
+dpkg-www source: missing-build-dependency-for-dh-addon apache2 => apache2-dev
