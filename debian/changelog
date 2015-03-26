@@ -1,3 +1,10 @@
+dpkg-www (2.57) UNRELEASED; urgency=medium
+
+  * QA upload.
+  * Added Vcs-* fields to d/control.
+
+ -- Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Thu, 26 Mar 2015 10:14:10 +0100
+
 dpkg-www (2.56) unstable; urgency=medium
 
   * QA upload.
