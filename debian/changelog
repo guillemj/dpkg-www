@@ -13,6 +13,7 @@ dpkg-www (2.56) UNRELEASED; urgency=medium
     - Added Vcs-* fields.
     - Added ${misc:Depends}.
     - Drop depends on essential apt.
+    - Replace mozilla-firefox by iceweasel.
   * Delete unwanted 'debian/:q' file.
   * src/dpkg-www.8:
     - Fix hyphen-used-as-minus-sign.
