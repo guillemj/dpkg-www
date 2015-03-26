@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Debian Package Browser
+Comment=View installed packages
+Keywords=dpkg;package;
+Icon=dpkg-www
+Exec=dpkg-www
+Terminal=false
+Categories=System;
+StartupNotify=true
