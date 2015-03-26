@@ -1,24 +1,23 @@
-This package was written by Massimo Dal Zotto <dz@debian.org> on
-Mon,  2 Aug 1999 17:37:25 +0200.
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
-This software is released under the terms of the GNU General Public
-Licence.
-
-   Copyright (C) 1999-2006 Massimo Dal Zotto <dz@debian.org>
-
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-   
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-   
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
-
-On Debian GNU/Linux systems, the complete text of the GNU General
-Public License version2 can be found in `/usr/share/common-licenses/GPL-2'.
+Files: *
+Copyright: 1999-2006 Massimo Dal Zotto <dz@debian.org>
+           2008 Raphael Geissert <atomo64@gmail.com>
+           2015 Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License along
+ with this program; if not, write to the Free Software Foundation, Inc.,
+ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ .
+ On Debian systems, the text of the GNU General Public License version 2
+ can be found in `/usr/share/common-licenses/GPL-2'.
