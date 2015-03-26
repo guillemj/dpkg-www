@@ -5,8 +5,8 @@ dpkg-www (2.56) UNRELEASED; urgency=medium
   * Bumped Standards-Version to 3.9.6: No change required.
   * Bumped source format to 3.0 (native).
   * Minimize d/rules to use dh $@, create links using d/links.
-  * Installing files using d/install rather that custom Makefile. Drop
-    unused targets from Makefile.
+  * Use d/install to install files. Drop unused targets from Makefile.
+  * Use d/manpages to install manuals.
   * Other d/control changed:
     - Added Vcs-* fields.
     - Added ${misc:Depends}.

@@ -2,6 +2,4 @@ src/dpkg                /usr/lib/cgi-bin/
 src/dpkg-www            /usr/bin/
 src/dpkg-www-installer  /usr/sbin/
 src/dpkg-www.xpm        /usr/share/pixmaps/
-src/dpkg-www.1          /usr/share/man/man1/
-src/dpkg-www.8          /usr/share/man/man8/
 src/dpkg-www.conf       /etc
