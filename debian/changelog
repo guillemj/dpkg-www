@@ -765,7 +765,3 @@ dpkg-www (1.1) unstable; urgency=low
   * Changed dwww-convert and dwww-find to handle dpkg output.
 
  -- Massimo Dal Zotto <dz@cs.unitn.it>  Mon,  2 Aug 1999 17:37:25 +0200
-
-Local variables:
-mode: debian-changelog
-End:
