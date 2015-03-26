@@ -18,7 +18,7 @@ Allowing access to /cgi-bin/dpkg from any foreign host could allow a
 malicious external user to know your installed packages and try possible
 security exploits. You should therefore disable access to dpkg-www from
 foreign hosts. With apache you should add a file with the following
-instructions into apache conf.d directory:
+instructions into apache conf-available directory:
 
     # Disable execution of dpkg from remote hosts
     <Location /cgi-bin/dpkg>
