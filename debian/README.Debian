@@ -22,14 +22,12 @@ instructions into apache conf.d directory:
 
     # Disable execution of dpkg from remote hosts
     <Location /cgi-bin/dpkg>
-        order deny,allow
-        deny from all
-        allow from localhost
-        allow from .your.domain
+        require local
+        # require ip 192.168.0
     </Location>
 
 The dpkg-www installation script will automatically install a default
-configuration file in /etc/{apache,apache2}/conf.d. If you are using a
+configuration file in /etc/apache2/conf-available/. If you are using a
 different httpd server you should make the appropriate changes in the
 proper httpd config file.
 
@@ -37,4 +35,4 @@ Enabling the WEB installation feature could potentially introduce
 security holes in your system and your network. Use at yout own risk!
 
 -- 
-Massimo Dal Zotto <dz@debian.org>  Tue Sep 26 14:11:49 CEST 2006
+Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Thu, 26 Mar 2015 11:57:16 +0100
