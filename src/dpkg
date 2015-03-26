@@ -1225,7 +1225,7 @@ EOF
 getValue() {
     local key="$1"
     test -x /usr/bin/perl || return
-    perl -e "use CGI; my \$q = new CGI(\$_); print \$q->param('$key')" "$1"
+    perl -e "use CGI; my \$q = new CGI(\$_); print scalar \$q->param('$key')" "$1"
 }
 
 escape_html() {
