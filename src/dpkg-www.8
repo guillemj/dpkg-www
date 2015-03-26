@@ -117,7 +117,7 @@ even if an ssh agent holds the private key.
 .IP GREP_DCTRL_OPTS
 These options are passed to
 .B grep-dctrl(1)
-when doing a query by field. Default is "-i" for case-insensitive fixed
+when doing a query by field. Default is "\-i" for case-insensitive fixed
 substring match. See
 .B grep-dctrl(1)
 for more info.
@@ -189,7 +189,7 @@ LIST_DOCUMENTATION=1
 .br
 # Options passed to grep-dctrl in queryPackagesByField()
 .br
-GREP_DCTRL_OPTS="-i"
+GREP_DCTRL_OPTS="\-i"
 .br
 
 .br
@@ -280,7 +280,7 @@ packages.
 
 .PP
 The WEB browser must have been configured to handle the above content-type
-by running the command "/usr/sbin/dpkg-www-installer -x -f '%s'", which must
+by running the command "/usr/sbin/dpkg-www-installer \-x \-f '%s'", which must
 obviously intalled also on the client side if installing from remote.
 If the dpkg-www package is not installed on the browser client you can simply
 copy the script /usr/sbin/dpkg-www-installer and hope it works...
@@ -290,11 +290,11 @@ You can configure your
 .B Netscape.
 browser from the Navigator -> Application menu of the Preferences
 window. You must add a new item with MIME type "application/dpkg-www-installer"
-and application "/usr/sbin/dpkg-www-installer -x -f '%s'".
+and application "/usr/sbin/dpkg-www-installer \-x \-f '%s'".
 This should add the following line to your Netscape mailcap file:
 .PP
 .in +2
-application/dpkg-www-installer;/usr/sbin/dpkg-www-installer -x -f '%s'
+application/dpkg-www-installer;/usr/sbin/dpkg-www-installer \-x \-f '%s'
 .PP
 The dpkg-www WEB installation has been succesfully tested only with
 .B Netscape.
