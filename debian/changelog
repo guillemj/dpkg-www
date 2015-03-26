@@ -1,4 +1,4 @@
-dpkg-www (2.57) UNRELEASED; urgency=medium
+dpkg-www (2.56) UNRELEASED; urgency=medium
 
   * QA upload.
   * Bumped compat level to 9.
@@ -9,6 +9,7 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
     - Added Vcs-* fields.
     - Added ${misc:Depends}.
     - Drop depends on essential apt.
+  * Delete unwanted 'debian/:q' file.
   * src/dpkg-www.8:
     - Fix hyphen-used-as-minus-sign.
     - Spelling fix.
@@ -17,13 +18,6 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
     - Update README.Debian.
 
  -- Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Thu, 26 Mar 2015 10:14:10 +0100
-
-dpkg-www (2.56) unstable; urgency=medium
-
-  * QA upload.
-  * Delete unwanted ':q' file.
-
- -- Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Thu, 26 Mar 2015 09:28:56 +0100
 
 dpkg-www (2.55) unstable; urgency=medium
 
