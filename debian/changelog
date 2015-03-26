@@ -1,9 +1,12 @@
 dpkg-www (2.57) UNRELEASED; urgency=medium
 
   * QA upload.
-  * Added Vcs-* fields to d/control.
-  * d/control: Added ${misc:Depends}.
-  * src/dpkg-www.8: Fix hyphen-used-as-minus-sign.
+  * d/control:
+    - Added Vcs-* fields.
+    - Added ${misc:Depends}.
+  * src/dpkg-www.8:
+    - Fix hyphen-used-as-minus-sign.
+    - Spelling fix.
 
  -- Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Thu, 26 Mar 2015 10:14:10 +0100
 
