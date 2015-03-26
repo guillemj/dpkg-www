@@ -4,9 +4,10 @@ dpkg-www (2.56) UNRELEASED; urgency=medium
   * Bumped compat level to 9.
   * Bumped Standards-Version to 3.9.6: No change required.
   * Bumped source format to 3.0 (native).
-  * Minimize d/rules to use dh $@, create links using d/links.
+  * Minimize d/rules to use dh $@.
   * Use d/install to install files. Drop unused targets from Makefile.
   * Use d/manpages to install manuals.
+  * Use .so in dpkg-www-installer.8 rather than creating links manually.
   * Other d/control changed:
     - Added Vcs-* fields.
     - Added ${misc:Depends}.
