@@ -1,7 +1,7 @@
-?package(dpkg-www):needs="text" section="Help"\
+?package(dpkg-www):needs="text" section="Applications/System/Package Management"\
   title="Debian Package Browser" command="/usr/bin/dpkg-www ' '"\
   icon="/usr/share/pixmaps/dpkg-www.xpm"
 
-?package(dpkg-www):needs="x11" section="Help"\
+?package(dpkg-www):needs="x11" section="Applications/System/Package Management"\
   title="Debian Package Browser" command="/usr/bin/dpkg-www ' '"\
   icon="/usr/share/pixmaps/dpkg-www.xpm"

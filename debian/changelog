@@ -2,7 +2,8 @@ dpkg-www (2.56) UNRELEASED; urgency=medium
 
   * QA upload.
   * Bumped compat level to 9.
-  * Bumped Standards-Version to 3.9.6: No change required.
+  * Bumped Standards-Version to 3.9.6:
+    - Move menu to section Applications/System/Package Management.
   * Bumped source format to 3.0 (native).
   * Minimize d/rules to use dh $@.
   * Use d/install to install files. Drop unused targets from Makefile.
