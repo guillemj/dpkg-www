@@ -1,4 +1,4 @@
-dpkg-www (2.56) UNRELEASED; urgency=medium
+dpkg-www (2.56) unstable; urgency=medium
 
   * QA upload.
   * Bumped compat level to 9.
@@ -26,7 +26,7 @@ dpkg-www (2.56) UNRELEASED; urgency=medium
   * Set utf-8 charset in html responses. (Closes: #712018)
   * Force perl 'scalar' parsing of CGI parameters. (Closes: #774319)
 
- -- Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Thu, 26 Mar 2015 10:14:10 +0100
+ -- Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Tue, 15 Sep 2015 21:17:14 +0200
 
 dpkg-www (2.55) unstable; urgency=medium
 
