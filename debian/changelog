@@ -13,7 +13,6 @@ dpkg-www (2.56) unstable; urgency=medium
     - Added Vcs-* fields.
     - Added ${misc:Depends}.
     - Replace mozilla-firefox by iceweasel.
-  * Delete unwanted 'debian/:q' file. (Closes: #781295)
   * src/dpkg-www.8:
     - Fix hyphen-used-as-minus-sign.
     - Spelling fix.
@@ -25,6 +24,7 @@ dpkg-www (2.56) unstable; urgency=medium
   * New .desktop file since menu is deprecated.
   * Set utf-8 charset in html responses. (Closes: #712018)
   * Force perl 'scalar' parsing of CGI parameters. (Closes: #774319)
+  * Delete unwanted 'debian/:q' file. (Closes: #781295)
 
  -- Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>  Tue, 15 Sep 2015 21:17:14 +0200
 
