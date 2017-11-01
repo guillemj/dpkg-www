@@ -1,9 +1,10 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
 Files: *
-Copyright: 1999-2006 Massimo Dal Zotto <dz@debian.org>
-           2008 Raphael Geissert <atomo64@gmail.com>
-           2015 Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>
+Copyright:
+ 1999-2006 Massimo Dal Zotto <dz@debian.org>
+ 2008 Raphael Geissert <atomo64@gmail.com>
+ 2015 Jean-Michel Nirgal Vourgère <jmv_deb@nirgal.com>
 License: GPL-2+
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
