@@ -17,7 +17,7 @@ documentation files can be a very frustrating and time-consuming task.
 .PP
 With the
 .B dpkg-www
-cgi you can instead browse Debian packages info with a WEB browser,
+CGI you can instead browse Debian packages info with a WEB browser,
 following package dependencies and locating documentation (man pages,
 Info files, READMEs, and so on) with a few mouse clicks. If you have
 superuser privileges you can even install, upgrade or remove packages
@@ -30,7 +30,7 @@ with the addition of HREF's for packages dependencies and documentation
 files.
 
 .PP
-The cgi program can take an optional query argument which can be given in
+The CGI program can take an optional query argument which can be given in
 the URL or entered in the query field of the html form. This can be:
 .IP <empty>
 list concisely all installed packages
@@ -63,7 +63,7 @@ This feature works only if the
 .B grep-dctrl
 package is installed.
 .IP ?\ (question\ mark)
-show a concise help about the cgi usage.
+show a concise help about the CGI usage.
 .IP <space>\ (a\ single\ space)
 print only the input form, for use from window-manager menus.
 
@@ -92,7 +92,7 @@ If the variable is set to "top" the button will be located before the file
 list, default is the bottom of the page.
 .IP SHOW_LOCAL_FILES
 If this variable is set, dpkg-www will use file:/ style URL's to 
-access html files -- bypassing the cgi script.  This is faster
+access html files -- bypassing the CGI script.  This is faster
 on slow machines.  Default is not defined, which means use local files
 for connection from localhost and http:// URL's for remote connections.
 .IP CHECK_PACKAGE_VERSION
@@ -130,7 +130,7 @@ or
 .B dlocate ,
 or
 .B auto .
-Default is auto, meaning that the cgi will use
+Default is auto, meaning that the CGI will use
 .B dlocate
 if installed, otherwise revert to
 .B dpkg
@@ -142,7 +142,7 @@ Manpage to HTML translation command. Can be
 .B man2html
 or
 .B auto .
-Default is auto, meaning that the cgi will use
+Default is auto, meaning that the CGI will use
 .B man2thml
 if installed, otherwise revert to
 .B dwww .
@@ -235,23 +235,23 @@ DEBIAN_CONTENTS="
 .br
 
 .br
-# Enable cgi debugging. Not really useful.
+# Enable CGI debugging. Not really useful.
 .br
 # DEBUG=1
 .PP
 
-.SS Cgi access
+.SS CGI access
 The information provided by
 .B dpkg-www
 and the ability to install or remove packages also remotely can potentially
 give useful information to crackers and open security holes. For these reasons
-access to this cgi program should be allowed only from localhost and trusted
+access to this CGI program should be allowed only from localhost and trusted
 hosts or domains. Unfortunately this configuration is dependent on the
 particular installed WEB server. The dpkg-www package configures the apache
 server, if installed, to allow access only from localhost. Other WEB servers
 must be configured manually by the system administrator to restrict access
 to trusted hosts. If you administer many Debian system on a local network
-you may want to enable access to the cgi from your network and browse
+you may want to enable access to the CGI from your network and browse
 packages on any host from any other machine.
 
 .SS WEB installation
@@ -267,7 +267,7 @@ installation.
 
 .PP
 For security reasons the installation is done entirely from the browser side,
-so that you don't need to gain root privileges from the cgi program which is
+so that you don't need to gain root privileges from the CGI program which is
 run on the server. The only thing done on the server is to generate an
 installation request which is downloaded to the browser for the execution,
 which is started under control of the user and with his privileges.

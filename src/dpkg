@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Cgi interface to dpkg. Show information about debian packages.
+# CGI interface to dpkg. Show information about debian packages.
 #
 # Copyright (C) 1999-2006  Massimo Dal Zotto <dz@debian.org>
 #

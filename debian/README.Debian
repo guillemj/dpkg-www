@@ -3,7 +3,7 @@ dpkg-www for Debian
 
 Web based Debian package browser.
 
-With this cgi program you can browse Debian packages using a WEB browser.
+With this CGI program you can browse Debian packages using a WEB browser.
 You can easily follow package dependencies and browse package documentation
 with a mouse click.
 
