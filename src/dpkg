@@ -23,34 +23,63 @@ SELF=${0##*/}; export SELF
 HELP_PAGE="/usr/share/man/man8/dpkg-www.8.gz"
 COLUMNS=256; export COLUMNS
 SECTION_DESCRIPTIONS="
-admin		Utilities to administer the system
+admin		Administrative utilities (install software, manage users, etc)
 base		Basic needed utilities of every Debian system
-comm		Software to use your modem in the old fashioned style
-devel		Development utilities, compilers, environments, libraries, etc.
-doc		FAQs, HOWTOs, documents and software to browse documentation 
-editors		Software to edit files and programming environments
-electronics	Electronics utilities
-games		Programs to spend a nice time with after setting up Debian
-graphics	Editors, viewers, converters... Everything to become an artist
-hamradio	Software for ham radio
+cli-mono	Mono and the Common Language Infrastructure
+comm		Programs for faxmodems and other communication devices
+database	Database servers and tools
+debug		Debug symbols
+devel		Utilities and programs for software development
+doc		Documentation and specialized programs for viewing documentation
+editors		Text editors and word processors
+education	Software, documentation or data related to educational activities
+electronics	Programs for working with circuits and electronics
+embedded	Programs for embedded systems
+fonts		Fonts and font utilities
+games		Games, toys, and fun programs
+gnome		The GNOME Desktop Environment
+gnu-r		The GNU R statistical computation and graphics system
+gnustep		The GNUstep Environment
+graphics	Utilities to create, view, and edit graphics files
+hamradio	Software for ham radio operators
+haskell		Haskell programming language and libraries
+httpd		Webservers and their modules
 interpreters	Interpreters for interpreted languages and macro processors
-libs		Libraries to make other programs work
-mail		Programs to route, read, and compose E-mail messages
-math		Math software
-misc		Miscellaneous utilities that didn't fit well anywhere else
-net		Daemons and clients to connect your system to the world
-news		Software to access Usenet, to set up news servers, etc.
-non-us		Software restricted in the US by export regulations or patents
-oldlibs		Old versions of libraries, kept for backward compatibility
-otherosfs	Software to use programs and filesystems for other O.S.
-science		Basic tools for scientific work
-shells		Command shells and friendly user interfaces for beginners.
-sound		Utilities to deal with sound: mixers, players, recorders, etc. 
-tex		The famous typesetting software and related programs
-text		Utilities to format and print text documents
-utils		Utilities for file/disk manipulation, backup, monitoring, etc. 
-web		Web servers, browsers, proxies, download tools etc.
-x11		X servers, libraries, fonts, window managers, and applications
+introspection	Introspection support for programming languages
+java		Java programming language and libraries
+javascript	JavaScript programming language, libraries, and development tools
+kde		The KDE Desktop Environment
+kernel		Kernel and kernel modules
+libdevel	Development files for libraries
+libs		Collections of software routines
+lisp		Lisp programming language and libraries
+localization	Language packs
+mail		Programs to write, send, and route email messages
+math		Numeric analysis and other mathematics-related software
+metapackages	Packages which solely depend on other packages
+misc		Miscellaneous software
+net		Programs to connect to and provide various services
+news		Usenet clients and servers
+ocaml		OCaml programming language and libraries
+oldlibs		Obsolete libraries
+otherosfs	Emulators and software to read foreign filesystems
+perl		Perl programming language and libraries
+php		PHP programming language and libraries
+python		Python programming language and libraries
+ruby		Ruby programming language and libraries
+rust		Rust programming language, library crates, and development tools
+science		Software for scientific work
+shells		Command shells and alternative console environments
+sound		Utilities to play and record sound
+tex		The TeX typesetting system
+text		Text processing utilities
+utils		Various system utilities
+vcs		Version control systems
+video		Utilities to record, view, edit, and stream video files
+web		Web browsers, servers, proxies, and other tools
+x11		The X window system and related software
+xfce		The Xfce Desktop Environment
+zope		Zope/Plone framework
 "
 
 TASK_DESCRIPTIONS="
