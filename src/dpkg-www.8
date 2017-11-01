@@ -40,11 +40,11 @@ list concisely all installed and available packages
 list concisely the requested packages
 .IP <wilcard\ expession>
 list concisely all packages whose name matches the expression, for
-example `*image*' will find all packages which contain the string `image'.
+example '*image*' will find all packages which contain the string 'image'.
 .IP <package> 
 list verbosely a package and, if the package is installed, all its files.
 If the package is not installed and the WEB installation is enabled you
-can install it by clicking on the `Install' button. If the package is
+can install it by clicking on the 'Install' button. If the package is
 installed you can remove it or upgrade to a new version, if available,
 by clicking on the respective buttons.
 .IP <absolute\ pathname>
@@ -78,11 +78,11 @@ script that defines some or all the following variables
 .IP CHECK_BUTTONS
 If this option is enabled 
 .B dpkw-www
-will add a small `install' check-button for each package shown in the package
+will add a small 'install' check-button for each package shown in the package
 list. Default is 0 (disabled) because the resulting interface is not very nice.
 The use of this option is therefore not recommended.
 .IP INSTALL_BUTTON
-If this option is set the `Install' or `Upgrade' and `Remove' buttons will
+If this option is set the 'Install' or 'Upgrade' and 'Remove' buttons will
 be added to the verbose info of a package. By clicking on these button you
 will start the installation of removal the package as described in the section
 .B WEB Installation.
@@ -257,7 +257,7 @@ packages on any host from any other machine.
 .SS WEB installation
 If this option is enabled in the 
 .I /etc/dpkg-www.conf
-file, the `Install', `Upgrade' and `Remove' buttons are added to the info
+file, the 'Install', 'Upgrade' and 'Remove' buttons are added to the info
 page of installed or uninstalled packages.
 By clicking on this button the system administrator, or more precisely any
 user who has the ability to become system administrator (since you don't
@@ -272,7 +272,7 @@ run on the server. The only thing done on the server is to generate an
 installation request which is downloaded to the browser for the execution,
 which is started under control of the user and with his privileges.
 The real installation is done by a small helper script run from the user's
-browser when a document with content-type `application/dpkg-www-installer'
+browser when a document with content-type 'application/dpkg-www-installer'
 is received from the web server. The helper script opens an XTerm on the
 user's display and runs a script which becomes superuser, after asking the
 root password, and execs an apt-get command to install the requested
@@ -302,7 +302,7 @@ With other WEB browsers it is untested and it may not work correctly.
 
 .PP
 In order to be able to install the packages the user must known the root
-password asked for `su root' when installing on the local server, or have
+password asked for 'su root' when installing on the local server, or have
 the ability to ssh as root to the remote host when installing from a remote
 client.
 
