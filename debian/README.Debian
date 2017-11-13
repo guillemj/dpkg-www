@@ -13,7 +13,7 @@ own a non-installed file or have a certain value in a control field.
 You can even install or remove packages from your browser if this feature is
 enabled in the site configuration file.
 
-WARNING! 
+WARNING!
 Allowing access to /cgi-bin/dpkg from any foreign host could allow a
 malicious external user to know your installed packages and try possible
 security exploits. You should therefore disable access to dpkg-www from

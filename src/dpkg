@@ -907,11 +907,11 @@ packageFilter() {
 	    gsub("\\(", " (")
 	    for (f=2; f<=NF; f++) {
 		if ($f == "|") {
-		    continue 
+		    continue
 		}
 		if (match($f,"^\\(")) {
 		    f++;
-		    continue 
+		    continue
 		}
 		r = $f;
 		gsub(",", "", r)
@@ -1024,7 +1024,7 @@ listFilter() {
 	    if (needs_desc) {
 		update_descs()
 	    }
-	    if (NR < 6) { 
+	    if (NR < 6) {
 		if (!missing) {
 		    print "no packages found"
 		}
@@ -1459,7 +1459,7 @@ elif [ "$remove" ]; then
 elif [ "$browse" ]; then
     printHtmlHeader "Package Browser" application/dpkg-www-browser
     printBrowseRequest "$packages"
-    printHtmlBottom 
+    printHtmlBottom
 else
     printHtmlHeader "$title"
     printInputForm

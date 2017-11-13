@@ -158,7 +158,6 @@ case "$HOST" in
 	    echo -n "Root "; su root -c "\
 		apt-get -s $REINSTALL $ACTION $PACKAGES; echo
 		apt-get    $REINSTALL $ACTION $PACKAGES"
-	    
 	fi
 	;;
     *)

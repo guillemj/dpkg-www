@@ -17,7 +17,7 @@ will try to find an installed X browser to open the specified URL.
 If not running under X it will try to use a text browser instead.
 
 If Netscape is found and a Netscape instance is already running it
-will be asked to open the dpkg URL on localhost with the optional 
+will be asked to open the dpkg URL on localhost with the optional
 .I query
 supplied on the command line.
 If there is no browser running, it will start automatically a new one.
@@ -32,14 +32,14 @@ is an helper application which can configured in the WWW browser for web
 installation. It should never be invoked directly by the user.
 
 .SH OPTIONS
-.TP 
+.TP
 \fB\-s\fR, \fB\-\-stdout\fR
 Redirect output to stdout. Requires one of the text browsers (lynx,
 lynx-ssl or links) installed.
-.TP 
+.TP
 \fB\-h\fR, \fB\-\-host\fR \fBhost\fR
 Send the query to a remote host, where dpkg-www must be installed.
-.TP 
+.TP
 .BI query
 Specifies an optional package name, an absolute pathname or a query
 argument which is passed to the dpkg cgi-bin. See

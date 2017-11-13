@@ -41,7 +41,7 @@ list concisely the requested packages
 .IP <wilcard\ expession>
 list concisely all packages whose name matches the expression, for
 example '*image*' will find all packages which contain the string 'image'.
-.IP <package> 
+.IP <package>
 list verbosely a package and, if the package is installed, all its files.
 If the package is not installed and the WEB installation is enabled you
 can install it by clicking on the 'Install' button. If the package is
@@ -58,7 +58,7 @@ list all the packages with control field matching value. If the field name is
 omitted the value is searched in any control field. The default search is a
 case-insensitive fixed substring match but it can be changed with the
 .B GREP_DCTRL_OPTS
-option in the config file. 
+option in the config file.
 This feature works only if the
 .B grep-dctrl
 package is installed.
@@ -76,7 +76,7 @@ This file is a simple Bourne shell
 script that defines some or all the following variables
 (defaults are used if the file doesn't exist, or doesn't define the variable):
 .IP CHECK_BUTTONS
-If this option is enabled 
+If this option is enabled
 .B dpkw-www
 will add a small 'install' check-button for each package shown in the package
 list. Default is 0 (disabled) because the resulting interface is not very nice.
@@ -91,7 +91,7 @@ by default. Use at your own risk.
 If the variable is set to "top" the button will be located before the file
 list, default is the bottom of the page.
 .IP SHOW_LOCAL_FILES
-If this variable is set, dpkg-www will use file:/ style URL's to 
+If this variable is set, dpkg-www will use file:/ style URL's to
 access html files -- bypassing the CGI script.  This is faster
 on slow machines.  Default is not defined, which means use local files
 for connection from localhost and http:// URL's for remote connections.
@@ -255,7 +255,7 @@ you may want to enable access to the CGI from your network and browse
 packages on any host from any other machine.
 
 .SS WEB installation
-If this option is enabled in the 
+If this option is enabled in the
 .I /etc/dpkg-www.conf
 file, the 'Install', 'Upgrade' and 'Remove' buttons are added to the info
 page of installed or uninstalled packages.

@@ -6,6 +6,7 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
   * Spell CGI in uppercase.
   * Remove now unused dh-apache2 lintian override.
   * Use balanced quotes '' instead of `' in text.
+  * Remove trailing spaces.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 01 Nov 2017 03:18:53 +0100
 
@@ -457,7 +458,7 @@ dpkg-www (2.17) unstable; urgency=low
 dpkg-www (2.16) unstable; urgency=low
 
   * Added missing doublequotes to sanity check tests.
-    Added missing backslashes to addButton functions. 
+    Added missing backslashes to addButton functions.
 
  -- Massimo Dal Zotto <dz@debian.org>  Tue,  6 Mar 2001 15:50:00 +0100
 

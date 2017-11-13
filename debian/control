@@ -35,6 +35,6 @@ Description: Web based Debian package browser
  those providing a virtual package.
  .
  If you are the system administrator you can also install or remove
- packages by clicking on the buttons found in the package info page, 
+ packages by clicking on the buttons found in the package info page,
  provided that this feature has been enabled and you have properly
  configured your web browser.
