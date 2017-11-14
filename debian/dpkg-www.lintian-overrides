@@ -1,0 +1,2 @@
+# We have now a Suggests which should be enough.
+dpkg-www: script-needs-depends-on-sensible-utils usr/bin/dpkg-www *

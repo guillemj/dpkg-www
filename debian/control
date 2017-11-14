@@ -23,6 +23,7 @@ Suggests:
  dlocate,
  grep-dctrl,
  firefox | www-browser,
+ sensible-utils,
  man2html,
  tasksel,
 Description: Web based Debian package browser
