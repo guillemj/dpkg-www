@@ -2,12 +2,12 @@ Source: dpkg-www
 Section: doc
 Priority: optional
 Maintainer: Debian QA Group <packages@qa.debian.org>
+Vcs-Git: https://anonscm.debian.org/git/collab-maint/dpkg-www.git
+Vcs-Browser: https://anonscm.debian.org/git/collab-maint/dpkg-www.git
 Build-Depends:
  debhelper (>= 9),
  dh-apache2,
 Standards-Version: 3.9.6
-Vcs-Git: git://anonscm.debian.org/collab-maint/dpkg-www.git
-Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/dpkg-www.git
 
 Package: dpkg-www
 Architecture: all
