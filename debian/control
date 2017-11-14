@@ -22,7 +22,7 @@ Recommends:
 Suggests:
  dlocate,
  grep-dctrl,
- iceweasel | www-browser,
+ firefox | www-browser,
  man2html,
  tasksel,
 Description: Web based Debian package browser
