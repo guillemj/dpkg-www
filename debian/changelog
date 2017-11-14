@@ -14,6 +14,7 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
   * Use https in debian/copyright Format URL.
   * Move location of license on Debian systems into a Comment field in
     debian/copyright file.
+  * Bump debhelper compatibilty level to 10.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 01 Nov 2017 03:18:53 +0100
 
