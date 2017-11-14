@@ -16,7 +16,7 @@ Depends:
  apt,
  dwww,
  info2www,
- perl | perl5,
+ perl,
 Recommends:
  ${misc:Recommends},
 Suggests:

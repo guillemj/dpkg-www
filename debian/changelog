@@ -8,6 +8,7 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
   * Use balanced quotes '' instead of `' in text.
   * Remove trailing spaces.
   * Update Vcs field URLs.
+  * Remove obsolete perl5 alternative dependency.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 01 Nov 2017 03:18:53 +0100
 
