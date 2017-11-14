@@ -11,6 +11,7 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
   * Remove obsolete perl5 alternative dependency.
   * Replace iceweasel with firefox dependency.
   * Add sensible-utils to Suggests.
+  * Use https in debian/copyright Format URL.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 01 Nov 2017 03:18:53 +0100
 
