@@ -4,6 +4,7 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
   * Update archive section names and descriptions. (Closes: #847532)
   * Wrap and sort debian/control and debian/copyright fields.
   * Spell CGI in uppercase.
+  * Remove now unused dh-apache2 lintian override.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 01 Nov 2017 03:18:53 +0100
 
