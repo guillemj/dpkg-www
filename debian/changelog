@@ -1,4 +1,4 @@
-dpkg-www (2.57) UNRELEASED; urgency=medium
+dpkg-www (2.57) unstable; urgency=medium
 
   * QA upload.
   * Update archive section names and descriptions. (Closes: #847532)
@@ -20,7 +20,7 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
     as the less bad of all alternatives.
   * Bump Standards-Version to 4.1.1.
 
- -- Guillem Jover <guillem@debian.org>  Wed, 01 Nov 2017 03:18:53 +0100
+ -- Guillem Jover <guillem@debian.org>  Fri, 17 Nov 2017 03:32:01 +0100
 
 dpkg-www (2.56) unstable; urgency=medium
 
