@@ -16,6 +16,8 @@ dpkg-www (2.57) UNRELEASED; urgency=medium
     debian/copyright file.
   * Bump debhelper compatibilty level to 10.
   * Set Rules-Requires-Root to no.
+  * Add lintian override for bogus tech-ctte decision imposed onto policy,
+    as the less bad of all alternatives.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 01 Nov 2017 03:18:53 +0100
 
