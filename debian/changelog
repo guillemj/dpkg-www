@@ -1,4 +1,4 @@
-dpkg-www (2.58) UNRELEASED; urgency=medium
+dpkg-www (2.58) unstable; urgency=medium
 
   * Take over maintainership as part of the Dpkg Developers umbrella.
   * Namespace debhelper fragment files with binary package name.
@@ -11,7 +11,7 @@ dpkg-www (2.58) UNRELEASED; urgency=medium
   * Use dpkg-query directly instead of via the dpkg wrapper.
   * Use dpkg-query instead of accessing the internal dpkg database directly.
 
- -- Guillem Jover <guillem@debian.org>  Sat, 02 Feb 2019 03:22:13 +0100
+ -- Guillem Jover <guillem@debian.org>  Sat, 02 Feb 2019 04:01:49 +0100
 
 dpkg-www (2.57) unstable; urgency=medium
 
