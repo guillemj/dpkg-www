@@ -157,7 +157,7 @@ if [ ! "$DPKG" -o "$DPKG" = auto ]; then
     if [ -x /usr/bin/dlocate ]; then
 	DPKG=dlocate
     else
-	DPKG=dpkg
+	DPKG=dpkg-query
     fi
 fi
 
@@ -440,7 +440,7 @@ queryPackagesByField() {
 	else
 	    apt-cache search "$arg" | sed 's/ .*//;s/^/Package: /'
 	fi
-	dpkg -l "*" 2>&1
+	dpkg-query -l "*" 2>&1
     } \
     | awk '
 	/^Package:/ { p[$2]=1; NR=0; next }
@@ -512,7 +512,7 @@ listRecentPackages() {
 	echo "<PRE>"
 	echo "Recent packages in last $n days:"
 	echo ""
-	dpkg -l $packages 2>&1 | listFilter
+	dpkg-query -l $packages 2>&1 | listFilter
 	echo "</PRE>"
     else
 	echo "<PRE>"
@@ -525,7 +525,7 @@ listRecentPackages() {
 listPackages() {
     debug "listPackages $*"
     echo "<PRE>"
-    dpkg -l "$@" 2>&1 | listFilter
+    dpkg-query -l "$@" 2>&1 | listFilter
     echo "</PRE>"
 }
 
@@ -541,7 +541,7 @@ listPackage() {
     local priority
     local essential
 
-    pkg_info="$(dpkg -s $package)"
+    pkg_info="$(dpkg-query -s $package)"
     if [ ! "$pkg_info" ]; then
 	# Unknown package or virtual package
 	listVirtualPackage $package || listUnknownPackage $package
@@ -575,7 +575,7 @@ listPackage() {
 	    pkg_info="$(
 		echo "$pkg_info" \
 		   | grep "^\(Package\|Status\|Priority\|Section\):"
-		dpkg --print-avail $package 2>/dev/null \
+		dpkg-query --print-avail $package 2>/dev/null \
 		   | grep -v -e "^\(Package\|Status\|Priority\|Section\):" \
 			     -e "^\(Filename\|MD5sum\|Size\):"
 	    )"
