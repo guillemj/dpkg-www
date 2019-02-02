@@ -1,3 +1,9 @@
+dpkg-www (2.58) UNRELEASED; urgency=medium
+
+  * QA upload.
+
+ -- Guillem Jover <guillem@debian.org>  Sat, 02 Feb 2019 03:22:13 +0100
+
 dpkg-www (2.57) unstable; urgency=medium
 
   * QA upload.
