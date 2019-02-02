@@ -1,6 +1,6 @@
 dpkg-www (2.58) UNRELEASED; urgency=medium
 
-  * QA upload.
+  * Take over maintainership as part of the Dpkg Developers umbrella.
 
  -- Guillem Jover <guillem@debian.org>  Sat, 02 Feb 2019 03:22:13 +0100
 
