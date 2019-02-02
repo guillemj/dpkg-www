@@ -1,4 +1,2 @@
-# We have now a Suggests which should be enough.
-dpkg-www: script-needs-depends-on-sensible-utils usr/bin/dpkg-www *
 # Ignore bogus tech-ctte decision imposed onto policy.
 dpkg-www: command-in-menu-file-and-desktop-file dpkg-www usr/share/menu/dpkg-www:*
