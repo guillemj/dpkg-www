@@ -4,6 +4,7 @@ dpkg-www (2.58) UNRELEASED; urgency=medium
   * Namespace debhelper fragment files with binary package name.
   * Remove lintian override about sensible-utils, now that lintian has been
     fixed.
+  * Lower-case package synopsis.
 
  -- Guillem Jover <guillem@debian.org>  Sat, 02 Feb 2019 03:22:13 +0100
 
