@@ -124,8 +124,6 @@ DPKG=auto		# Select the dpkg program (automatic)
 MAN=auto		# Select the man program (automatic)
 DEBIAN_CONTENTS=	# List of Contents-xxx.gz files
 INSTALLED_ONLY=0	# Only installed packages
-DPKG_STATUS=/var/lib/dpkg/status
-DPKG_AVAILABLE=/var/lib/dpkg/available
 TASK_DESCRIPTIONS_FILE=/usr/share/tasksel/debian-tasks.desc
 APT_CACHE_OPTS="-o APT::Cache::AllVersions=0"
 CHECK_PACKAGE_VERSION=true
@@ -435,8 +433,8 @@ queryPackagesByField() {
     echo ""
     {
 	if [ -x /usr/bin/grep-dctrl ]; then
-	    grep-dctrl $GREP_DCTRL_OPTS -s Package -F "$field" "$arg" \
-		$DPKG_STATUS $DPKG_AVAILABLE
+	    ( dpkg-query -s; dpkg-query -p ) \
+	       | grep-dctrl $GREP_DCTRL_OPTS -s Package -F "$field" "$arg"
 	else
 	    apt-cache search "$arg" | sed 's/ .*//;s/^/Package: /'
 	fi
@@ -454,7 +452,7 @@ queryPackagesByField() {
 # List available sections
 listSections() {
     sections=$(
-	grep -h "^Section:" $DPKG_STATUS $DPKG_AVAILABLE \
+	( dpkg-query -s; dpkg-query -p ) | grep -h "^Section:" \
 	   | sed 's|.*:[ ]*||; s|.*/||' | sort | uniq | grep -v "^non-"
     )
     echo "<pre>"
@@ -474,7 +472,7 @@ listSections() {
 # List available tasks
 listTasks() {
     tasks=$(
-	grep -h "^Task:" $DPKG_STATUS $DPKG_AVAILABLE \
+	( dpkg-query -s; dpkg-query -p ) | grep -h "^Task:" \
 	   | sed 's|.*:[ ]*||; s|,[ ]*|\
 |g' | sort | uniq
     )
@@ -503,10 +501,16 @@ listTasks() {
 # List recent packages
 listRecentPackages() {
     n=${1:-1}
+    s=$(
+	N=$n perl -MTime::Piece -MTime::Seconds -E '\
+	my $o = localtime->truncate(to => "day") - \
+	Time::Seconds->new($ARGV[0] * ONE_DAY); \
+	print $o->epoch;' \
+    )
     packages=$(
-	find /var/lib/dpkg/info/ -daystart \( -name \*.list -a -mtime -$n \) \
-	   | sed 's|.list$||;s|.*/||' \
-	   | sort
+	dpkg-query -f '${db-fsys:Last-Modified} ${binary:Package}\n' -W \
+	   | S=$s perl -n -E '(@field) = split " "; \
+		print "$field[1] " if $field[0] > $ENV{S};' \
     )
     if [ "$packages" ]; then
 	echo "<PRE>"
@@ -722,7 +726,7 @@ listVirtualPackage() {
     debug "listVirtualPackage $*"
     local package="$1"
     local packages=$(
-	cat $DPKG_STATUS $DPKG_AVAILABLE \
+	( dpkg-query -s; dpkg-query -p ) \
 	  | awk -v package=$package '
 	    /^Package:/ { owner = $2 }
 	    /^Provides:/ {
@@ -767,9 +771,9 @@ listPackageDocumentation() {
     local f
     test_flag "$LIST_DOCUMENTATION" || return
     test -x /usr/sbin/install-docs || return
-    test -e /var/lib/dpkg/info/$package.postinst || return
+    dpkg-query --control-list $package | grep -q postinst || return
     installdocs_files=$(
-	cat /var/lib/dpkg/info/$package.postinst \
+	dpkg-query --control-show $package postinst \
 	  | grep 'install-docs[ 	]*-i' \
 	  | sed 's/.*install-docs[ 	]*-i[ 	]*//;s/[ 	].*//' \
 	  | sort | uniq

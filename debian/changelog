@@ -9,6 +9,7 @@ dpkg-www (2.58) UNRELEASED; urgency=medium
   * Bump debhelper compatibility level to 11.
   * Move dwww and info2www from Depends to Recommends.
   * Use dpkg-query directly instead of via the dpkg wrapper.
+  * Use dpkg-query instead of accessing the internal dpkg database directly.
 
  -- Guillem Jover <guillem@debian.org>  Sat, 02 Feb 2019 03:22:13 +0100
 

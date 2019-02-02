@@ -15,6 +15,7 @@ Package: dpkg-www
 Architecture: all
 Depends:
  ${misc:Depends},
+ dpkg (>= 1.19.3),
  apt,
  perl,
 Recommends:
