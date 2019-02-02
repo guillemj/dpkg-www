@@ -7,6 +7,7 @@ dpkg-www (2.58) UNRELEASED; urgency=medium
   * Lower-case package synopsis.
   * Bump Standards-Version to 4.3.0 (no changes needed).
   * Bump debhelper compatibility level to 11.
+  * Move dwww and info2www from Depends to Recommends.
 
  -- Guillem Jover <guillem@debian.org>  Sat, 02 Feb 2019 03:22:13 +0100
 

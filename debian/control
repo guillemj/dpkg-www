@@ -16,11 +16,11 @@ Architecture: all
 Depends:
  ${misc:Depends},
  apt,
- dwww,
- info2www,
  perl,
 Recommends:
  ${misc:Recommends},
+ dwww,
+ info2www,
 Suggests:
  dlocate,
  grep-dctrl,
