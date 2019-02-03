@@ -1,6 +1,7 @@
 dpkg-www (2.58) unstable; urgency=medium
 
   * Take over maintainership as part of the Dpkg Developers umbrella.
+    (Closes: #738903)
   * Namespace debhelper fragment files with binary package name.
   * Remove lintian override about sensible-utils, now that lintian has been
     fixed.
