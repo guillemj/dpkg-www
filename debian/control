@@ -29,7 +29,7 @@ Suggests:
  sensible-utils,
  man2html,
  tasksel,
-Description: web based Debian package browser
+Description: Debian package management web interface
  With the dpkg cgi-bin you can browse Debian packages on a local or
  remote host using a normal web browser.
  .
