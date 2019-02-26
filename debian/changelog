@@ -3,6 +3,7 @@ dpkg-www (2.59) UNRELEASED; urgency=medium
   * Add support for golang section.
   * Line-wrap field values to the next line in debian/copyright.
   * Unify package description with the rest of the dpkg suite.
+  * Document DPKG_WWW_HOST in dpkg-www(8) man page.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
