@@ -4,7 +4,7 @@
 dpkg-www, dpkg-www-installer \- WWW Debian package browser
 
 .SH SYNOPSIS
-http://<hostname>/cgi-bin/dpkg
+https://<hostname>/cgi-bin/dpkg
 
 .SH DESCRIPTION
 A typical Debian system can have hundreds installed packages and thousands
@@ -94,7 +94,7 @@ list, default is the bottom of the page.
 If this variable is set, dpkg-www will use file:/ style URL's to
 access html files -- bypassing the CGI script.  This is faster
 on slow machines.  Default is not defined, which means use local files
-for connection from localhost and http:// URL's for remote connections.
+for connection from localhost and https:// URL's for remote connections.
 .IP CHECK_PACKAGE_VERSION
 If this variable is set, dpkg-www will check if a newer version of an installed
 package is available. On slow machines you may want to set this option to

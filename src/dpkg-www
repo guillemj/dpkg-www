@@ -36,7 +36,11 @@ urlencode() {
         print $s . "\n";'   "$*"
 }
 
-DPKG_WWW_URL="http://${DPKG_WWW_HOST:-localhost}/cgi-bin/dpkg"
+if [ -n "$DPKG_WWW_HOST" ]; then
+    DPKG_WWW_URL="https://$DPKG_WWW_HOST/cgi-bin/dpkg"
+else
+    DPKG_WWW_URL="http://localhost/cgi-bin/dpkg"
+fi
 X11_BROWSERS="\
     sensible-browser x-www-browser
     mozilla firefox galeon gzilla arena chimera chimera2 amaya
@@ -59,7 +63,7 @@ while [ "${1#-}" != "$1" ]; do
 	    ;;
 	-h|--host) #host#
 	    test "$2" || { usage; exit 1; }
-	    DPKG_WWW_URL="http://${2}/cgi-bin/dpkg"
+	    DPKG_WWW_URL="https://${2}/cgi-bin/dpkg"
 	    shift 2 || exit 1
 	    ;;
 	-s|--stdout)
