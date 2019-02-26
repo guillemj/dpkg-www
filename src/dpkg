@@ -40,6 +40,7 @@ games		Games, toys, and fun programs
 gnome		The GNOME Desktop Environment
 gnu-r		The GNU R statistical computation and graphics system
 gnustep		The GNUstep Environment
+golang		Go programming language, libraries, and development tools
 graphics	Utilities to create, view, and edit graphics files
 hamradio	Software for ham radio operators
 haskell		Haskell programming language and libraries
