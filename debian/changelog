@@ -1,6 +1,7 @@
 dpkg-www (2.59) UNRELEASED; urgency=medium
 
   * Add support for golang section.
+  * Line-wrap field values to the next line in debian/copyright.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
