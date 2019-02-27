@@ -12,6 +12,8 @@ dpkg-www (2.59) UNRELEASED; urgency=medium
   * Clean up man pages:
     - Move copyright and license information from AUTHOR and LICENSE sections
       to file comment headers.
+    - Update Contents examples use current compression, suite, area and
+      architecture.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
