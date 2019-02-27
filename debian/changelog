@@ -22,6 +22,7 @@ dpkg-www (2.59) UNRELEASED; urgency=medium
       variable names and command-line options, and italic for filenames and
       variable values.
     - Fix some typos.
+  * Use UTF-8 copyright symbol instead of (C).
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
