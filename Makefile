@@ -11,3 +11,9 @@ all:
 	    mv -f src/dpkg.new src/dpkg; \
 	    chmod 755 src/dpkg; \
 	fi
+
+dist:
+	git archive \
+	    --prefix=$(PKGNAME)-$(VERSION)/ \
+	    --output=$(PKGNAME)-$(VERSION).tar.xz \
+	    $(VERSION)
