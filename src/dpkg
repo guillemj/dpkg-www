@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-PROG_VERSION=2.58
+PROG_VERSION=2.59
 SELF=${0##*/}; export SELF
 HELP_PAGE="/usr/share/man/man8/dpkg-www.8.gz"
 COLUMNS=256; export COLUMNS
