@@ -115,7 +115,7 @@ unix-server	conventional unix server
 web-server	web server
 "
 
-# Configuration defaults, can be overriden in /etc/dpkg-www.conf
+# Configuration defaults, can be overridden in /etc/dpkg-www.conf
 #
 SHOW_LOCAL_FILES=auto	# Show local files directly (automatic)
 LIST_UNAVAILABLE=0	# List also unavailable packages
@@ -226,7 +226,7 @@ usage() {
 	    <TD> <I>list of packages</I>
 	    <TD> list required packages concisely
 	  <TR><TD>
-	    <TD> <I>wilcard expression</I>
+	    <TD> <I>wildcard expression</I>
 	    <TD> list matching packages concisely
 	  <TR><TD>
 	    <TD> <I>absolute pathname</I>

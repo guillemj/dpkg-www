@@ -21,6 +21,7 @@ dpkg-www (2.59) UNRELEASED; urgency=medium
       references, escaping dash characters, and applying bold for programs,
       variable names and command-line options, and italic for filenames and
       variable values.
+    - Fix some typos.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
@@ -56,7 +57,7 @@ dpkg-www (2.57) unstable; urgency=medium
   * Use https in debian/copyright Format URL.
   * Move location of license on Debian systems into a Comment field in
     debian/copyright file.
-  * Bump debhelper compatibilty level to 10.
+  * Bump debhelper compatibility level to 10.
   * Set Rules-Requires-Root to no.
   * Add lintian override for bogus tech-ctte decision imposed onto policy,
     as the less bad of all alternatives.
@@ -598,7 +599,7 @@ dpkg-www (2.8) unstable; urgency=low
 
   * Fixed bug in listPackage() (unknownPackage instead of listUnknownPackage).
 
-  * Added the LIST_UNAVAILABLE option to remove unvailable packages from the
+  * Added the LIST_UNAVAILABLE option to remove unavailable packages from the
     package list.
 
   * Added more examples in the help page.

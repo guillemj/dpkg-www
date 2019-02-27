@@ -34,7 +34,7 @@ With the
 .B dpkg\-www
 CGI you can instead browse Debian packages info with a web browser,
 following package dependencies and locating documentation (man pages,
-Info files, READMEs, and so on) with a few mouse clicks. If you have
+Info files, READMEs, and so on) with few mouse clicks. If you have
 superuser privileges you can even install, upgrade or remove packages
 from your web browser.
 The output provided by
@@ -53,7 +53,7 @@ list concisely all installed packages
 list concisely all installed and available packages
 .IP <list\ of\ packages>
 list concisely the requested packages
-.IP <wilcard\ expession>
+.IP <wildcard\ expession>
 list concisely all packages whose name matches the expression, for
 example '*image*' will find all packages which contain the string 'image'.
 .IP <package>
@@ -191,14 +191,14 @@ quickly finding the package to install when a needed command is missing.
 background color of the HTML body.
 .TP
 .B DEBUG
-internal option used only for debugging. Disabled by default since it is
+Internal option used only for debugging. Disabled by default since it is
 useless for normal users.
 .TP
 .B DWWW_PATH
-path on webserver to \fBdwww\fP(7) cgi-bin.
+Path on webserver to \fBdwww\fP(7) cgi-bin.
 .TP
 .B INFO2WWW_PATH
-path on webserver to \fBinfo2www\fP(1) cgi-bin.
+Path on webserver to \fBinfo2www\fP(1) cgi-bin.
 
 .PP
 The following is an exaple \fI/etc/dpkg-www.conf\fP file:
@@ -319,8 +319,8 @@ packages.
 .PP
 The web browser must have been configured to handle the above content-type
 by running the command "\fB/usr/sbin/dpkg\-www\-installer \-x \-f '%s'\fP",
-which must obviously intalled also on the client side if installing from
-remote.
+which must obviously be installed also on the client side if installing
+remotely.
 If the
 .B dpkg-www
 package is not installed on the browser client you can simply
