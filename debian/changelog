@@ -23,6 +23,7 @@ dpkg-www (2.59) UNRELEASED; urgency=medium
       variable values.
     - Fix some typos.
   * Use UTF-8 copyright symbol instead of (C).
+  * Stop linkifying the author information to dead URLs in the footer.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
