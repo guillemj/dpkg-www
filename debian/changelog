@@ -15,6 +15,7 @@ dpkg-www (2.59) UNRELEASED; urgency=medium
     - Update Contents examples use current compression, suite, area and
       architecture.
     - Make Debian references kernel neutral.
+    - Use «X Window System» instead of incorrect name.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
