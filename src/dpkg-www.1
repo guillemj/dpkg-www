@@ -16,8 +16,8 @@ If the command is invoked while running under X-window the script
 will try to find an installed X browser to open the specified URL.
 If not running under X it will try to use a text browser instead.
 
-If Netscape is found and a Netscape instance is already running it
-will be asked to open the dpkg URL on localhost with the optional
+If one of the known browsers is found and there is an instance already
+running it will be asked to open the dpkg URL on localhost with the optional
 .I query
 supplied on the command line.
 If there is no browser running, it will start automatically a new one.
@@ -34,8 +34,8 @@ installation. It should never be invoked directly by the user.
 .SH OPTIONS
 .TP
 \fB\-s\fR, \fB\-\-stdout\fR
-Redirect output to stdout. Requires one of the text browsers (lynx,
-lynx-ssl or links) installed.
+Redirect output to stdout. Requires one of the text browsers (elinks,
+links2, links or w3m) installed.
 .TP
 \fB\-h\fR, \fB\-\-host\fR \fBhost\fR
 Send the query to a remote host, where dpkg-www must be installed.
@@ -52,7 +52,7 @@ for more information about the use of the CGI.
 Configuration files for dpkg-www. It is not necessary for these files to exist,
 there are sensible defaults for everything, but you can specify your preferred
 www browser with the DPKG_WWW_BROWSER variable, for example:
-.B DPKG_WWW_BROWSER=mozilla
+.B DPKG_WWW_BROWSER=firefox
 
 .SH EXAMPLES
 .TP

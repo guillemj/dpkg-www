@@ -33,7 +33,7 @@ if [ "$1" = "-x" -o "$1" = "--xterm" ]; then
     xterm -T "Package Installation" -e $0 "$@"
     exit 0
 fi
-# Restart self in an xterm window. Used by mozilla which can't pass -x switch.
+# Restart self in an xterm window. Used by firefox which cannot pass -x switch.
 if [ "$DPKG_WWW_INSTALLER_XTERM" != true ] && ! tty -s; then
     DPKG_WWW_INSTALLER_XTERM=true xterm -T "Package Installation" -e $0 "$@"
     exit 0

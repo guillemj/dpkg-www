@@ -43,11 +43,10 @@ else
 fi
 X11_BROWSERS="\
     sensible-browser x-www-browser
-    mozilla firefox galeon gzilla arena chimera chimera2 amaya
-    gnome-help-browser opera netscape"
+    firefox chromium konqueror epiphany-browser midori surf xlinks2"
 TXT_BROWSERS="\
     sensible-browser www-browser
-    lynx lynx-ssl links w3m"
+    elinks links2 links lynx w3m"
 
 browser=
 browser_args=
