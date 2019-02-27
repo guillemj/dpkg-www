@@ -13,17 +13,19 @@
 .\" You should have received a copy of the GNU General Public License
 .\" along with this program.  If not, see <https://www.gnu.org/licenses/>.
 .
-.TH DPKG-WWW 1 "September 1, 2004"
+.TH DPKG\-WWW 1 "2019-02-26"
 
 .SH NAME
-dpkg-www \- program to remotely open a WWW Debian package browser
+dpkg\-www \- program to remotely open a WWW Debian package browser
 
 .SH SYNOPSIS
 .B dpkg-www
-.I [-s|--stdout] [-h|--host host] [query]
+.RB [ \-s | \-\-stdout ]
+.RB [ \-h | "\-\-host \fIhost\fP" ]
+.RI [ query ]
 
 .SH DESCRIPTION
-.B dpkg-www
+.B dpkg\-www
 is used to remotely control a web browser and open a dpkg
 URL on the local host from an interactive shell or script.
 
@@ -39,61 +41,67 @@ If there is no browser running, it will start automatically a new one.
 
 The functionality provided by this program is identical to running
 a web browser with the
-.B \-remote openURL(http://localhost/cgi-bin/dpkg)
+.B \-remote openURL(http://localhost/cgi\-bin/dpkg)
 argument or opening the same URL from within the browser.
 
-.B dpkg-www-installer
+.BR dpkg\-www\-installer (8)
 is an helper application which can configured in the WWW browser for web
 installation. It should never be invoked directly by the user.
 
 .SH OPTIONS
 .TP
-\fB\-s\fR, \fB\-\-stdout\fR
+.BR \-s ", " \-\-stdout
 Redirect output to stdout. Requires one of the text browsers (elinks,
 links2, links or w3m) installed.
 .TP
-\fB\-h\fR, \fB\-\-host\fR \fBhost\fR
-Send the query to a remote host, where dpkg-www must be installed.
+.BR \-h ", " \-\-host " \fIhost\fR"
+Send the query to a remote host, where \fBdpkg\-www\fP must be installed.
 .TP
-.BI query
+.I query
 Specifies an optional package name, an absolute pathname or a query
-argument which is passed to the dpkg cgi-bin. See
-.BR dpkg-www(8)
+argument which is passed to the dpkg cgi\-bin. See
+.BR dpkg\-www (8)
 for more information about the use of the CGI.
 
 .SH FILES
-.IP /etc/dpkg-www.conf
-.IP ~/.dpkg-www
-Configuration files for dpkg-www. It is not necessary for these files to exist,
-there are sensible defaults for everything, but you can specify your preferred
-www browser with the DPKG_WWW_BROWSER variable, for example:
-.B DPKG_WWW_BROWSER=firefox
+.TP
+.I /etc/dpkg\-www.conf
+.TQ
+.I ~/.dpkg\-www
+Configuration files for \fBdpkg\-www\fP.
+It is not necessary for these files to exist, there are sensible defaults
+for everything, but you can specify your preferred www browser with the
+.B DPKG_WWW_BROWSER
+variable, for example
+.BR DPKG_WWW_BROWSER=firefox .
 
 .SH EXAMPLES
 .TP
-.B dpkg-www
+.B dpkg\-www
 This would open a dpkg URL on localhost listing all the installed packages.
 .TP
-.B dpkg-www bash
+.B dpkg\-www bash
 This would open a dpkg URL asking info on the bash package.
 .TP
-.B dpkg-www -h pisolo bash
+.B dpkg\-www \-h pisolo bash
 This would open a dpkg URL asking info on the bash package on host pisolo.
 .TP
-.B dpkg-www 'dpkg*'
-This would open a dpkg URL listing all packages matching dpkg*.
+.B dpkg\-www 'dpkg*'
+This would open a dpkg URL listing all packages matching
+.IR dpkg* .
 .TP
-.B dpkg-www /bin/bash
+.B dpkg\-www /bin/bash
 This would open a dpkg URL asking info on the package(s)
-owning the file /bin/bash .
+owning the file
+.IR /bin/bash .
 .TP
-.B dpkg-www depends=coreutils
+.B dpkg\-www depends=coreutils
 This would open a dpkg URL listing all packages depending on coreutils.
 .TP
-.B dpkg-www --stdout depends=awk | grep ^ii
+.B dpkg\-www \-\-stdout depends=awk | grep ^ii
 This would list on stdout all packages depending on awk and grep all
 lines of installed packages.
 
-.SH "SEE ALSO"
-.BR dpkg(8) ,
-.BR dpkg-www(8)
+.SH SEE ALSO
+.BR dpkg (1),
+.BR dpkg\-www (8).

@@ -17,6 +17,10 @@ dpkg-www (2.59) UNRELEASED; urgency=medium
     - Make Debian references kernel neutral.
     - Use «X Window System» instead of incorrect name.
     - Replace obsolete package references.
+    - Fix markup, by adding sections between parenthesis for man page
+      references, escaping dash characters, and applying bold for programs,
+      variable names and command-line options, and italic for filenames and
+      variable values.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
