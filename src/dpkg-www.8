@@ -17,11 +17,11 @@ documentation files can be a very frustrating and time-consuming task.
 .PP
 With the
 .B dpkg-www
-CGI you can instead browse Debian packages info with a WEB browser,
+CGI you can instead browse Debian packages info with a web browser,
 following package dependencies and locating documentation (man pages,
 Info files, READMEs, and so on) with a few mouse clicks. If you have
 superuser privileges you can even install, upgrade or remove packages
-from your WEB browser.
+from your web browser.
 The output provided by
 .B dpkg-www
 is basically that of
@@ -43,7 +43,7 @@ list concisely all packages whose name matches the expression, for
 example '*image*' will find all packages which contain the string 'image'.
 .IP <package>
 list verbosely a package and, if the package is installed, all its files.
-If the package is not installed and the WEB installation is enabled you
+If the package is not installed and the web installation is enabled you
 can install it by clicking on the 'Install' button. If the package is
 installed you can remove it or upgrade to a new version, if available,
 by clicking on the respective buttons.
@@ -85,7 +85,7 @@ The use of this option is therefore not recommended.
 If this option is set the 'Install' or 'Upgrade' and 'Remove' buttons will
 be added to the verbose info of a package. By clicking on these button you
 will start the installation of removal the package as described in the section
-.B WEB Installation.
+.B Web Installation.
 Since this option can potentially introduce security holes it is disabled (0)
 by default. Use at your own risk.
 If the variable is set to "top" the button will be located before the file
@@ -247,14 +247,14 @@ and the ability to install or remove packages also remotely can potentially
 give useful information to crackers and open security holes. For these reasons
 access to this CGI program should be allowed only from localhost and trusted
 hosts or domains. Unfortunately this configuration is dependent on the
-particular installed WEB server. The dpkg-www package configures the apache
-server, if installed, to allow access only from localhost. Other WEB servers
+particular installed web server. The dpkg-www package configures the apache
+server, if installed, to allow access only from localhost. Other web servers
 must be configured manually by the system administrator to restrict access
 to trusted hosts. If you administer many Debian system on a local network
 you may want to enable access to the CGI from your network and browse
 packages on any host from any other machine.
 
-.SS WEB installation
+.SS Web installation
 If this option is enabled in the
 .I /etc/dpkg-www.conf
 file, the 'Install', 'Upgrade' and 'Remove' buttons are added to the info
@@ -262,7 +262,7 @@ page of installed or uninstalled packages.
 By clicking on this button the system administrator, or more precisely any
 user who has the ability to become system administrator (since you don't
 want to run a web browser as root!), will be able to install or remove a
-package on the fly, provided he has properly configured his browser for WEB
+package on the fly, provided he has properly configured his browser for web
 installation.
 
 .PP
@@ -279,7 +279,7 @@ root password, and execs an apt-get command to install the requested
 packages.
 
 .PP
-The WEB browser must have been configured to handle the above content-type
+The web browser must have been configured to handle the above content-type
 by running the command "/usr/sbin/dpkg-www-installer \-x \-f '%s'", which must
 obviously intalled also on the client side if installing from remote.
 If the dpkg-www package is not installed on the browser client you can simply
@@ -296,9 +296,9 @@ This should add the following line to your Netscape mailcap file:
 .in +2
 application/dpkg-www-installer;/usr/sbin/dpkg-www-installer \-x \-f '%s'
 .PP
-The dpkg-www WEB installation has been successfully tested only with
+The dpkg-www web installation has been successfully tested only with
 .B Netscape.
-With other WEB browsers it is untested and it may not work correctly.
+With other web browsers it is untested and it may not work correctly.
 
 .PP
 In order to be able to install the packages the user must known the root
@@ -307,16 +307,16 @@ the ability to ssh as root to the remote host when installing from a remote
 client.
 
 .PP
-From the security point of view, executing a WEB installation is functionally
+From the security point of view, executing a web installation is functionally
 equivalent to opening a shell in an XTerm, becoming superuser after having
 supplied the proper password and running apt-get as root to install or remove
-the required packages. Starting this from the WEB could be potentially
+the required packages. Starting this from the web could be potentially
 vulnerable to man-in-the-middle attacks, but since it requires a password
 on the client it seems quite safe. If you are really paranoid connect to a
 secure server from an SSL-enabled browser.
 
 .PP
-The dpkg-www WEB installation is not intended to replace the normal use
+The dpkg-www web installation is not intended to replace the normal use
 of apt-get from the shell. It is provided only as a shortcut to allow the
 installation of a package after having located it with the browser without
 needing to open a root shell and run apt-get manually. For normal package

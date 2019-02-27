@@ -328,7 +328,7 @@ usage() {
 	</P>
 	(3) This works only if <TT>INSTALL_BUTTON=1</TT> has been set in the
 	configuration file<EM>&nbsp/etc/dpkg-www.conf</EM>, your browser has
-	been configured to handle WEB installation requests and, of course,
+	been configured to handle web installation requests and, of course,
 	you know the root password.
 	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
 	man page for more information.
@@ -1204,12 +1204,12 @@ printInstallRequest() {
 	Install-host: $host
 	Install-packages: $packages
 	-->
-	<H1>dpkg-www WEB Installation</H1>
+	<H1>dpkg-www Web Installation</H1>
 	<P>
 	If you are reading this document on your browser or you have
 	been asked to save it to disk instead of running the installation
 	of the required packages this means that your browser has not
-	been set up correctly for dpkg-www WEB installation.
+	been set up correctly for dpkg-www web installation.
 	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
 	man page for more information.
 	</P>
@@ -1224,12 +1224,12 @@ printRemoveRequest() {
 	Remove-host: $host
 	Remove-packages: $packages
 	-->
-	<H1>dpkg-www WEB Deinstallation</H1>
+	<H1>dpkg-www Web Deinstallation</H1>
 	<P>
 	If you are reading this document on your browser or you have
 	been asked to save it to disk instead of running the installation
 	of the required packages this means that your browser has not
-	been set up correctly for dpkg-www WEB installation.
+	been set up correctly for dpkg-www web installation.
 	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
 	man page for more information.
 	</P>
@@ -1248,7 +1248,7 @@ printBrowseRequest() {
 	If you are reading this document on your browser or you have
 	been asked to save it to disk instead of running a browser
 	on the required packages this means that your browser has not
-	been set up correctly for dpkg-www WEB installation.
+	been set up correctly for dpkg-www web installation.
 	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
 	man page for more information.
 	</P>

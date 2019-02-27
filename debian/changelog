@@ -6,6 +6,7 @@ dpkg-www (2.59) UNRELEASED; urgency=medium
   * Document DPKG_WWW_HOST in dpkg-www(8) man page.
   * Use https URLs everywhere except for localhost.
   * Update DDPO URL.
+  * Decapitalize «web» in CGI and man pages.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
