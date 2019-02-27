@@ -9,6 +9,9 @@ dpkg-www (2.59) UNRELEASED; urgency=medium
   * Decapitalize «web» in CGI and man pages.
   * Remove or update obsolete web browser references.
   * Change FSF postal address to an URL for GPL-2+ license grants.
+  * Clean up man pages:
+    - Move copyright and license information from AUTHOR and LICENSE sections
+      to file comment headers.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 26 Feb 2019 04:33:12 +0100
 
