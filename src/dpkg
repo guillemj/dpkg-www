@@ -894,7 +894,7 @@ packageFilter() {
 	    # Add link to maintainer packages overview
 	    m = $0; sub(".*: ","",m);sub(" &lt;.*","",m);gsub("[()]","\\\\&",m)
 	    e = $0; sub(".*&lt;","",e);sub("&gt;.*","",e)
-	    u = "https://qa.debian.org/developer.php/developer.php?login=" e
+	    u = "https://qa.debian.org/developer.php?login=" e
 	    sub(m, "<a href=\"" u "\">&</a>")
 
 	    # Add link to Debian BTS page for this package
