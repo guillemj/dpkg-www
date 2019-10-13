@@ -3,7 +3,7 @@ dpkg-www for Debian
 
 Web based Debian package browser.
 
-With this CGI program you can browse Debian packages using a WEB browser.
+With this CGI program you can browse Debian packages using a web browser.
 You can easily follow package dependencies and browse package documentation
 with a mouse click.
 
@@ -31,7 +31,7 @@ configuration file in /etc/apache2/conf-available/. If you are using a
 different httpd server you should make the appropriate changes in the
 proper httpd config file.
 
-Enabling the WEB installation feature could potentially introduce
+Enabling the web installation feature could potentially introduce
 security holes in your system and your network. Use at yout own risk!
 
 -- 

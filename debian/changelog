@@ -8,6 +8,7 @@ dpkg-www (2.60) UNRELEASED; urgency=medium
     Closes: #942278
   * Remove obsolete conffile removal and renames.
   * Uppercase apache2 Require directives.
+  * Lowercase web in README.Debian.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 13 Oct 2019 22:36:00 +0200
 
