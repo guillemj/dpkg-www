@@ -7,6 +7,7 @@ dpkg-www (2.60) UNRELEASED; urgency=medium
     perl core in 5.21.0. Thanks to Michael Gindonis <mkg@iki.fi>.
     Closes: #942278
   * Remove obsolete conffile removal and renames.
+  * Uppercase apache2 Require directives.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 13 Oct 2019 22:36:00 +0200
 
