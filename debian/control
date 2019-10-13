@@ -18,6 +18,7 @@ Depends:
  dpkg (>= 1.19.3),
  apt,
  perl,
+ libcgi-pm-perl,
 Recommends:
  ${misc:Recommends},
  dwww,
