@@ -1,3 +1,9 @@
+dpkg-www (2.60) UNRELEASED; urgency=medium
+
+  * Bump Standards-Version to 4.4.1 (no changes needed).
+
+ -- Guillem Jover <guillem@debian.org>  Sun, 13 Oct 2019 22:36:00 +0200
+
 dpkg-www (2.59) unstable; urgency=medium
 
   * Add support for golang section.

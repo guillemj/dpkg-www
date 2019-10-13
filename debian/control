@@ -9,7 +9,7 @@ Rules-Requires-Root: no
 Build-Depends:
  debhelper (>= 11),
  dh-apache2,
-Standards-Version: 4.3.0
+Standards-Version: 4.4.1
 
 Package: dpkg-www
 Architecture: all
