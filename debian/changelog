@@ -9,6 +9,8 @@ dpkg-www (2.60) UNRELEASED; urgency=medium
   * Remove obsolete conffile removal and renames.
   * Uppercase apache2 Require directives.
   * Lowercase web in README.Debian.
+  * Remove copyright output in CGI HTML footer, as this information can get
+    out of sync and duplicates what is already in the source header.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 13 Oct 2019 22:36:00 +0200
 
