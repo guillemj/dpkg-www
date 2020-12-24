@@ -13,6 +13,7 @@ Standards-Version: 4.5.1
 
 Package: dpkg-www
 Architecture: all
+Multi-Arch: foreign
 Depends:
  ${misc:Depends},
  dpkg (>= 1.19.3),
