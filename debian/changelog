@@ -1,6 +1,7 @@
 dpkg-www (2.61) UNRELEASED; urgency=medium
 
   * Switch to debhelper compatibility level 13.
+  * Switch to Standards-Version 4.5.1 (no changes needed).
 
  -- Guillem Jover <guillem@debian.org>  Thu, 24 Dec 2020 22:49:14 +0100
 
