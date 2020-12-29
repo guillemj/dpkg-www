@@ -6,6 +6,7 @@ dpkg-www (2.61) UNRELEASED; urgency=medium
   * Use dpkg-parsechangelog in upstream build system.
   * Do not replace version in source dpkg CGI script at build time, instead
     create a replaced file to install.
+  * Rewrite man pages from groff to POD.
 
  -- Guillem Jover <guillem@debian.org>  Thu, 24 Dec 2020 22:49:14 +0100
 
