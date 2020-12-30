@@ -1,4 +1,4 @@
-dpkg-www (2.61) UNRELEASED; urgency=medium
+dpkg-www (2.61) unstable; urgency=medium
 
   * Switch to debhelper compatibility level 13.
   * Switch to Standards-Version 4.5.1 (no changes needed).
@@ -9,7 +9,7 @@ dpkg-www (2.61) UNRELEASED; urgency=medium
   * Rewrite man pages from groff to POD.
   * Update copyright years.
 
- -- Guillem Jover <guillem@debian.org>  Thu, 24 Dec 2020 22:49:14 +0100
+ -- Guillem Jover <guillem@debian.org>  Wed, 30 Dec 2020 02:18:20 +0100
 
 dpkg-www (2.60) unstable; urgency=medium
 
