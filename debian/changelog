@@ -4,6 +4,8 @@ dpkg-www (2.61) UNRELEASED; urgency=medium
   * Switch to Standards-Version 4.5.1 (no changes needed).
   * Mark dpkg-www package as Multi-Arch: foreign.
   * Use dpkg-parsechangelog in upstream build system.
+  * Do not replace version in source dpkg CGI script at build time, instead
+    create a replaced file to install.
 
  -- Guillem Jover <guillem@debian.org>  Thu, 24 Dec 2020 22:49:14 +0100
 
