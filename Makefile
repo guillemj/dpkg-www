@@ -1,7 +1,7 @@
 # Makefile
 
-PKGNAME = $(shell head -1 debian/changelog | sed 's/ .*//')
-VERSION	= $(shell head -1 debian/changelog | sed 's/.*(//;s/).*//;s/-.*//')
+PKGNAME = $(shell dpkg-parsechangelog -SSource)
+VERSION = $(shell dpkg-parsechangelog -SVersion)
 
 all:
 	# Update program version from changelog
