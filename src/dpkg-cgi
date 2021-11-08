@@ -203,141 +203,141 @@ esac
 # Print a short help for the cgi-program
 usage() {
     cat <<- EOF
-	<P>
+	<p>
 	You can query information about Debian packages and installed files.
 	The search argument can be:
-	<P>
-	<TABLE WIDTH="80%">
-	  <TR><TD>
-	    <TD> <TT>?</TT>
-	    <TD> show this help page
-	  <TR><TD>
-	    <TD> <TT>*</TT>
-	    <TD> list all packages available on your system
-	  <TR><TD>
-	    <TD> <I>&lt;empty&gt;</I>
-	    <TD> list all packages installed on your system
-	  <TR><TD>
-	    <TD> <I>&lt;space&gt;</I>
-	    <TD> print only the input form, for use from wm menus
-	  <TR><TD>
-	    <TD> <I>package</I>
-	    <TD> list the required package and its owned files
-	  <TR><TD>
-	    <TD> <I>list of packages</I>
-	    <TD> list required packages concisely
-	  <TR><TD>
-	    <TD> <I>wildcard expression</I>
-	    <TD> list matching packages concisely
-	  <TR><TD>
-	    <TD> <I>absolute pathname</I>
-	    <TD> list packages owning pathname
-	  <TR><TD>
-	    <TD> <I>field=value</I>
-	    <TD> list packages with control field matching value
-	  <TR><TD>
-	    <TD> <I>=value</I>
-	    <TD> list packages with any field matching value
-	  <TR><TD>
-	    <TD> <I>section=?</I>
-	    <TD> list available package sections
-	  <TR><TD>
-	    <TD> <I>task=?</I>
-	    <TD> list available tasks
-	  <TR><TD>
-	    <TD> <I>recent=[&lt;N&gt;]</I>
-	    <TD> list packages installed in last N days (default 1)
-	</TABLE>
-	<P>
-	<H3>Examples:</H3>
-	<P>
-	<FORM METHOD="GET" ACTION="$SELF">
-	<TABLE WIDTH="80%">
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=*"><TT>*</TT></A>
-	    <TD> list all packages available on your system
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query="><I>&lt;empty&gt;</I></A>
-	    <TD> list all packages installed on your system
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=binutils"><TT>binutils<TT></A>
-	    <TD> list verbosely the package binutils
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=dpkg+apt"><TT>dpkg apt</TT></A>
-	    <TD> list the dpkg and apt packages
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=jpeg*"><TT>jpeg*</TT></A>
-	    <TD> list packages with name beginning with "jpeg"
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=*jpeg*"><TT>*jpeg*</TT></A>
-	    <TD> list packages with name containing "jpeg"
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=/usr/bin/tail"><TT>/usr/bin/tail</TT></A>
-	    <TD> list packages owning the file /usr/bin/tail
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=/.*/postfix"><TT>/.*/postfix</TT></A>
-	    <TD> list packages owning any file named "postfix" (1)
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=/.*pbm.*"><TT>/.*pbm.*</TT></A>
-	    <TD> list packages owning any file matching *pbm* (1)
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=maintainer%3DJoey+Hess"
-	         ><TT>maintainer=Joey Hess</TT></A>
-	    <TD> list packages with maintainer Joey Hess (2)
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=section%3Dnet"><TT>section=net</TT></A>
-	    <TD> list packages with section net (2)
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=%3Dfirewall"><TT>=firewall</TT></A>
-	    <TD> list packages with any field matching "firewall" (2)
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=section%3D?"><TT>section=?</TT></A>
-	    <TD> list available package sections
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=task%3D?"><TT>task=?</TT></A>
-	    <TD> list available tasks
-	  <TR><TD>
-	    <TD> <A HREF="$SELF?query=recent%3D2"><TT>recent=2</TT></A>
-	    <TD> list packages installed in last 2 days
-	  <TR><TD>
-	    <TD> <TT>
-	         <INPUT TYPE="hidden" NAME="packages" VALUE="hello">
-		 <INPUT TYPE="submit" NAME="install" VALUE="Install">
-		 package <A HREF="$SELF?query=hello">hello</A><TT>
-	    <TD> install the package hello (3)
-	  <TR><TD>
-	    <TD> <TT>
-		 <!-- INPUT TYPE="hidden" NAME="packages" VALUE="hello" -->
-		 <INPUT TYPE="submit" NAME="remove" VALUE="Remove ">
-		 package <A HREF="$SELF?query=hello">hello</A><TT>
-	    <TD> remove the package hello (3)
-	</TABLE>
-	</FORM>
-	<P>
+	<p>
+	<table width="80%">
+	  <tr><td>
+	    <td> <tt>?</tt>
+	    <td> show this help page
+	  <tr><td>
+	    <td> <tt>*</tt>
+	    <td> list all packages available on your system
+	  <tr><td>
+	    <td> <i>&lt;empty&gt;</i>
+	    <td> list all packages installed on your system
+	  <tr><td>
+	    <td> <i>&lt;space&gt;</i>
+	    <td> print only the input form, for use from wm menus
+	  <tr><td>
+	    <td> <i>package</i>
+	    <td> list the required package and its owned files
+	  <tr><td>
+	    <td> <i>list of packages</i>
+	    <td> list required packages concisely
+	  <tr><td>
+	    <td> <i>wildcard expression</i>
+	    <td> list matching packages concisely
+	  <tr><td>
+	    <td> <i>absolute pathname</i>
+	    <td> list packages owning pathname
+	  <tr><td>
+	    <td> <i>field=value</i>
+	    <td> list packages with control field matching value
+	  <tr><td>
+	    <td> <i>=value</i>
+	    <td> list packages with any field matching value
+	  <tr><td>
+	    <td> <i>section=?</i>
+	    <td> list available package sections
+	  <tr><td>
+	    <td> <i>task=?</i>
+	    <td> list available tasks
+	  <tr><td>
+	    <td> <i>recent=[&lt;N&gt;]</i>
+	    <td> list packages installed in last N days (default 1)
+	</table>
+	<p>
+	<h3>Examples:</h3>
+	<p>
+	<form method="GET" action="$SELF">
+	<table width="80%">
+	  <tr><td>
+	    <td> <a href="$SELF?query=*"><tt>*</tt></a>
+	    <td> list all packages available on your system
+	  <tr><td>
+	    <td> <a href="$SELF?query="><i>&lt;empty&gt;</i></a>
+	    <td> list all packages installed on your system
+	  <tr><td>
+	    <td> <a href="$SELF?query=binutils"><tt>binutils<tt></a>
+	    <td> list verbosely the package binutils
+	  <tr><td>
+	    <td> <a href="$SELF?query=dpkg+apt"><tt>dpkg apt</tt></a>
+	    <td> list the dpkg and apt packages
+	  <tr><td>
+	    <td> <a href="$SELF?query=jpeg*"><tt>jpeg*</tt></a>
+	    <td> list packages with name beginning with "jpeg"
+	  <tr><td>
+	    <td> <a href="$SELF?query=*jpeg*"><tt>*jpeg*</tt></a>
+	    <td> list packages with name containing "jpeg"
+	  <tr><td>
+	    <td> <a href="$SELF?query=/usr/bin/tail"><tt>/usr/bin/tail</tt></a>
+	    <td> list packages owning the file /usr/bin/tail
+	  <tr><td>
+	    <td> <a href="$SELF?query=/.*/postfix"><tt>/.*/postfix</tt></a>
+	    <td> list packages owning any file named "postfix" (1)
+	  <tr><td>
+	    <td> <a href="$SELF?query=/.*pbm.*"><tt>/.*pbm.*</tt></a>
+	    <td> list packages owning any file matching *pbm* (1)
+	  <tr><td>
+	    <td> <a href="$SELF?query=maintainer%3DJoey+Hess"
+	         ><tt>maintainer=Joey Hess</tt></a>
+	    <td> list packages with maintainer Joey Hess (2)
+	  <tr><td>
+	    <td> <a href="$SELF?query=section%3Dnet"><tt>section=net</tt></a>
+	    <td> list packages with section net (2)
+	  <tr><td>
+	    <td> <a href="$SELF?query=%3Dfirewall"><tt>=firewall</tt></a>
+	    <td> list packages with any field matching "firewall" (2)
+	  <tr><td>
+	    <td> <a href="$SELF?query=section%3D?"><tt>section=?</tt></a>
+	    <td> list available package sections
+	  <tr><td>
+	    <td> <a href="$SELF?query=task%3D?"><tt>task=?</tt></a>
+	    <td> list available tasks
+	  <tr><td>
+	    <td> <a href="$SELF?query=recent%3D2"><tt>recent=2</tt></a>
+	    <td> list packages installed in last 2 days
+	  <tr><td>
+	    <td> <tt>
+	         <input type="hidden" name="packages" value="hello">
+		 <input type="submit" name="install" value="Install">
+		 package <a href="$SELF?query=hello">hello</a><tt>
+	    <td> install the package hello (3)
+	  <tr><td>
+	    <td> <tt>
+		 <!-- input type="hidden" name="packages" value="hello" -->
+		 <input type="submit" name="remove" value="Remove ">
+		 package <a href="$SELF?query=hello">hello</a><tt>
+	    <td> remove the package hello (3)
+	</table>
+	</form>
+	<p>
 	(1) The regexp form can be used to query also packages owning files
 	not installed on your system. However this works only if you have
-	properly configured the variable <TT>DEBIAN_CONTENTS</TT> in the
-	configuration file<EM>&nbsp/etc/dpkg-www.conf</EM>.
+	properly configured the variable <tt>DEBIAN_CONTENTS</tt> in the
+	configuration file<em>&nbsp/etc/dpkg-www.conf</em>.
 	This query can be used to find which package you should install
 	in order to get some missing command or file.
-	Note that the leading '<TT>/</TT>' is required to distinguish filename
+	Note that the leading '<tt>/</tt>' is required to distinguish filename
 	queries from package queries.
-	<P>
+	<p>
 	(2) This works only if the
-	<A HREF="$SELF?query=grep-dctrl">grep-dctrl</A> package is installed.
-	</P>
-	(3) This works only if <TT>INSTALL_BUTTON=1</TT> has been set in the
-	configuration file<EM>&nbsp/etc/dpkg-www.conf</EM>, your browser has
+	<a href="$SELF?query=grep-dctrl">grep-dctrl</a> package is installed.
+	</p>
+	(3) This works only if <tt>INSTALL_BUTTON=1</tt> has been set in the
+	configuration file<em>&nbsp/etc/dpkg-www.conf</em>, your browser has
 	been configured to handle web installation requests and, of course,
 	you know the root password.
-	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
+	See <a href="${MAN}${HELP_PAGE}">dpkg-www(8)</a>
 	man page for more information.
-	</P>
+	</p>
 EOF
 }
 
 debug() {
-    test_flag "$DEBUG" && echo "<TT>$(escape_html "$*")</TT><BR>"
+    test_flag "$DEBUG" && echo "<tt>$(escape_html "$*")</tt><br>"
 }
 
 test_flag() {
@@ -422,14 +422,14 @@ queryPackagesByField() {
 	return
     fi
     if [ "$field" != "" -a ! -x /usr/bin/grep-dctrl ]; then
-	echo "<PRE>"
-	echo -n "Error: the <A HREF=\"$SELF?query=/usr/bin/grep-dctrl\">"
-	echo -n "grep-dctrl</A>"
+	echo "<pre>"
+	echo -n "Error: the <a href=\"$SELF?query=/usr/bin/grep-dctrl\">"
+	echo -n "grep-dctrl</a>"
 	echo " command is not installed on your system"
-	echo "</PRE>"
+	echo "</pre>"
 	return
     fi
-    echo "<PRE>"
+    echo "<pre>"
     echo "Packages with $(escape_html "${field:-any field matching} $arg")"
     echo ""
     {
@@ -447,7 +447,7 @@ queryPackagesByField() {
 	(p[$2] != 1) { next }
 	{ print }' \
     | listFilter
-    echo "</PRE>"
+    echo "</pre>"
 }
 
 # List available sections
@@ -514,24 +514,24 @@ listRecentPackages() {
 		print "$field[1] " if $field[0] > $ENV{S};' \
     )
     if [ "$packages" ]; then
-	echo "<PRE>"
+	echo "<pre>"
 	echo "Recent packages in last $n days:"
 	echo ""
 	dpkg-query -l $packages 2>&1 | listFilter
-	echo "</PRE>"
+	echo "</pre>"
     else
-	echo "<PRE>"
+	echo "<pre>"
 	echo "No recent packages in last $n days"
-	echo "</PRE>"
+	echo "</pre>"
     fi
 }
 
 # List one or more packages concisely
 listPackages() {
     debug "listPackages $*"
-    echo "<PRE>"
+    echo "<pre>"
     dpkg-query -l "$@" 2>&1 | listFilter
-    echo "</PRE>"
+    echo "</pre>"
 }
 
 # List a single package
@@ -608,7 +608,7 @@ listPackage() {
 	fi
     fi
 
-    echo "<PRE>"
+    echo "<pre>"
 
     # Print package info
     echo "$pkg_info" | packageFilter $package
@@ -627,7 +627,7 @@ listPackage() {
 	addButtons
     fi
 
-    echo "</PRE>"
+    echo "</pre>"
 }
 
 # Add "Install", "Update" and "Remove" buttons if enabled.
@@ -657,12 +657,12 @@ addInstallButton() {
     local package="$1"
     local pkgname="$package"
     if test_flag "$INSTALL_BUTTON"; then
-	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">" \
-	     "<INPUT TYPE=\"hidden\" NAME=\"packages\" VALUE=\"$pkgname\">"
+	echo "<form method=\"GET\" action=\"$SELF\">" \
+	     "<input type=\"hidden\" name=\"packages\" value=\"$pkgname\">"
 	echo -n \
 	     "Package $(escape_html "$package") is not installed." \
-	     "<INPUT TYPE=\"submit\" NAME=\"install\" VALUE=\"Install\">" \
-	     "</FORM>"
+	     "<input type=\"submit\" name=\"install\" value=\"Install\">" \
+	     "</form>"
     else
 	echo ""
 	echo "Package $(escape_html "$package") is not installed."
@@ -676,12 +676,12 @@ addRemoveButton() {
     local package="$1"
     local pkgname="$package"
     if test_flag "$INSTALL_BUTTON"; then
-	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">" \
-	     "<INPUT TYPE=\"hidden\" NAME=\"packages\" VALUE=\"$pkgname\">"
+	echo "<form method=\"GET\" action=\"$SELF\">" \
+	     "<input type=\"hidden\" name=\"packages\" value=\"$pkgname\">"
 	echo -n \
-	     "<INPUT TYPE=\"submit\" NAME=\"remove\" VALUE=\"Remove\">" \
+	     "<input type=\"submit\" name=\"remove\" value=\"Remove\">" \
 	     "package $package" \
-	     "</FORM>"
+	     "</form>"
     fi
 }
 
@@ -693,12 +693,12 @@ addUpgradeButton() {
     local latest="$2"
     local pkgname="$package"
     if test_flag "$INSTALL_BUTTON"; then
-	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">" \
-	     "<INPUT TYPE=\"hidden\" NAME=\"packages\" VALUE=\"$pkgname\">"
+	echo "<form method=\"GET\" action=\"$SELF\">" \
+	     "<input type=\"hidden\" name=\"packages\" value=\"$pkgname\">"
 	echo -n \
-	     "<INPUT TYPE=\"submit\" NAME=\"install\" VALUE=\"Upgrade\">" \
+	     "<input type=\"submit\" name=\"install\" value=\"Upgrade\">" \
 	     "package $package to version $latest" \
-	     "</FORM>"
+	     "</form>"
     fi
 }
 
@@ -710,14 +710,14 @@ addRemoveUpgradeButtons() {
     local latest="$2"
     local pkgname="$package"
     if test_flag "$INSTALL_BUTTON"; then
-	echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">" \
-	     "<INPUT TYPE=\"hidden\" NAME=\"packages\" VALUE=\"$pkgname\">"
+	echo "<form method=\"GET\" action=\"$SELF\">" \
+	     "<input type=\"hidden\" name=\"packages\" value=\"$pkgname\">"
 	echo -n \
-	     "<INPUT TYPE=\"submit\" NAME=\"remove\" VALUE=\"Remove\">" \
+	     "<input type=\"submit\" name=\"remove\" value=\"Remove\">" \
 	     "package $package. " \
-	     "<INPUT TYPE=\"submit\" NAME=\"install\" VALUE=\"Upgrade\">" \
+	     "<input type=\"submit\" name=\"install\" value=\"Upgrade\">" \
 	     "to version $latest" \
-	     "</FORM>"
+	     "</form>"
     fi
 }
 
@@ -738,18 +738,18 @@ listVirtualPackage() {
     )
     test "$packages" || return 1
     debug "is virtual package"
-    echo "<PRE>"
+    echo "<pre>"
     echo "Virtual package $(escape_html "$package") is provided by:"
-    echo "</PRE>"
+    echo "</pre>"
     listPackages $(echo $packages)
 }
 
 listUnknownPackage() {
     debug "listUnknownPackage $*"
     local package="$(escape_html "$1")"
-    echo "<PRE>"
+    echo "<pre>"
     echo "Package $package is not installed and no info is available."
-    echo "</PRE>"
+    echo "</pre>"
 }
 
 listPackageFiles() {
@@ -826,9 +826,9 @@ queryOwners() {
 	    | grep -v diversion | tr -d ','
     )
     if [ "$owners" ]; then
-	echo "<PRE>"
+	echo "<pre>"
 	echo "Packages owning $(escape_html "$file"):"
-	echo "</PRE>"
+	echo "</pre>"
 	listPackages $owners
 	return
     fi
@@ -843,16 +843,16 @@ queryOwners() {
 	)
     fi
     if [ "$owners" ]; then
-	echo "<PRE>"
+	echo "<pre>"
 	echo "Packages owning $(escape_html "$file"):"
-	echo "</PRE>"
+	echo "</pre>"
 	listPackages $owners
 	return
     fi
 
-    echo "<PRE>"
+    echo "<pre>"
     echo "No package is owning $(escape_html "$file")"
-    echo "</PRE>"
+    echo "</pre>"
 }
 
 # Convert package info to html by adding hrefs to other packages.
@@ -939,7 +939,7 @@ packageFilter() {
 	/^Version:/ {
 	    if (match($0, "latest is")) {
 		# Show latest version in bold
-		sub("\\(latest is", "<B>(latest is"); sub("\\)", ")</B>")
+		sub("\\(latest is", "<b>(latest is"); sub("\\)", ")</b>")
 	    }
 	}
 	/^$/ { next}
@@ -964,12 +964,12 @@ listFilter() {
 	    descMax = 10
 	    if (CHECK_BUTTONS) {
 		pkg_button = \
-		    "<INPUT TYPE=\"checkbox\" NAME=\"packages\" VALUE=\"%s\">"
+		    "<input type=\"checkbox\" name=\"packages\" value=\"%s\">"
 		install_button = \
-		    "<INPUT TYPE=\"submit\" NAME=\"install\" " \
+		    "<input type=\"submit\" name=\"install\" " \
 			"VALUE=\"Install selected packages\">"
 		reset_button = \
-		    "<INPUT TYPE=\"reset\">"
+		    "<input type=\"reset\">"
 		buttonW = 2
 	    }
 	}
@@ -1039,7 +1039,7 @@ listFilter() {
 		print ""
 	    }
 	    if (CHECK_BUTTONS) {
-		printf "<FORM METHOD=\"GET\" ACTION=\"" SELF "\">"
+		printf "<form method=\"GET\" action=\"" SELF "\">"
 	    }
 	    for (i=1; i<=3; i++) {
 		print header[i]
@@ -1077,7 +1077,7 @@ listFilter() {
 		}
 		href = link = name
 		gsub("\\+", "%2B", href)
-		href = "<A HREF=\"" SELF "?query=" href "\">" link "</A>" npad
+		href = "<a href=\"" SELF "?query=" href "\">" link "</a>" npad
 		printf("%s%s %s %s %s\n", stat, button, href, vers, desc)
 		npackages++
 	    }
@@ -1090,7 +1090,7 @@ listFilter() {
 		if (install) {
 		    printf reset_button "  " install_button "\n"
 		}
-		printf "</FORM>"
+		printf "</form>"
 	    }
 	}
 	function escape(s) {
@@ -1143,7 +1143,7 @@ fileFilter() {
 	    gsub("\\+", "\\+", r);
 	    gsub("\\+", "%2B", s);
 	    gsub("\\$","\\$",r)
-	    sub(r, "<A HREF=\"" man s "\">" t "</A>")
+	    sub(r, "<a href=\"" man s "\">" t "</a>")
 	    print
 	    next
 	}
@@ -1154,7 +1154,7 @@ fileFilter() {
 	    gsub("\\+", "\\+", r);
 	    gsub("\\+", "%2B", s);
 	    gsub("\\$","\\$",r)
-	    sub(r, "<A HREF=\"" info2www "?" s "\">" t "</A>")
+	    sub(r, "<a href=\"" info2www "?" s "\">" t "</a>")
 	    print
 	    next
 	}
@@ -1166,10 +1166,10 @@ fileFilter() {
 	    gsub("\\+", "%2B", s);
 	    gsub("\\$","\\$",r)
 	    if (show_local_files == "true") {
-		sub(r, "<A HREF=\"file:" s "\">" t "</A>")
+		sub(r, "<a href=\"file:" s "\">" t "</a>")
 	    } else {
-		sub(r, "<A HREF=\"" dwww "?type=file\\&location=" s "\">"\
-		       t "</A>")
+		sub(r, "<a href=\"" dwww "?type=file\\&location=" s "\">"\
+		       t "</a>")
 	    }
 	    print
 	    next
@@ -1204,15 +1204,15 @@ printInstallRequest() {
 	Install-host: $host
 	Install-packages: $packages
 	-->
-	<H1>dpkg-www Web Installation</H1>
-	<P>
+	<h1>dpkg-www Web Installation</h1>
+	<p>
 	If you are reading this document on your browser or you have
 	been asked to save it to disk instead of running the installation
 	of the required packages this means that your browser has not
 	been set up correctly for dpkg-www web installation.
-	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
+	See <a href="${MAN}${HELP_PAGE}">dpkg-www(8)</a>
 	man page for more information.
-	</P>
+	</p>
 EOF
 }
 
@@ -1224,15 +1224,15 @@ printRemoveRequest() {
 	Remove-host: $host
 	Remove-packages: $packages
 	-->
-	<H1>dpkg-www Web Deinstallation</H1>
-	<P>
+	<h1>dpkg-www Web Deinstallation</h1>
+	<p>
 	If you are reading this document on your browser or you have
 	been asked to save it to disk instead of running the installation
 	of the required packages this means that your browser has not
 	been set up correctly for dpkg-www web installation.
-	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
+	See <a href="${MAN}${HELP_PAGE}">dpkg-www(8)</a>
 	man page for more information.
-	</P>
+	</p>
 EOF
 }
 
@@ -1243,15 +1243,15 @@ printBrowseRequest() {
 	<!--
 	Browse-package: $package
 	-->
-	<H1>dpkg-www Browse Request</H1>
-	<P>
+	<h1>dpkg-www Browse Request</h1>
+	<p>
 	If you are reading this document on your browser or you have
 	been asked to save it to disk instead of running a browser
 	on the required packages this means that your browser has not
 	been set up correctly for dpkg-www web installation.
-	See <A HREF="${MAN}${HELP_PAGE}">dpkg-www(8)</A>
+	See <a href="${MAN}${HELP_PAGE}">dpkg-www(8)</a>
 	man page for more information.
-	</P>
+	</p>
 EOF
 }
 
@@ -1275,11 +1275,11 @@ printHtmlHeader() {
     echo "Connection: close"
     echo ""
     if [ "$content_type" ]; then
-	echo "<HTML>"
-	echo "<HEAD>"
-	echo "<TITLE>$title</TITLE>"
-	echo "</HEAD>"
-	echo "<BODY BGCOLOR=\"${BGCOLOR:-#c0c0c0}\">"
+	echo "<html>"
+	echo "<head>"
+	echo "<title>$title</title>"
+	echo "</head>"
+	echo "<body bgcolor=\"${BGCOLOR:-#c0c0c0}\">"
     fi
 }
 
@@ -1291,33 +1291,33 @@ printInputForm() {
     test "$input_form_done" = true  && return
     test "$KEEP_INPUT" = 1 && default="$query"
     test "$INSTALLED_ONLY" = 1 && installed="checked"
-    echo "<H1>Debian packages on $HOSTNAME</H1>"
+    echo "<h1>Debian packages on $HOSTNAME</h1>"
     if [ -x /usr/bin/perl ]; then
-	echo '<P>'
+	echo '<p>'
 	if [ "${HTTP_USER_AGENT#Lynx}" != "$HTTP_USER_AGENT" ]; then
-	   echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">"
+	   echo "<form method=\"GET\" action=\"$SELF\">"
 	    echo "Search:"
-	    echo '<INPUT NAME="query" SIZE="42" VALUE="'"$default"'">'
-	   echo '<INPUT NAME="search" TYPE="submit" VALUE="Submit">'
-	   echo '(?&nbsp;for&nbsp;help)<BR>'
-	   echo '<INPUT NAME="installed" TYPE="checkbox"' $installed '>' \
+	    echo '<input name="query" size="42" value="'"$default"'">'
+	   echo '<input name="search" type="submit" value="Submit">'
+	   echo '(?&nbsp;for&nbsp;help)<br>'
+	   echo '<input name="installed" type="checkbox"' $installed '>' \
 		'only installed packages' '<br>&nbsp;<br>'
-	   echo '</FORM>'
+	   echo '</form>'
 	else
-	   echo "<FORM METHOD=\"GET\" ACTION=\"$SELF\">"
-	   echo '<INPUT NAME="search" TYPE="submit" VALUE="  Search  ">'
-	    echo '<INPUT NAME="query" SIZE="50" VALUE="'"$default"'">'
-	   echo '<INPUT NAME="help" TYPE="submit" VALUE="   Help   ">'
-	   echo '<INPUT NAME="installed" TYPE="checkbox"' $installed '>' \
+	   echo "<form method=\"GET\" action=\"$SELF\">"
+	   echo '<input name="search" type="submit" value="  Search  ">'
+	    echo '<input name="query" size="50" value="'"$default"'">'
+	   echo '<input name="help" type="submit" value="   Help   ">'
+	   echo '<input name="installed" type="checkbox"' $installed '>' \
 		'only installed packages'
-	   echo '</FORM>'
-	   test "$query" != " " && echo '<HR WIDTH="100%">'
+	   echo '</form>'
+	   test "$query" != " " && echo '<hr width="100%">'
 	fi
-	echo '</P>'
+	echo '</p>'
     else
-	echo '<P>'
-	echo '<ISINDEX>'
-	echo '</P>'
+	echo '<p>'
+	echo '<isindex>'
+	echo '</p>'
     fi
     input_form_done=true
 }
@@ -1326,17 +1326,17 @@ printInputForm() {
 printHtmlBottom() {
     test "$noheader" = true && return
     cat <<- EOF
-	<P>
-	<HR WIDTH="100%">
-	<ADDRESS>
-	Generated by <A HREF="$SELF?query=dpkg-www">
-	dpkg-www $PROG_VERSION</A>
-	</ADDRESS>
-	<BR>
-	</P>
-        $(test "${tempfile}" && echo "<PRE>" && cat $tempfile | sed 's/</\&lt;/g' && echo "</PRE>")
-	</BODY>
-	</HTML>
+	<p>
+	<hr width="100%">
+	<address>
+	Generated by <a href="$SELF?query=dpkg-www">
+	dpkg-www $PROG_VERSION</a>
+	</address>
+	<br>
+	</p>
+        $(test "${tempfile}" && echo "<pre>" && cat $tempfile | sed 's/</\&lt;/g' && echo "</pre>")
+	</body>
+	</html>
 EOF
 }
 
@@ -1344,9 +1344,9 @@ printError() {
     local message="$*"
     printHtmlHeader "$title"
     printInputForm
-    echo "<P>"
+    echo "<p>"
     echo "$(escape_html "$message")"
-    echo "<P>"
+    echo "<p>"
     usage
     printHtmlBottom
 }
@@ -1387,7 +1387,7 @@ test "$bgcolor" != "" && BGCOLOR="$bgcolor"
 if test_flag "$DEBUG"; then
     printHtmlHeader "$title"
     cat <<- EOF
-	<PRE>
+	<pre>
 	$(env | sort)
 	SELF=$SELF
 	DPKG=$DPKG
@@ -1407,7 +1407,7 @@ if test_flag "$DEBUG"; then
 	noheader="$(escape_html "$noheader")"
 	installed="$(escape_html "$installed")"
 	debug="$(escape_html "$debug")"
-	</PRE>
+	</pre>
 EOF
     tempfile=$(tempfile); trap "rm -f $tempfile" 0
     exec 2>$tempfile
