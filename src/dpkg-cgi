@@ -503,15 +503,15 @@ listTasks() {
 listRecentPackages() {
     n=${1:-1}
     s=$(
-	N=$n perl -MTime::Piece -MTime::Seconds -E '\
-	my $o = localtime->truncate(to => "day") - \
-	Time::Seconds->new($ARGV[0] * ONE_DAY); \
-	print $o->epoch;' \
+	N=$n perl -MTime::Piece -MTime::Seconds -E '
+	my $o = localtime->truncate(to => "day") -
+	Time::Seconds->new($ENV{N} * ONE_DAY);
+	print $o->epoch;'
     )
     packages=$(
 	dpkg-query -f '${db-fsys:Last-Modified} ${binary:Package}\n' -W \
-	   | S=$s perl -n -E '(@field) = split " "; \
-		print "$field[1] " if $field[0] > $ENV{S};' \
+	   | S=$s perl -n -E '(@field) = split " ";
+		print "$field[1] " if $field[0] > $ENV{S};'
     )
     if [ "$packages" ]; then
 	echo "<pre>"
