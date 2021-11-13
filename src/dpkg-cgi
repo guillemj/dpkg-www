@@ -298,7 +298,7 @@ usage() {
 	    <td> list available tasks
 	  <tr><td>
 	    <td> <a href="$SELF?query=recent%3D2"><tt>recent=2</tt></a>
-	    <td> list packages installed in last 2 days
+	    <td> list packages installed in the last 2 days
 	  <tr><td>
 	    <td> <tt>
 	         <input type="hidden" name="packages" value="hello">
