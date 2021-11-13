@@ -1,3 +1,9 @@
+dpkg-www (2.62) UNRELEASED; urgency=medium
+
+  *
+
+ -- Guillem Jover <guillem@debian.org>  Sat, 13 Nov 2021 19:47:21 +0100
+
 dpkg-www (2.61) unstable; urgency=medium
 
   * Switch to debhelper compatibility level 13.
