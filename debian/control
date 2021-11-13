@@ -27,10 +27,10 @@ Recommends:
 Suggests:
  dlocate,
  grep-dctrl,
- firefox | www-browser,
  sensible-utils,
  man2html,
  tasksel,
+ www-browser,
 Description: Debian package management web interface
  With the dpkg cgi-bin you can browse Debian packages on a local or
  remote host using a normal web browser.
