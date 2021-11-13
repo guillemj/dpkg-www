@@ -83,39 +83,6 @@ xfce		The Xfce Desktop Environment
 zope		Zope/Plone framework
 "
 
-TASK_DESCRIPTIONS="
-basic-desktop	X window system
-c-dev		C and C++
-chinese-s	simplified Chinese environment
-chinese-t	traditional Chinese environment
-cyrillic	Cyrillic environment
-database-server	SQL database
-desktop		desktop environment
-dialup		dialup system
-dns-server	DNS server
-file-server	file server
-fortran-dev	fortran
-french		French environment
-games		games
-german		German environment
-japanese	Japanese environment
-junior		Debian Jr.
-korean		Korean environment
-laptop		laptop system
-mail-server	mail server
-news-server	usenet news server
-polish		Polish environment
-print-server	print server
-python-dev	Python
-russian		Russian environment
-science		scientific applications
-spanish		Spanish environment
-tcltk-dev	Tcl/Tk
-tex		TeX/LaTeX environment
-unix-server	conventional unix server
-web-server	web server
-"
-
 # Configuration defaults, can be overridden in /etc/dpkg-www.conf
 #
 SHOW_LOCAL_FILES=auto	# Show local files directly (automatic)
@@ -125,7 +92,7 @@ DPKG=auto		# Select the dpkg program (automatic)
 MAN=auto		# Select the man program (automatic)
 DEBIAN_CONTENTS=	# List of Contents-xxx.gz files
 INSTALLED_ONLY=0	# Only installed packages
-TASK_DESCRIPTIONS_FILE=/usr/share/tasksel/debian-tasks.desc
+TASK_DESCRIPTIONS_FILE=/usr/share/tasksel/descs/debian-tasks.desc
 APT_CACHE_OPTS="-o APT::Cache::AllVersions=0"
 CHECK_PACKAGE_VERSION=true
 DPKG_WWW_BROWSER_HACK=false
@@ -479,33 +446,30 @@ listSections() {
 
 # List available tasks
 listTasks() {
-    local tasks
-    tasks=$(
-	( dpkg-query -s; dpkg-query -p ) | grep -h "^Task:" \
-	   | sed 's|.*:[ ]*||; s|,[ ]*|\
-|g' | sort | uniq
-    )
     echo "<pre>"
     echo "Available tasks:"
     echo ""
-    for t in $tasks; do
-        local desc
-	desc=$(
-	    if [ -e "$TASK_DESCRIPTIONS_FILE" ]; then
-		cat "$TASK_DESCRIPTIONS_FILE" 2>/dev/null | awk -v t="$t" '
-		    /^Task:/ { task = $2 }
-		    /^Description:/ && (task == t) {
-			sub($1"[ ]*",""); print; exit
-		    }'
-	    else
-		echo "$TASK_DESCRIPTIONS" | sed "/^$t/!d; s/^$t[ 	]*//;q"
-	    fi
-	)
-	desc=${desc:="no description available"}
-        local x
-	x=$(printf "%$[16-${#t}]s" " ")
-	echo "  <a href=\"${SELF}?query=task%3D${t}\">${t}</a>${x} ${desc}"
-    done
+    ( dpkg-query -s; dpkg-query -p ) \
+      | TASK_DESCRIPTIONS_FILE=$TASK_DESCRIPTIONS_FILE \
+        perl -MDpkg::Control -MDpkg::Index -E '
+        my $tasks = Dpkg::Index->new(get_key_func => sub { return $_[0]->{Task} });
+        $tasks->load($ENV{TASK_DESCRIPTIONS_FILE});
+        my %pkg2task;
+        foreach my $task ($tasks->get()) {
+          next unless exists $task->{Key};
+          my $name = $task->{Key} =~ s/\s*//gr;
+          $pkg2task{$name} = $task->{Task};
+        }
+        my $idx = Dpkg::Index->new(type => CTRL_FILE_STATUS);
+        $idx->load("-");
+        foreach my $ctrl ($idx->get(Section => "tasks")) {
+          my $pkg = $ctrl->{Package};
+          my $task = $pkg2task{$pkg};
+          my $desc = (split "\n", $ctrl->{Description})[0];
+          my $pad = 16 - length $task;
+          say "  <a href=\"$ENV{SELF}?query=$pkg\">$task</a>" . " " x $pad . " ${desc}";
+        }
+      '
     echo "</pre>"
 }
 
