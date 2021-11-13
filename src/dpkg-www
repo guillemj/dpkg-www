@@ -96,7 +96,7 @@ test -e ~/.dpkg-www && . ~/.dpkg-www 2>/dev/null
 
 if [ "$DISPLAY" ]; then
     for f in $browser $DPKG_WWW_BROWSER $X11_BROWSERS $TXT_BROWSERS; do
-	if which $f >/dev/null 2>&1; then
+	if command -v $f >/dev/null 2>&1; then
 	    browser=$f
 	    break
 	fi
@@ -104,7 +104,7 @@ if [ "$DISPLAY" ]; then
 else
     for f in $browser $DPKG_WWW_BROWSER $TXT_BROWSERS; do
 	echo $X11_BROWSERS | grep -qw "$f" && continue	# skip X11 $BROWSER
-	if which $f >/dev/null 2>&1; then
+	if command -v $f >/dev/null 2>&1; then
 	    browser=$f
 	    break
 	fi
