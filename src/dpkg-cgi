@@ -406,9 +406,13 @@ queryPackages() {
 
 # Query one or more packages by control field value
 queryPackagesByField() {
-    field="${*%%=*}"; arg="${*#$field}"; arg="${arg#=}"
-    field="${field## }"; field="${field%% }"
-    arg="${arg## }"; arg="${arg%% }"
+    local field="${*%%=*}"
+    local arg="${*#$field}"
+    arg="${arg#=}"
+    field="${field## }"
+    field="${field%% }"
+    arg="${arg## }"
+    arg="${arg%% }"
     if [ "$field" = section -a "$arg" = "?" ]; then
 	listSections
 	return
@@ -452,6 +456,7 @@ queryPackagesByField() {
 
 # List available sections
 listSections() {
+    local sections
     sections=$(
 	( dpkg-query -s; dpkg-query -p ) | grep -h "^Section:" \
 	   | sed 's|.*:[ ]*||; s|.*/||' | sort | uniq | grep -v "^non-"
@@ -460,10 +465,12 @@ listSections() {
     echo "Available sections:"
     echo ""
     for s in $sections; do
+        local desc
 	desc=$(
 	    echo "$SECTION_DESCRIPTIONS" | sed "/^$s/!d; s/^$s[	 ]*//;q"
 	)
 	desc=${desc:="no description available"}
+        local x
 	x=$(printf "%$[16-${#s}]s" " ")
 	echo "  <a href=\"${SELF}?query=section%3D${s}\">${s}</a>${x} ${desc}"
     done
@@ -472,6 +479,7 @@ listSections() {
 
 # List available tasks
 listTasks() {
+    local tasks
     tasks=$(
 	( dpkg-query -s; dpkg-query -p ) | grep -h "^Task:" \
 	   | sed 's|.*:[ ]*||; s|,[ ]*|\
@@ -481,6 +489,7 @@ listTasks() {
     echo "Available tasks:"
     echo ""
     for t in $tasks; do
+        local desc
 	desc=$(
 	    if [ -e "$TASK_DESCRIPTIONS_FILE" ]; then
 		cat "$TASK_DESCRIPTIONS_FILE" 2>/dev/null | awk -v t="$t" '
@@ -493,6 +502,7 @@ listTasks() {
 	    fi
 	)
 	desc=${desc:="no description available"}
+        local x
 	x=$(printf "%$[16-${#t}]s" " ")
 	echo "  <a href=\"${SELF}?query=task%3D${t}\">${t}</a>${x} ${desc}"
     done
@@ -501,13 +511,15 @@ listTasks() {
 
 # List recent packages
 listRecentPackages() {
-    n=${1:-1}
+    local n=${1:-1}
+    local s
     s=$(
 	N=$n perl -MTime::Piece -MTime::Seconds -E '
 	my $o = localtime->truncate(to => "day") -
 	Time::Seconds->new($ENV{N} * ONE_DAY);
 	print $o->epoch;'
     )
+    local packages
     packages=$(
 	dpkg-query -f '${db-fsys:Last-Modified} ${binary:Package}\n' -W \
 	   | S=$s perl -n -E '(@field) = split " ";
@@ -546,6 +558,7 @@ listPackage() {
     local priority
     local essential
 
+    local pkg_info
     pkg_info="$(dpkg-query -s $package)"
     if [ ! "$pkg_info" ]; then
 	# Unknown package or virtual package
