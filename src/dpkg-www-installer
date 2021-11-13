@@ -26,13 +26,13 @@ press_enter() {
     echo -n "Press Enter to close this window..."; read x
 }
 
-# Restart self in an xterm window. Must be the first option. Used by netscape.
+# Restart self in an xterm window. Must be the first option. Used by Firefox.
 if [ "$1" = "-x" -o "$1" = "--xterm" ]; then
     shift 1
     xterm -T "Package Installation" -e $0 "$@"
     exit 0
 fi
-# Restart self in an xterm window. Used by firefox which cannot pass -x switch.
+# Restart self in an xterm window. Used by Firefox which cannot pass -x switch.
 if [ "$DPKG_WWW_INSTALLER_XTERM" != true ] && ! tty -s; then
     DPKG_WWW_INSTALLER_XTERM=true xterm -T "Package Installation" -e $0 "$@"
     exit 0

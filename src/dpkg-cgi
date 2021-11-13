@@ -137,7 +137,7 @@ DWWW_PATH="/cgi-bin/dwww"
 INFO2WWW_PATH="/cgi-bin/info2www"
 
 # Install buttons support. This require that users define the following
-# mime action in their netscape mailcap file:
+# mime action in their mailcap file:
 #
 # application/dpkg-www-installer;/usr/sbin/dpkg-www-installer -f '%s'
 #

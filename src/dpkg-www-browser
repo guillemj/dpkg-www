@@ -50,7 +50,7 @@ ACTION=""
 HOST=""
 PACKAGES=""
 
-# Restart self in an xterm window. Must be the first option. Used by netscape.
+# Restart self in an xterm window. Must be the first option. Used by Firefox.
 if [ "$DISPLAY" -a "$1" = "-x" -o "$1" = "--xterm" ]; then
     shift 1
     xterm -T "Package Browser" -e $0 "$@"
