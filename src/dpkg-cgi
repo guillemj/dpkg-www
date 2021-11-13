@@ -260,8 +260,8 @@ usage() {
 	    <td> <a href="$SELF?query="><i>&lt;empty&gt;</i></a>
 	    <td> list all packages installed on your system
 	  <tr><td>
-	    <td> <a href="$SELF?query=binutils"><tt>binutils<tt></a>
-	    <td> list verbosely the package binutils
+	    <td> <a href="$SELF?query=dpkg"><tt>dpkg<tt></a>
+	    <td> list verbosely the package dpkg
 	  <tr><td>
 	    <td> <a href="$SELF?query=dpkg+apt"><tt>dpkg apt</tt></a>
 	    <td> list the dpkg and apt packages
@@ -275,15 +275,15 @@ usage() {
 	    <td> <a href="$SELF?query=/usr/bin/tail"><tt>/usr/bin/tail</tt></a>
 	    <td> list packages owning the file /usr/bin/tail
 	  <tr><td>
-	    <td> <a href="$SELF?query=/.*/postfix"><tt>/.*/postfix</tt></a>
-	    <td> list packages owning any file named "postfix" (1)
+	    <td> <a href="$SELF?query=/.*/README"><tt>/.*/README</tt></a>
+	    <td> list packages owning any file named "README" (1)
 	  <tr><td>
-	    <td> <a href="$SELF?query=/.*pbm.*"><tt>/.*pbm.*</tt></a>
-	    <td> list packages owning any file matching *pbm* (1)
+	    <td> <a href="$SELF?query=/.*txt.*"><tt>/.*txt.*</tt></a>
+	    <td> list packages owning any file matching *txt* (1)
 	  <tr><td>
-	    <td> <a href="$SELF?query=maintainer%3DJoey+Hess"
-	         ><tt>maintainer=Joey Hess</tt></a>
-	    <td> list packages with maintainer Joey Hess (2)
+	    <td> <a href="$SELF?query=maintainer%3DDpkg+Developers"
+	         ><tt>maintainer=Dpkg Developers</tt></a>
+	    <td> list packages with maintainer Dpkg Developers (2)
 	  <tr><td>
 	    <td> <a href="$SELF?query=section%3Dnet"><tt>section=net</tt></a>
 	    <td> list packages with section net (2)
