@@ -43,7 +43,8 @@ else
 fi
 X11_BROWSERS="\
     sensible-browser x-www-browser
-    firefox chromium konqueror epiphany-browser midori surf xlinks2"
+    chromium firefox konqueror falkon epiphany-browser midori
+    dillo surf xlinks2"
 TXT_BROWSERS="\
     sensible-browser www-browser
     elinks links2 links lynx w3m"
