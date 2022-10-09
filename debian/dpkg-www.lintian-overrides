@@ -1,2 +1,4 @@
 # Ignore bogus tech-ctte decision imposed onto policy.
-dpkg-www: command-in-menu-file-and-desktop-file dpkg-www usr/share/menu/dpkg-www:*
+dpkg-www: command-in-menu-file-and-desktop-file dpkg-www [usr/share/menu/dpkg-www:*]
+# Ignore bogus tag, see #1017632.
+dpkg-www: bin-sbin-mismatch usr/sbin/dpkg-www -> usr/bin/dpkg-www [usr/lib/cgi-bin/dpkg]
