@@ -3,7 +3,7 @@
 # Command-line interface to dpkg-www.
 #
 # Copyright © 1999-2006 Massimo Dal Zotto <dz@debian.org>
-# Copyright © 2019 Guillem Jover <guillem@debian.org>
+# Copyright © 2019-2022 Guillem Jover <guillem@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
