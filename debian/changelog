@@ -1,8 +1,16 @@
-dpkg-www (2.63) UNRELEASED; urgency=medium
+dpkg-www (2.63) unstable; urgency=medium
 
-  *
+  * Use «command -v <rel-name>» instead of «test -x <abs-name>».
+  * Do not call ssh with an absolute pathname.
+  * Update Contents files example pathnames.
+  * Update copyright years.
+  * Build system:
+    - Remove directories from man page name.
+  * Packaging:
+    - Switch to Standards-Version 4.6.1 (no changes needed).
+    - Update lintian overrides.
 
- -- Guillem Jover <guillem@debian.org>  Sun, 09 Oct 2022 22:58:49 +0200
+ -- Guillem Jover <guillem@debian.org>  Sat, 03 Dec 2022 18:25:58 +0100
 
 dpkg-www (2.62) unstable; urgency=medium
 
