@@ -120,7 +120,7 @@ HOSTNAME="${HOSTNAME_FULL%%.*}"
 
 # Use dlocate, if installed, to speedup certain queries
 if [ ! "$DPKG" -o "$DPKG" = auto ]; then
-    if [ -x /usr/bin/dlocate ]; then
+    if command -v dlocate >/dev/null; then
 	DPKG=dlocate
     else
 	DPKG=dpkg-query
@@ -392,7 +392,7 @@ queryPackagesByField() {
 	listRecentPackages $arg
 	return
     fi
-    if [ "$field" != "" -a ! -x /usr/bin/grep-dctrl ]; then
+    if [ "$field" != "" ] && ! command -v grep-dctrl >/dev/null; then
 	echo "<pre>"
 	echo -n "Error: the <a href=\"$SELF?query=/usr/bin/grep-dctrl\">"
 	echo -n "grep-dctrl</a>"
@@ -404,7 +404,7 @@ queryPackagesByField() {
     echo "Packages with $(escape_html "${field:-any field matching} $arg")"
     echo ""
     {
-	if [ -x /usr/bin/grep-dctrl ]; then
+	if command -v grep-dctrl >/dev/null; then
 	    ( dpkg-query -s; dpkg-query -p ) \
 	       | grep-dctrl $GREP_DCTRL_OPTS -s Package -F "$field" "$arg"
 	else
@@ -544,7 +544,7 @@ listPackage() {
     fi
 
     if [ "$status" = not-installed -o "$status" = config-files ]; then
-	if [ -x /usr/bin/apt-cache ]; then
+	if command -v apt-cache >/dev/null; then
 	    pkg_info="$(
 		echo "$pkg_info" \
 		   | grep "^\(Package\|Status\|Priority\|Section\):"
@@ -1235,7 +1235,7 @@ EOF
 # Get the value of a query argument
 getValue() {
     local key="$1"
-    test -x /usr/bin/perl || return
+    command -v perl >/dev/null || return
     perl -e "use CGI; my \$q = new CGI(\$_); print scalar \$q->param('$key')" "$1"
 }
 
@@ -1269,7 +1269,7 @@ printInputForm() {
     test "$KEEP_INPUT" = 1 && default="$query"
     test "$INSTALLED_ONLY" = 1 && installed="checked"
     echo "<h1>Debian packages on $HOSTNAME</h1>"
-    if [ -x /usr/bin/perl ]; then
+    if command -v perl >/dev/null; then
 	echo '<p>'
 	if [ "${HTTP_USER_AGENT#Lynx}" != "$HTTP_USER_AGENT" ]; then
 	   echo "<form method=\"GET\" action=\"$SELF\">"

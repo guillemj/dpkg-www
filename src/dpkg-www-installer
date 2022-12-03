@@ -132,7 +132,7 @@ if [ $(echo "$PACKAGES" | wc -w) -gt 1 ]; then
     fi
     echo ""
     echo "$PACKAGES" \
-       | if [ -x /usr/bin/fold ]; then fold -s -w 76; else cat; fi \
+       | if command -v fold >/dev/null; then fold -s -w 76; else cat; fi \
        | sed 's/^/  /'
     echo ""
 else

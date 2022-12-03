@@ -70,16 +70,16 @@ while [ "${1#-}" != "$1" ]; do
 	    shift 1
 	    export DISPLAY=""
 	    noheader="&noheader=true"
-	    if [ -x /usr/bin/lynx ]; then
+	    if command -v lynx >/dev/null; then
 		browser="lynx"
 		browser_args="-dump -nolist"
-	    elif [ -x /usr/bin/lynx-ssl ]; then
+	    elif command -v lynx-ssl >/dev/null; then
 		browser="lynx"
 		browser_args="-dump -nolist"
-	    elif  [ -x /usr/bin/links ]; then
+	    elif command -v links >/dev/null; then
 		browser="links"
 		browser_args=""
-	    elif  [ -x /usr/bin/w3m ]; then
+	    elif command -v w3m >/dev/null; then
 		browser="w3m"
 		browser_args=""
 	    fi
