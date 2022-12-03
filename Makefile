@@ -19,7 +19,7 @@ src/dpkg: src/dpkg-cgi
 %: %.pod
 	$(POD2MAN) \
 	  --section=$(subst .,,$(suffix $@)) \
-	  --name=$(basename $@) \
+	  --name=$(notdir $(basename $@)) \
 	  --center="Debian Project" \
 	  --date="$(PODDATE)" \
 	  --release="$(VERSION)" \
