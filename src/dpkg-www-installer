@@ -162,7 +162,7 @@ case "$HOST" in
     *)
 	# Ignore any active ssh-agent to force ssh passwd prompt
 	test "$FORCE_SSH_PASSWD" = true && unset SSH_AGENT_PID SSH_AUTH_SOCK
-	/usr/bin/ssh -l root "$HOST" PATH=/usr/sbin:/sbin:/usr/bin:/bin \
+	ssh -l root "$HOST" PATH=/usr/sbin:/sbin:/usr/bin:/bin \
 		apt-get -s $REINSTALL $ACTION $PACKAGES \; echo \; \
 		apt-get    $REINSTALL $ACTION $PACKAGES
         ;;
