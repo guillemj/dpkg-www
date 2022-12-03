@@ -234,9 +234,9 @@ The following is an example F</etc/dpkg-www.conf> file:
 
   # List of Contents-xxx.gz files, if available.
   DEBIAN_CONTENTS="
-          /debian/dists/buster/Contents-amd64.gz
-          /debian/dists/buster-updates/Contents-amd64.gz
-          /debian-security/dists/buster/updates/Contents-amd64.gz"
+    /debian/dists/bookworm/main/Contents-amd64.gz
+    /debian/dists/bookworm-updates/main/Contents-amd64.gz
+    /debian-security/dists/bookworm-security/main/Contents-amd64.gz"
 
   # Dpkg command (dpkg|dlocate|auto). Automatically detected.
   # DPKG=auto
