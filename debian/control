@@ -10,7 +10,7 @@ Build-Depends:
  debhelper-compat (= 13),
  debhelper (>= 13.10~),
  dh-apache2,
-Standards-Version: 4.6.1
+Standards-Version: 4.6.2
 
 Package: dpkg-www
 Architecture: all
