@@ -1,8 +1,10 @@
-dpkg-www (2.64) UNRELEASED; urgency=medium
+dpkg-www (2.64) unstable; urgency=medium
 
-  *
+  * Packaging:
+    - Do not trim debian/changelog.
+    - Switch to Standards-Version 4.6.2 (no changes needed).
 
- -- Guillem Jover <guillem@debian.org>  Sat, 11 Feb 2023 02:48:23 +0100
+ -- Guillem Jover <guillem@debian.org>  Sat, 25 Feb 2023 17:27:28 +0100
 
 dpkg-www (2.63) unstable; urgency=medium
 
