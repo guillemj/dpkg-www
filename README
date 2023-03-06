@@ -1,0 +1,46 @@
+dpkg-www - Debian package management web interface
+
+With the dpkg CGI program you can browse Debian packages on a local or
+remote host using a web browser.
+
+You can list packages, show package information and installed files,
+browse documentation and navigate through the packages dependencies.
+You can also find all the packages owners of a file or directory or
+those providing a virtual package.
+
+If you are the system administrator you can also install or remove
+packages by clicking on the buttons found in the package info page,
+provided that this feature has been enabled and you have properly
+configured your web browser.
+
+
+Releases
+--------
+
+The current legacy, stable and development releases can be found at:
+
+  <https://deb.debian.org/debian/pool/main/d/dpkg-www/>
+
+For older releases check:
+
+  <https://snapshot.debian.org/package/dpkg-www/>
+
+
+Source Repository
+-----------------
+
+The primary repository can be browsed and cloned from:
+
+  <https://git.dpkg.org/git/dpkg/dpkg-www.git>
+
+
+Mailing List
+------------
+
+The subscription interface and web archives can be found at:
+
+  <https://lists.debian.org/debian-dpkg/>
+
+The mailing list address is (no subscription required to post):
+
+  debian-dpkg@lists.debian.org
