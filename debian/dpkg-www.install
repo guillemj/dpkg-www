@@ -4,3 +4,4 @@ src/dpkg-www-installer  /usr/sbin/
 src/dpkg-www.xpm        /usr/share/pixmaps/
 src/dpkg-www.conf       /etc
 src/dpkg-www.desktop    /usr/share/applications
+src/debian-sections     /usr/share/dpkg-www/

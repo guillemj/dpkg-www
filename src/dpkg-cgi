@@ -22,66 +22,7 @@ PROG_VERSION=2.x
 SELF=${0##*/}; export SELF
 HELP_PAGE="/usr/share/man/man8/dpkg-www.8.gz"
 COLUMNS=256; export COLUMNS
-SECTION_DESCRIPTIONS="
-admin		Administrative utilities (install software, manage users, etc)
-base		Basic needed utilities of every Debian system
-cli-mono	Mono and the Common Language Infrastructure
-comm		Programs for faxmodems and other communication devices
-database	Database servers and tools
-debug		Debug symbols
-devel		Utilities and programs for software development
-doc		Documentation and specialized programs for viewing documentation
-editors		Text editors and word processors
-education	Software, documentation or data related to educational activities
-electronics	Programs for working with circuits and electronics
-embedded	Programs for embedded systems
-fonts		Fonts and font utilities
-games		Games, toys, and fun programs
-gnome		The GNOME Desktop Environment
-gnu-r		The GNU R statistical computation and graphics system
-gnustep		The GNUstep Environment
-golang		Go programming language, libraries, and development tools
-graphics	Utilities to create, view, and edit graphics files
-hamradio	Software for ham radio operators
-haskell		Haskell programming language and libraries
-httpd		Webservers and their modules
-interpreters	Interpreters for interpreted languages and macro processors
-introspection	Introspection support for programming languages
-java		Java programming language and libraries
-javascript	JavaScript programming language, libraries, and development tools
-kde		The KDE Desktop Environment
-kernel		Kernel and kernel modules
-libdevel	Development files for libraries
-libs		Collections of software routines
-lisp		Lisp programming language and libraries
-localization	Language packs
-mail		Programs to write, send, and route email messages
-math		Numeric analysis and other mathematics-related software
-metapackages	Packages which solely depend on other packages
-misc		Miscellaneous software
-net		Programs to connect to and provide various services
-news		Usenet clients and servers
-ocaml		OCaml programming language and libraries
-oldlibs		Obsolete libraries
-otherosfs	Emulators and software to read foreign filesystems
-perl		Perl programming language and libraries
-php		PHP programming language and libraries
-python		Python programming language and libraries
-ruby		Ruby programming language and libraries
-rust		Rust programming language, library crates, and development tools
-science		Software for scientific work
-shells		Command shells and alternative console environments
-sound		Utilities to play and record sound
-tex		The TeX typesetting system
-text		Text processing utilities
-utils		Various system utilities
-vcs		Version control systems
-video		Utilities to record, view, edit, and stream video files
-web		Web browsers, servers, proxies, and other tools
-x11		The X window system and related software
-xfce		The Xfce Desktop Environment
-zope		Zope/Plone framework
-"
+SECTION_DESCRIPTIONS_FILE="/usr/share/dpkg-www/debian-sections"
 
 # Configuration defaults, can be overridden in /etc/dpkg-www.conf
 #
@@ -434,7 +375,7 @@ listSections() {
     for s in $sections; do
         local desc
 	desc=$(
-	    echo "$SECTION_DESCRIPTIONS" | sed "/^$s/!d; s/^$s[	 ]*//;q"
+	    sed -e "/^$s/!d; s/^$s[	 ]*//;q" "$SECTION_DESCRIPTIONS_FILE"
 	)
 	desc=${desc:="no description available"}
         local x
